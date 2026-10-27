@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Sparkles, ShieldAlert, ArrowUpRight } from 'lucide-react';
 import categoriesData from '../../data/categories.json';
+import { siteConfig } from '../../config/siteConfig';
 
 export const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
@@ -102,7 +103,7 @@ export const Footer: React.FC = () => {
                   color: '#ffffff',
                 }}
               >
-                DigiEcom
+                {siteConfig.brandName}
               </span>
             </Link>
             <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-muted)', lineHeight: 1.6 }}>
@@ -297,7 +298,7 @@ export const Footer: React.FC = () => {
           }}
         >
           <div>
-            &copy; {currentYear} DigiEcom Storefront. All rights reserved. Sample demonstration catalogue.
+            &copy; {currentYear} {siteConfig.copyrightHolder}. All rights reserved. Sample demonstration catalogue.
           </div>
           <div style={{ display: 'flex', gap: 'var(--space-4)' }}>
             <span>No paid checkout active</span>

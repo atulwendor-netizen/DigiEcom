@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Search, Menu, X, ChevronDown, Layers, Sparkles } from 'lucide-react';
 import categoriesData from '../../data/categories.json';
 import { DemoBanner } from './DemoBanner';
+import { siteConfig } from '../../config/siteConfig';
 
 export const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -87,7 +88,7 @@ export const Header: React.FC = () => {
                     lineHeight: 1.1,
                   }}
                 >
-                  DigiEcom
+                  {siteConfig.brandName}
                 </span>
                 <span
                   style={{

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Sparkles, Terminal, FileCode, CheckCircle2, Shield } from 'lucide-react';
+import { siteConfig } from '../../config/siteConfig';
 
 export const Hero: React.FC = () => {
   return (
@@ -43,7 +44,7 @@ export const Hero: React.FC = () => {
                 letterSpacing: '-0.03em',
               }}
             >
-              Your Next Big Idea Starts With the{' '}
+              {siteConfig.heroHeadline}{' '}
               <span
                 style={{
                   background: 'linear-gradient(135deg, #10ef8a 0%, #38bdf8 50%, #c084fc 100%)',
@@ -51,7 +52,7 @@ export const Hero: React.FC = () => {
                   WebkitTextFillColor: 'transparent',
                 }}
               >
-                Right Digital Tools.
+                {siteConfig.heroHighlightWord}
               </span>
             </h1>
 
@@ -64,9 +65,7 @@ export const Hero: React.FC = () => {
                 maxWidth: '620px',
               }}
             >
-              Discover rigorously structured system design handbooks, benchmarked AI prompt vaults,
-              financial spreadsheets, Figma component libraries, and ergonomic developer dotfiles.
-              Crafted to accelerate modern builders, engineers, and digital operators.
+              {siteConfig.heroSubheadline}
             </p>
 
             {/* CTAs */}

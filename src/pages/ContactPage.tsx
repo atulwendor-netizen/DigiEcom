@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Mail, Clock, MessageSquare, CheckCircle2 } from 'lucide-react';
 import { Breadcrumbs } from '../components/common/Breadcrumbs';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
+import { siteConfig } from '../config/siteConfig';
 
 export const ContactPage: React.FC = () => {
   useDocumentTitle(
@@ -65,7 +66,7 @@ export const ContactPage: React.FC = () => {
             </div>
             <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', margin: 0 }}>
               Primary Desk:{' '}
-              <span className="code-inline">[support@yourdomain.com]</span>
+              <span className="code-inline">[{siteConfig.supportEmail}]</span>
             </p>
             <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-dim)', marginTop: '4px' }}>
               Standard response within 24 business hours.
@@ -78,8 +79,8 @@ export const ContactPage: React.FC = () => {
               <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 700 }}>Operating Hours</h3>
             </div>
             <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', margin: 0 }}>
-              Monday &ndash; Friday, 10:00 AM &ndash; 6:00 PM{' '}
-              <span className="code-inline">[IST / UTC+5:30]</span>
+              {siteConfig.supportHours}{' '}
+              <span className="code-inline">[{siteConfig.supportTimezone}]</span>
             </p>
             <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-dim)', marginTop: '4px' }}>
               Excludes gazetted national holidays.
@@ -114,7 +115,7 @@ export const ContactPage: React.FC = () => {
               <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', maxWidth: '440px', margin: '0 auto' }}>
                 Thank you for testing the contact form! Because this is a static storefront demonstration, no external
                 email daemon has been triggered. In production, this form will forward directly to{' '}
-                <span className="code-inline">[support@yourdomain.com]</span>.
+                <span className="code-inline">[{siteConfig.supportEmail}]</span>.
               </p>
               <button
                 type="button"
