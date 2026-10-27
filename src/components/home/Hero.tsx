@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Terminal, CheckCircle2, Shield } from 'lucide-react';
 import { siteConfig } from '../../config/siteConfig';
-import { HeroHumanAnimation } from './HeroHumanAnimation';
 
 export const Hero: React.FC = () => {
   return (
@@ -171,19 +170,16 @@ export const Hero: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Column: 3D Floating Product Mockups & Presenter */}
+          {/* Right Column: 3D Floating Product Mockups */}
           <div
-            className="hero-showcase-wrapper"
             style={{
               position: 'relative',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 'var(--space-6)',
-              alignItems: 'center',
               width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
-            {/* Standalone Demo 3D Floating Product Mockups */}
             <div className="hero-art" aria-label="Decorative digital product mockups">
               <div className="art-glow" />
               <div className="art-orbit" />
@@ -204,21 +200,6 @@ export const Hero: React.FC = () => {
               </div>
               <div className="art-sticker" aria-hidden="true">✳</div>
               <div className="art-caption">Tools for your next chapter</div>
-            </div>
-
-            {/* Photorealistic Presenter Animation */}
-            <div
-              className="hero-presenter-wrapper"
-              style={{
-                position: 'relative',
-                width: '100%',
-                display: 'flex',
-                justifyContent: 'center',
-                zIndex: 4,
-                pointerEvents: 'none',
-              }}
-            >
-              <HeroHumanAnimation />
             </div>
           </div>
         </div>

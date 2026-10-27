@@ -374,16 +374,16 @@ a {
 /* Hero layout */
 @media (min-width: 960px) {
   .hero-grid {
-    grid-template-columns: 1fr 1.05fr !important;
+    grid-template-columns: 1.05fr 0.95fr !important;
+    gap: var(--space-12) !important;
+    align-items: center !important;
   }
 }
 
-@media (min-width: 1140px) {
-  .hero-showcase-wrapper {
-    display: grid !important;
-    grid-template-columns: 240px 1fr !important;
-    align-items: center !important;
-    gap: var(--space-4) !important;
+@media (max-width: 959px) {
+  .hero-grid {
+    grid-template-columns: 1fr !important;
+    gap: var(--space-8) !important;
   }
 }
 
