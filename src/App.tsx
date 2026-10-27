@@ -13,10 +13,11 @@ import { DeliveryPolicyPage } from './pages/policies/DeliveryPolicyPage';
 import { LicensePolicyPage } from './pages/policies/LicensePolicyPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { ScrollToTop } from './components/common/ScrollToTop';
+import { CartProvider } from './context/CartContext';
 
 export const App: React.FC = () => {
   return (
-    <>
+    <CartProvider>
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<RootLayout />}>
@@ -33,7 +34,7 @@ export const App: React.FC = () => {
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
-    </>
+    </CartProvider>
   );
 };
 

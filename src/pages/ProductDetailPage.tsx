@@ -10,6 +10,7 @@ import {
   Sparkles,
   ChevronDown,
   Layers,
+  ShoppingBag,
 } from 'lucide-react';
 import productsData from '../data/products.json';
 import { Product } from '../types/product';
@@ -18,10 +19,12 @@ import { ProductCard } from '../components/products/ProductCard';
 import { Breadcrumbs } from '../components/common/Breadcrumbs';
 import { formatINR } from '../utils/currency';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
+import { useCart } from '../context/CartContext';
 
 export const ProductDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
+  const { addItem } = useCart();
 
   const products = productsData as unknown as Product[];
   const product = products.find((p) => p.slug === slug);
@@ -226,6 +229,26 @@ export const ProductDetailPage: React.FC = () => {
                   INR (One-time payment)
                 </span>
               </div>
+
+              {/* Add to Cart Action */}
+              <button
+                type="button"
+                onClick={() => addItem(product)}
+                className="btn btn-primary btn-lg"
+                style={{
+                  width: '100%',
+                  fontWeight: 700,
+                  fontSize: 'var(--text-base)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  cursor: 'pointer',
+                }}
+              >
+                <ShoppingBag size={18} />
+                <span>Add to Cart</span>
+              </button>
 
               {/* Honest Checkout Disabled Notification */}
               <div

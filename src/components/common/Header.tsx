@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Search, Menu, X, ChevronDown, Layers } from 'lucide-react';
+import { Search, Menu, X, ChevronDown, Layers, ShoppingBag } from 'lucide-react';
 import categoriesData from '../../data/categories.json';
 import { DemoBanner } from './DemoBanner';
 import { BrandLogo } from './BrandLogo';
+import { useCart } from '../../context/CartContext';
 
 export const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const { openCart, itemCount } = useCart();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -244,11 +246,68 @@ export const Header: React.FC = () => {
               />
             </form>
 
-            {/* Right Side: Primary Browse CTA & Mobile Menu Toggle */}
+            {/* Right Side: Primary Browse CTA, Cart Trigger & Mobile Menu Toggle */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
               <Link to="/products" className="btn btn-primary btn-sm desktop-cta">
                 Browse Products
               </Link>
+
+              {/* Shopping Cart Trigger */}
+              <button
+                type="button"
+                onClick={openCart}
+                className="cart-trigger-btn"
+                aria-label={itemCount > 0 ? `Shopping cart, ${itemCount} items` : 'Shopping cart'}
+                style={{
+                  position: 'relative',
+                  background: 'var(--bg-surface-elevated)',
+                  border: '1px solid var(--border-card)',
+                  borderRadius: 'var(--radius-md)',
+                  color: 'var(--text-primary)',
+                  padding: 'var(--space-2)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  transition: 'background var(--transition-fast), border-color var(--transition-fast)',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = 'var(--panel-light)';
+                  e.currentTarget.style.borderColor = 'rgba(198, 255, 101, 0.4)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'var(--bg-surface-elevated)';
+                  e.currentTarget.style.borderColor = 'var(--border-card)';
+                }}
+              >
+                <ShoppingBag size={20} />
+                {itemCount > 0 && (
+                  <span
+                    className="cart-count-badge"
+                    style={{
+                      position: 'absolute',
+                      top: '-6px',
+                      right: '-6px',
+                      background: 'var(--accent-lime)',
+                      color: 'var(--ink)',
+                      fontSize: '11px',
+                      fontWeight: 800,
+                      fontFamily: 'var(--font-mono)',
+                      borderRadius: '999px',
+                      minWidth: '18px',
+                      height: '18px',
+                      padding: '0 4px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      boxShadow: '0 0 10px rgba(198, 255, 101, 0.4)',
+                      lineHeight: 1,
+                    }}
+                  >
+                    {itemCount}
+                  </span>
+                )}
+              </button>
 
               {/* Mobile Menu Hamburger */}
               <button
@@ -406,6 +465,26 @@ export const Header: React.FC = () => {
                 Contact & Support
               </Link>
             </nav>
+
+            <button
+              type="button"
+              onClick={() => {
+                closeMenus();
+                openCart();
+              }}
+              className="btn btn-secondary"
+              style={{
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                marginTop: 'var(--space-2)',
+              }}
+            >
+              <ShoppingBag size={18} />
+              <span>View Shopping Cart ({itemCount})</span>
+            </button>
 
             <Link
               to="/products"

@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom';
 import { Header } from '../common/Header';
 import { Footer } from '../common/Footer';
 import { SkipLink } from '../common/SkipLink';
+import { CartDrawer } from '../cart/CartDrawer';
 
 export const RootLayout: React.FC = () => {
   return (
@@ -13,6 +14,7 @@ export const RootLayout: React.FC = () => {
         <Outlet />
       </main>
       <Footer />
+      <CartDrawer />
     </div>
   );
 };

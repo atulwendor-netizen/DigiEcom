@@ -128,7 +128,7 @@ describe('Homepage Rendering & Components', () => {
     expect(notifyBtn).toBeDisabled();
   });
 
-  it('header does NOT render a nonfunctional cart or account icon pretending to work', () => {
+  it('header renders functional cart trigger and avoids fake user account button', () => {
     render(
       <MemoryRouter>
         <Header />
@@ -138,8 +138,10 @@ describe('Homepage Rendering & Components', () => {
     // Primary CTA is Browse Products
     expect(screen.getByRole('link', { name: /Browse Products/i })).toBeInTheDocument();
 
-    // No fake cart or user account buttons
-    expect(screen.queryByLabelText(/cart/i)).not.toBeInTheDocument();
+    // Functional shopping cart trigger is accessible
+    expect(screen.getByRole('button', { name: /shopping cart/i })).toBeInTheDocument();
+
+    // Still does not render fake user account button pretending to authenticate
     expect(screen.queryByLabelText(/my account/i)).not.toBeInTheDocument();
   });
 });

@@ -1,14 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { ShoppingBag } from 'lucide-react';
 import { Product } from '../../types/product';
 import { ProductCoverVisual } from './ProductCoverVisual';
 import { formatINR } from '../../utils/currency';
+import { useCart } from '../../context/CartContext';
 
 interface ProductCardProps {
   product: Product;
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+  const { addItem } = useCart();
+
   return (
     <article
       className="card card-interactive product-card"
@@ -149,15 +153,36 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             </small>
           </div>
 
-          <Link
-            to={`/products/${product.slug}`}
-            className="round-link"
-            aria-label={`View details for ${product.name}`}
-          >
-            <span aria-hidden="true" style={{ fontSize: '1.1rem', fontWeight: 700 }}>
-              ↗
-            </span>
-          </Link>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <button
+              type="button"
+              onClick={() => addItem(product)}
+              className="btn btn-secondary btn-sm"
+              style={{
+                padding: '6px 12px',
+                fontSize: '0.78rem',
+                borderRadius: 'var(--radius-sm)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                fontWeight: 600,
+                cursor: 'pointer',
+              }}
+              aria-label={`Add ${product.name} to cart`}
+            >
+              <ShoppingBag size={14} />
+              <span>Add</span>
+            </button>
+            <Link
+              to={`/products/${product.slug}`}
+              className="round-link"
+              aria-label={`View details for ${product.name}`}
+            >
+              <span aria-hidden="true" style={{ fontSize: '1.1rem', fontWeight: 700 }}>
+                ↗
+              </span>
+            </Link>
+          </div>
         </div>
       </div>
     </article>
