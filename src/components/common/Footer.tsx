@@ -11,7 +11,7 @@ export const Footer: React.FC = () => {
   return (
     <footer
       style={{
-        backgroundColor: '#070410',
+        backgroundColor: 'var(--ink)',
         borderTop: '1px solid var(--border-subtle)',
         marginTop: 'var(--space-20)',
         paddingTop: 'var(--space-16)',
@@ -275,7 +275,7 @@ export const Footer: React.FC = () => {
           }}
         >
           <div>
-            &copy; {currentYear} {siteConfig.copyrightHolder}. All rights reserved. Sample demonstration catalogue.
+            &copy; {currentYear} DigiEcom demo. Digital products shown are illustrative. All rights reserved.
           </div>
           <div style={{ display: 'flex', gap: 'var(--space-4)' }}>
             <span>No paid checkout active</span>

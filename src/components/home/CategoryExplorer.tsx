@@ -7,72 +7,91 @@ import {
   CheckCircle2,
   Layers,
   Terminal,
-  ArrowRight,
 } from 'lucide-react';
 import categoriesData from '../../data/categories.json';
 import { RevealOnScroll } from '../common/RevealOnScroll';
 
 export const CategoryExplorer: React.FC = () => {
-  const getCategoryIcon = (iconName: string, accentColor: string) => {
-    const size = 26;
-    const colorMap: Record<string, string> = {
-      violet: '#c084fc',
-      lime: '#10ef8a',
-      orange: '#fb923c',
-      cyan: '#38bdf8',
-      pink: '#f472b6',
-    };
-    const color = colorMap[accentColor] || '#10ef8a';
-
+  const getCategoryIcon = (iconName: string) => {
+    const size = 22;
     switch (iconName) {
       case 'BookOpen':
-        return <BookOpen size={size} color={color} />;
+        return <BookOpen size={size} color="var(--ink)" />;
       case 'Sparkles':
-        return <Sparkles size={size} color={color} />;
+        return <Sparkles size={size} color="var(--ink)" />;
       case 'Briefcase':
-        return <Briefcase size={size} color={color} />;
+        return <Briefcase size={size} color="var(--ink)" />;
       case 'CheckCircle2':
-        return <CheckCircle2 size={size} color={color} />;
+        return <CheckCircle2 size={size} color="var(--ink)" />;
       case 'Layers':
-        return <Layers size={size} color={color} />;
+        return <Layers size={size} color="var(--ink)" />;
       case 'Terminal':
       default:
-        return <Terminal size={size} color={color} />;
+        return <Terminal size={size} color="var(--ink)" />;
     }
   };
+
+  const cardColors = ['card-lime', 'card-pink', 'card-orange', 'card-lavender'];
 
   return (
     <section
       id="category-explorer"
       aria-labelledby="categories-heading"
       style={{
-        paddingTop: 'var(--space-12)',
-        paddingBottom: 'var(--space-16)',
-        backgroundColor: 'rgba(16, 12, 36, 0.4)',
-        borderTop: '1px solid var(--border-subtle)',
-        borderBottom: '1px solid var(--border-subtle)',
+        paddingTop: 'var(--space-16)',
+        paddingBottom: 'var(--space-20)',
+        borderTop: '1px solid var(--line)',
+        borderBottom: '1px solid var(--line)',
       }}
     >
       <div className="container">
-        {/* Section Header */}
+        {/* Section Head matching demo */}
         <RevealOnScroll>
-          <div style={{ marginBottom: 'var(--space-10)', textAlign: 'center', maxWidth: '640px', margin: '0 auto var(--space-10) auto' }}>
-            <span className="badge badge-violet" style={{ marginBottom: 'var(--space-2)' }}>
-              Curated Collections
-            </span>
-            <h2
-              id="categories-heading"
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'flex-end',
+              justifyContent: 'space-between',
+              gap: '28px',
+              marginBottom: '36px',
+              flexWrap: 'wrap',
+            }}
+          >
+            <div>
+              <div
+                style={{
+                  color: 'var(--lime)',
+                  fontSize: '0.74rem',
+                  fontWeight: 850,
+                  letterSpacing: '0.14em',
+                  textTransform: 'uppercase',
+                }}
+              >
+                Find your flow
+              </div>
+              <h2
+                id="categories-heading"
+                style={{
+                  margin: '9px 0 0',
+                  fontSize: 'clamp(2.2rem, 4.5vw, 3.6rem)',
+                  letterSpacing: '-0.065em',
+                  lineHeight: 1.04,
+                  fontWeight: 900,
+                }}
+              >
+                Good ideas need<br />good tools.
+              </h2>
+            </div>
+            <p
               style={{
-                fontSize: 'clamp(1.75rem, 3.5vw, 2.5rem)',
-                fontWeight: 800,
-                letterSpacing: '-0.02em',
-                marginBottom: 'var(--space-3)',
+                maxWidth: '420px',
+                color: 'var(--muted)',
+                margin: 0,
+                fontSize: '1rem',
+                lineHeight: 1.6,
               }}
             >
-              Explore Digital Assets by Discipline
-            </h2>
-            <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)' }}>
-              Each category is organized with verified file formats, compatibility notes, and clear licensing scopes.
+              Explore thoughtfully designed resources for learning, creating and getting work done &bull; all categorized with clear licensing and formats.
             </p>
           </div>
         </RevealOnScroll>
@@ -81,95 +100,52 @@ export const CategoryExplorer: React.FC = () => {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
-            gap: 'var(--space-6)',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+            gap: '16px',
           }}
         >
-          {categoriesData.map((cat, idx) => (
-            <RevealOnScroll key={cat.id} delay={idx * 60} style={{ height: '100%' }}>
-              <Link
-                to={`/products?category=${cat.id}`}
-                className="card card-interactive"
-                style={{
-                  textDecoration: 'none',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  padding: 'var(--space-6)',
-                  background: 'var(--bg-surface)',
-                  border: '1px solid var(--border-card)',
-                  height: '100%',
-                }}
-              >
-                <div>
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      marginBottom: 'var(--space-4)',
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: '50px',
-                        height: '50px',
-                        borderRadius: 'var(--radius-lg)',
-                        background: 'var(--bg-surface-elevated)',
-                        border: '1px solid var(--border-card)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      {getCategoryIcon(cat.iconName, cat.accentColor)}
-                    </div>
-                    <span
-                      className="badge"
-                      style={{
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: '11px',
-                        background: 'rgba(255, 255, 255, 0.05)',
-                        color: 'var(--text-muted)',
-                      }}
-                    >
-                      {cat.popularFormats.join(' ')}
-                    </span>
-                  </div>
-
-                  <h3
-                    style={{
-                      fontSize: 'var(--text-lg)',
-                      fontWeight: 700,
-                      marginBottom: 'var(--space-2)',
-                      color: 'var(--text-primary)',
-                    }}
-                  >
-                    {cat.name}
-                  </h3>
-                  <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', marginBottom: 'var(--space-3)', lineHeight: 1.5 }}>
-                    {cat.tagline}
-                  </p>
-                </div>
-
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 'var(--space-2)',
-                    fontSize: 'var(--text-xs)',
-                    fontWeight: 600,
-                    color: 'var(--accent-lime)',
-                    paddingTop: 'var(--space-3)',
-                    borderTop: '1px solid var(--border-card)',
-                  }}
+          {categoriesData.map((cat, idx) => {
+            const colorClass = cardColors[idx % cardColors.length];
+            return (
+              <RevealOnScroll key={cat.id} delay={idx * 60} style={{ height: '100%' }}>
+                <Link
+                  to={`/products?category=${cat.id}`}
+                  className={`demo-category-card ${colorClass}`}
                 >
-                  <span>Browse {cat.name}</span>
-                  <ArrowRight size={14} className="category-arrow" />
-                </div>
-              </Link>
-            </RevealOnScroll>
-          ))}
+                  <span className="category-icon-box" aria-hidden="true">
+                    {getCategoryIcon(cat.iconName)}
+                  </span>
+                  <div>
+                    <h3
+                      style={{
+                        margin: '22px 0 4px',
+                        fontSize: '1.25rem',
+                        fontWeight: 800,
+                        letterSpacing: '-0.04em',
+                        color: 'var(--ink)',
+                      }}
+                    >
+                      {cat.name}
+                    </h3>
+                    <p
+                      style={{
+                        margin: 0,
+                        fontSize: '0.84rem',
+                        opacity: 0.85,
+                        color: 'var(--ink)',
+                        lineHeight: 1.4,
+                      }}
+                    >
+                      {cat.description}
+                    </p>
+                  </div>
+                  <span className="category-arrow-icon" aria-hidden="true">
+                    ↗
+                  </span>
+                </Link>
+              </RevealOnScroll>
+            );
+          })}
         </div>
       </div>
     </section>

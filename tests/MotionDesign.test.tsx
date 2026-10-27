@@ -65,5 +65,12 @@ describe('Motion Design System Integrity', () => {
     expect(cssContent).toContain('@keyframes svgStrokeDraw');
     expect(cssContent).toContain('@keyframes mobileDrawerSlide');
     expect(cssContent).toContain('@keyframes ambientGlowPulse');
+
+    // Standalone demo keyframe migrations
+    expect(cssContent).toContain('@keyframes draw-mark');
+    expect(cssContent).toContain('@keyframes core-pop');
+    expect(cssContent).toContain('@keyframes text-rise');
+    expect(cssContent).toContain('@keyframes float-main');
+    expect(cssContent).toContain('@keyframes marquee');
   });
 });

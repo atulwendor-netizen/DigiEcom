@@ -1,175 +1,155 @@
 import React from 'react';
-import { Search, FileText, CreditCard, Download, AlertTriangle } from 'lucide-react';
+import { AlertTriangle } from 'lucide-react';
 import { RevealOnScroll } from '../common/RevealOnScroll';
 
 export const HowItWorksSection: React.FC = () => {
   const steps = [
     {
-      stepNumber: '01',
-      title: 'Discover Assets',
-      icon: <Search size={22} color="var(--accent-lime)" />,
+      num: '01',
+      title: '1. Discover & Filter',
       badge: 'Active in Storefront',
-      description:
-        'Browse curated digital collections by category, keyword, or required file formats. Inspect live previews, inclusions, and metadata.',
+      desc: 'Browse curated product categories and find resources matching your stack with verified file formats and system requirements.',
     },
     {
-      stepNumber: '02',
-      title: 'Review Specifications',
-      icon: <FileText size={22} color="var(--accent-violet)" />,
+      num: '02',
+      title: '2. Review Inclusions',
       badge: 'Active in Storefront',
-      description:
-        'Verify software compatibility, licensing constraints, file extensions, and FAQs before deciding if an asset fits your workflow.',
+      desc: 'Inspect exact file extensions, software compatibility, inclusions list, licensing scopes, and practical FAQs before deciding.',
     },
     {
-      stepNumber: '03',
-      title: 'Secure Checkout',
-      icon: <CreditCard size={22} color="var(--accent-orange)" />,
-      badge: 'Coming in Future Release',
-      description:
-        'Once backend payment gateways are implemented and tested, purchases will be processed securely with server-side signature verification.',
+      num: '03',
+      title: '3. Purchase',
+      badge: 'Temporarily Disabled',
+      desc: 'Purchases and payment processing are temporarily disabled. Backend payment gateways with server-side signature verification will be added in a future release.',
     },
     {
-      stepNumber: '04',
-      title: 'Protected Delivery',
-      icon: <Download size={22} color="var(--accent-cyan)" />,
+      num: '04',
+      title: '4. Instant Access',
       badge: 'Coming in Future Release',
-      description:
-        'Paid orders will receive authenticated, short-lived signed download links directly from private cloud storage with full receipt history.',
+      desc: 'Paid orders will receive authenticated, short-lived signed download links directly from private cloud storage with full receipt history.',
     },
   ];
 
   return (
     <section
+      id="how-it-works"
       aria-labelledby="how-it-works-heading"
       style={{
         paddingTop: 'var(--space-16)',
-        paddingBottom: 'var(--space-16)',
+        paddingBottom: 'var(--space-20)',
+        borderBottom: '1px solid var(--line)',
       }}
     >
       <div className="container">
-        {/* Header */}
-        <RevealOnScroll>
-          <div style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto var(--space-8) auto' }}>
-            <span className="badge badge-violet" style={{ marginBottom: 'var(--space-2)' }}>
-              Architecture & Roadmap
-            </span>
-            <h2
-              id="how-it-works-heading"
-              style={{
-                fontSize: 'clamp(1.75rem, 3.5vw, 2.5rem)',
-                fontWeight: 800,
-                letterSpacing: '-0.02em',
-                marginBottom: 'var(--space-3)',
-              }}
-            >
-              How DigiEcom Works
-            </h2>
-            <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)' }}>
-              Transparent overview of current storefront capabilities and upcoming infrastructure milestones.
-            </p>
-          </div>
-
-          {/* Notice Callout */}
-          <div
-            className="notice-banner notice-warning"
-            style={{ maxWidth: '820px', margin: '0 auto var(--space-10) auto' }}
-          >
-            <AlertTriangle size={20} color="#f59e0b" style={{ flexShrink: 0, marginTop: '2px' }} />
-            <div>
-              <strong>Storefront Phase 1 Notice:</strong> Step 1 (Discovery) and Step 2 (Product Review) are fully
-              operational today. Steps 3 and 4 (Checkout & Digital Fulfillment) remain intentionally disabled until
-              backend payment webhooks and private signed storage are connected.
-            </div>
-          </div>
-        </RevealOnScroll>
-
-        {/* 4 Steps Grid */}
         <div
+          className="how-grid"
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-            gap: 'var(--space-6)',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+            gap: '50px',
+            alignItems: 'start',
           }}
         >
-          {steps.map((item, idx) => (
-            <RevealOnScroll key={idx} delay={idx * 75} style={{ height: '100%' }}>
+          {/* Left Column: How Intro */}
+          <div className="how-intro">
+            <RevealOnScroll>
               <div
-                className="card card-interactive"
                 style={{
-                  position: 'relative',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  padding: 'var(--space-6)',
-                  background: 'var(--bg-surface)',
-                  border: '1px solid var(--border-card)',
-                  height: '100%',
+                  color: 'var(--lime)',
+                  fontSize: '0.74rem',
+                  fontWeight: 850,
+                  letterSpacing: '0.14em',
+                  textTransform: 'uppercase',
+                  marginBottom: '8px',
                 }}
               >
+                Simple by design
+              </div>
+              <h2
+                id="how-it-works-heading"
+                style={{
+                  margin: '0 0 16px',
+                  fontSize: 'clamp(2.2rem, 4vw, 3.4rem)',
+                  letterSpacing: '-0.065em',
+                  lineHeight: 1.05,
+                  fontWeight: 900,
+                  color: 'var(--text)',
+                }}
+              >
+                How DigiEcom Works
+              </h2>
+              <p
+                style={{
+                  color: 'var(--muted)',
+                  fontSize: '1rem',
+                  lineHeight: 1.6,
+                  maxWidth: '460px',
+                  marginBottom: '24px',
+                }}
+              >
+                DigiEcom is designed to make discovering digital resources straightforward. This preview demonstrates the intended customer journey; purchases and automated delivery remain inactive.
+              </p>
+
+              {/* Disabled Checkout Notice Callout */}
+              <div
+                className="notice-banner notice-warning"
+                style={{ maxWidth: '460px', marginBottom: '24px' }}
+              >
+                <AlertTriangle size={18} color="#f59e0b" style={{ flexShrink: 0, marginTop: '2px' }} />
                 <div>
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      marginBottom: 'var(--space-4)',
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: '44px',
-                        height: '44px',
-                        borderRadius: 'var(--radius-md)',
-                        background: 'var(--bg-surface-elevated)',
-                        border: '1px solid var(--border-subtle)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      {item.icon}
-                    </div>
-                    <span
-                      style={{
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: 'var(--text-xl)',
-                        fontWeight: 800,
-                        color: 'rgba(255, 255, 255, 0.2)',
-                      }}
-                    >
-                      {item.stepNumber}
-                    </span>
-                  </div>
-
-                  <div style={{ marginBottom: 'var(--space-2)' }}>
-                    <span
-                      className={`badge ${
-                        item.badge.includes('Active') ? 'badge-lime' : 'badge-demo'
-                      }`}
-                      style={{ fontSize: '10px' }}
-                    >
-                      {item.badge}
-                    </span>
-                  </div>
-
-                  <h3
-                    style={{
-                      fontSize: 'var(--text-base)',
-                      fontWeight: 700,
-                      marginBottom: 'var(--space-2)',
-                      color: 'var(--text-primary)',
-                    }}
-                  >
-                    {item.title}
-                  </h3>
-
-                  <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-                    {item.description}
-                  </p>
+                  <strong>Storefront Phase 1 Notice:</strong> Purchases and payment processing are temporarily disabled until backend payment webhooks and private signed storage are connected. No financial transactions or digital deliveries will occur in this preview.
                 </div>
               </div>
+
+              <a className="btn btn-primary" href="#products">
+                Explore the preview <span aria-hidden="true">↗</span>
+              </a>
             </RevealOnScroll>
-          ))}
+          </div>
+
+          {/* Right Column: Steps */}
+          <div className="steps" style={{ display: 'grid', gap: '14px' }}>
+            {steps.map((step, idx) => (
+              <RevealOnScroll key={step.num} delay={idx * 80}>
+                <article className="demo-step-card">
+                  <div className="demo-step-num">{step.num}</div>
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                      <h3
+                        style={{
+                          margin: 0,
+                          fontSize: '1.15rem',
+                          fontWeight: 800,
+                          letterSpacing: '-0.03em',
+                          color: 'var(--text)',
+                        }}
+                      >
+                        {step.title}
+                      </h3>
+                      <span
+                        className={`badge ${
+                          step.badge.includes('Active') ? 'badge-lime' : 'badge-demo'
+                        }`}
+                        style={{ fontSize: '10px' }}
+                      >
+                        {step.badge}
+                      </span>
+                    </div>
+                    <p
+                      style={{
+                        margin: 0,
+                        color: 'var(--muted)',
+                        fontSize: '0.88rem',
+                        lineHeight: 1.5,
+                      }}
+                    >
+                      {step.desc}
+                    </p>
+                  </div>
+                </article>
+              </RevealOnScroll>
+            ))}
+          </div>
         </div>
       </div>
     </section>

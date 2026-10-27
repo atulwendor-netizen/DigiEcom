@@ -4,55 +4,71 @@
    ========================================================================== */
 
 :root {
-  /* Brand Palette */
-  --bg-app: #080514;
-  --bg-surface: #100c24;
-  --bg-surface-elevated: #171133;
-  --bg-surface-hover: #211948;
-  --bg-surface-glass: rgba(16, 12, 36, 0.85);
+  /* Standalone Motion Demo Palette */
+  --ink: #171526;
+  --ink-2: #201d35;
+  --panel: #25213d;
+  --panel-light: #302b4b;
+  --text: #f8f7ff;
+  --muted: #b8b3cf;
+  --lime: #c6ff65;
+  --pink: #f6a5ff;
+  --orange: #ffbd7b;
+  --lavender: #c7bdff;
+  --line: rgba(255, 255, 255, 0.12);
+  --radius: 22px;
+  --shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+  --max: 1180px;
+
+  /* Brand Palette Mapped to Demo */
+  --bg-app: var(--ink);
+  --bg-surface: var(--ink-2);
+  --bg-surface-elevated: var(--panel);
+  --bg-surface-hover: var(--panel-light);
+  --bg-surface-glass: rgba(23, 21, 38, 0.86);
 
   /* Borders & Dividers */
-  --border-subtle: rgba(168, 85, 247, 0.15);
-  --border-card: rgba(255, 255, 255, 0.08);
-  --border-focus: #10ef8a;
-  --border-active: #a855f7;
+  --border-subtle: var(--line);
+  --border-card: rgba(255, 255, 255, 0.09);
+  --border-focus: var(--lime);
+  --border-active: var(--lime);
 
   /* Accent Colors */
-  --accent-lime: #10ef8a;
-  --accent-lime-hover: #0cd477;
-  --accent-lime-subtle: rgba(16, 239, 138, 0.12);
-  --accent-lime-glow: rgba(16, 239, 138, 0.25);
+  --accent-lime: var(--lime);
+  --accent-lime-hover: #b5f54f;
+  --accent-lime-subtle: rgba(198, 255, 101, 0.14);
+  --accent-lime-glow: rgba(198, 255, 101, 0.35);
 
-  --accent-violet: #a855f7;
-  --accent-violet-hover: #9333ea;
-  --accent-violet-subtle: rgba(168, 85, 247, 0.14);
-  --accent-violet-glow: rgba(168, 85, 247, 0.3);
+  --accent-violet: var(--lavender);
+  --accent-violet-hover: #b5a8ff;
+  --accent-violet-subtle: rgba(199, 189, 255, 0.14);
+  --accent-violet-glow: rgba(199, 189, 255, 0.3);
 
-  --accent-orange: #f97316;
-  --accent-orange-hover: #ea580c;
-  --accent-orange-subtle: rgba(249, 115, 22, 0.14);
+  --accent-orange: var(--orange);
+  --accent-orange-hover: #ffa852;
+  --accent-orange-subtle: rgba(255, 189, 123, 0.14);
 
-  --accent-pink: #ec4899;
-  --accent-pink-hover: #db2777;
-  --accent-pink-subtle: rgba(236, 72, 153, 0.14);
+  --accent-pink: var(--pink);
+  --accent-pink-hover: #f38aff;
+  --accent-pink-subtle: rgba(246, 165, 255, 0.14);
 
-  --accent-cyan: #06b6d4;
+  --accent-cyan: #38bdf8;
 
   /* Functional Status Colors */
-  --color-success: #10ef8a;
-  --color-warning: #f59e0b;
-  --color-warning-subtle: rgba(245, 158, 11, 0.14);
+  --color-success: var(--lime);
+  --color-warning: #ffbd7b;
+  --color-warning-subtle: rgba(255, 189, 123, 0.14);
   --color-error: #f43f5e;
   --color-error-subtle: rgba(244, 63, 94, 0.14);
-  --color-info: #38bdf8;
-  --color-info-subtle: rgba(56, 189, 248, 0.14);
+  --color-info: var(--lavender);
+  --color-info-subtle: rgba(199, 189, 255, 0.14);
 
   /* Typography Colors */
-  --text-primary: #f8fafc;
-  --text-secondary: #cbd5e1;
-  --text-muted: #94a3b8;
-  --text-dim: #64748b;
-  --text-on-accent: #05040a;
+  --text-primary: var(--text);
+  --text-secondary: var(--muted);
+  --text-muted: #9590b0;
+  --text-dim: #7b7596;
+  --text-on-accent: var(--ink);
 
   /* Typography Font Families */
   --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;

@@ -24,150 +24,151 @@ export const ProductCoverVisual: React.FC<ProductCoverVisualProps> = ({
   size = 'md',
   className = '',
 }) => {
-  const heightClass =
-    size === 'sm' ? 'h-36' : size === 'lg' ? 'h-72 md:h-80' : 'h-48 sm:h-52';
-
   const getVisualIcon = () => {
+    const iconSize = size === 'lg' ? 36 : 24;
     switch (product.coverVisualType) {
       case 'playbook':
-        return <BookOpen size={size === 'lg' ? 44 : 28} className="text-violet-300" />;
+        return <BookOpen size={iconSize} />;
       case 'ai':
-        return <Sparkles size={size === 'lg' ? 44 : 28} className="text-lime-300" />;
+        return <Sparkles size={iconSize} />;
       case 'finance':
-        return <BarChart3 size={size === 'lg' ? 44 : 28} className="text-orange-300" />;
+        return <BarChart3 size={iconSize} />;
       case 'legal':
-        return <FileCheck2 size={size === 'lg' ? 44 : 28} className="text-indigo-300" />;
+        return <FileCheck2 size={iconSize} />;
       case 'notion':
-        return <Workflow size={size === 'lg' ? 44 : 28} className="text-cyan-300" />;
+        return <Workflow size={iconSize} />;
       case 'obsidian':
-        return <Brain size={size === 'lg' ? 44 : 28} className="text-purple-300" />;
+        return <Brain size={iconSize} />;
       case 'design':
-        return <Palette size={size === 'lg' ? 44 : 28} className="text-pink-300" />;
+        return <Palette size={iconSize} />;
       case 'illustration':
-        return <Box size={size === 'lg' ? 44 : 28} className="text-fuchsia-300" />;
+        return <Box size={iconSize} />;
       case 'audio':
-        return <Headphones size={size === 'lg' ? 44 : 28} className="text-sky-300" />;
+        return <Headphones size={iconSize} />;
       case 'dotfiles':
       default:
-        return <Terminal size={size === 'lg' ? 44 : 28} className="text-emerald-300" />;
+        return <Terminal size={iconSize} />;
+    }
+  };
+
+  const getThemeClass = () => {
+    switch (product.category) {
+      case 'ebooks-guides':
+        return 'lime';
+      case 'ai-prompts':
+        return 'pink';
+      case 'business-templates':
+        return 'orange';
+      case 'productivity-tools':
+        return 'lavender';
+      case 'design-assets':
+        return 'pink';
+      case 'other-downloads':
+      default:
+        return 'lime';
     }
   };
 
   return (
     <div
-      className={`cover-visual-wrapper ${heightClass} ${className}`}
+      className={`demo-product-art ${getThemeClass()} ${className}`}
       style={{
         background: product.coverGradient,
-        position: 'relative',
-        overflow: 'hidden',
-        borderRadius: size === 'lg' ? 'var(--radius-xl)' : 'var(--radius-md) var(--radius-md) 0 0',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        padding: 'var(--space-4)',
-        borderBottom: '1px solid var(--border-card)',
+        minHeight: size === 'sm' ? '140px' : size === 'lg' ? '280px' : '200px',
       }}
       role="img"
       aria-label={`Visual cover graphic for ${product.name}`}
     >
-      {/* Background geometric accents */}
+      {/* 3D Tilted Cover from Demo */}
       <div
+        className="cover"
         style={{
-          position: 'absolute',
-          top: '-20%',
-          right: '-10%',
-          width: '180px',
-          height: '180px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%)',
-          pointerEvents: 'none',
-        }}
-      />
-      <div
-        style={{
-          position: 'absolute',
-          bottom: '-15%',
-          left: '-10%',
-          width: '140px',
-          height: '140px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(16,239,138,0.06) 0%, transparent 70%)',
-          pointerEvents: 'none',
-        }}
-      />
-
-      {/* Top row: Format badge & Demo tag */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 2 }}>
-        <span
-          className="badge"
-          style={{
-            background: 'rgba(0, 0, 0, 0.45)',
-            backdropFilter: 'blur(8px)',
-            color: 'var(--text-secondary)',
-            border: '1px solid rgba(255,255,255,0.12)',
-            fontFamily: 'var(--font-mono)',
-            fontSize: 'var(--text-xs)',
-          }}
-        >
-          {product.fileFormats.slice(0, 2).join(' ')}
-        </span>
-        <span className="badge badge-demo" style={{ fontSize: '10px' }}>
-          DEMO
-        </span>
-      </div>
-
-      {/* Middle row: Icon and visual graphic */}
-      <div
-        style={{
+          position: 'relative',
+          zIndex: 1,
+          width: size === 'lg' ? '50%' : '52%',
+          aspectRatio: '0.76',
+          border: '1px solid rgba(23, 21, 38, 0.2)',
+          borderRadius: '10px',
+          background: 'rgba(255, 255, 255, 0.18)',
+          boxShadow: '10px 12px 24px rgba(23, 21, 38, 0.25)',
+          padding: '12px',
+          color: 'var(--ink)',
           display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          flex: 1,
-          zIndex: 2,
-          padding: 'var(--space-2) 0',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
         }}
       >
-        <div
-          className="cover-visual-icon"
-          style={{
-            width: size === 'lg' ? '72px' : '52px',
-            height: size === 'lg' ? '72px' : '52px',
-            borderRadius: 'var(--radius-lg)',
-            background: 'rgba(0, 0, 0, 0.35)',
-            border: '1px solid rgba(255, 255, 255, 0.15)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
-          }}
-        >
-          {getVisualIcon()}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <small
+            style={{
+              fontSize: '0.52rem',
+              fontWeight: 900,
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+            }}
+          >
+            DIGIECOM / {product.fileFormats[0] || 'ASSET'}
+          </small>
+          <span
+            className="badge badge-demo"
+            style={{
+              fontSize: '9px',
+              padding: '0.1rem 0.4rem',
+              background: 'rgba(23, 21, 38, 0.85)',
+              color: 'var(--lime)',
+            }}
+          >
+            DEMO
+          </span>
         </div>
-      </div>
 
-      {/* Bottom row: Category badge and Subtle Title preview */}
-      <div style={{ zIndex: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <span
-          style={{
-            fontSize: '11px',
-            fontWeight: 700,
-            color: 'rgba(255, 255, 255, 0.85)',
-            textTransform: 'uppercase',
-            letterSpacing: '0.08em',
-          }}
-        >
-          {product.categoryLabel}
-        </span>
-        <span
-          style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: '11px',
-            color: 'var(--accent-lime)',
-            fontWeight: 600,
-          }}
-        >
-          DRM-Free
-        </span>
+        <div style={{ textAlign: 'center', margin: '4px 0' }}>
+          <div
+            className="cover-visual-icon"
+            style={{
+              display: 'inline-flex',
+              padding: '8px',
+              borderRadius: '50%',
+              background: 'rgba(23, 21, 38, 0.12)',
+            }}
+          >
+            {getVisualIcon()}
+          </div>
+          <strong
+            style={{
+              display: 'block',
+              marginTop: '6px',
+              fontSize: size === 'lg' ? '1.05rem' : '0.82rem',
+              lineHeight: 1.05,
+              letterSpacing: '-0.04em',
+              fontWeight: 900,
+            }}
+          >
+            {product.categoryLabel.toUpperCase()}
+          </strong>
+        </div>
+
+        <div>
+          <div
+            style={{
+              width: '70%',
+              height: '4px',
+              borderRadius: '4px',
+              background: 'currentColor',
+              opacity: 0.35,
+              marginBottom: '3px',
+            }}
+          />
+          <div
+            style={{
+              width: '45%',
+              height: '4px',
+              borderRadius: '4px',
+              background: 'currentColor',
+              opacity: 0.25,
+            }}
+          />
+        </div>
       </div>
     </div>
   );

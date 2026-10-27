@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Sparkles, ArrowRight } from 'lucide-react';
 import { Product } from '../../types/product';
 import { ProductCard } from '../products/ProductCard';
 import { RevealOnScroll } from '../common/RevealOnScroll';
@@ -17,7 +16,10 @@ export const FeaturedProducts: React.FC<FeaturedProductsProps> = ({ products }) 
       aria-labelledby="featured-heading"
       style={{
         paddingTop: 'var(--space-16)',
-        paddingBottom: 'var(--space-16)',
+        paddingBottom: 'var(--space-20)',
+        backgroundColor: '#1d1a30',
+        borderTop: '1px solid rgba(255, 255, 255, 0.05)',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
       }}
     >
       <div className="container">
@@ -29,37 +31,56 @@ export const FeaturedProducts: React.FC<FeaturedProductsProps> = ({ products }) 
               flexWrap: 'wrap',
               justifyContent: 'space-between',
               alignItems: 'flex-end',
-              gap: 'var(--space-4)',
-              marginBottom: 'var(--space-10)',
+              gap: '24px',
+              marginBottom: '36px',
             }}
           >
             <div>
-              <div style={{ display: 'inline-flex', marginBottom: 'var(--space-2)' }}>
-                <span className="badge badge-lime">
-                  <Sparkles size={12} />
-                  <span>Featured Catalogue</span>
-                </span>
+              <div
+                style={{
+                  color: 'var(--lime)',
+                  fontSize: '0.74rem',
+                  fontWeight: 850,
+                  letterSpacing: '0.14em',
+                  textTransform: 'uppercase',
+                  marginBottom: '8px',
+                }}
+              >
+                Curated for curious minds &bull; Featured Catalogue
               </div>
               <h2
                 id="featured-heading"
                 style={{
-                  fontSize: 'clamp(1.75rem, 3.5vw, 2.5rem)',
-                  fontWeight: 800,
-                  letterSpacing: '-0.02em',
-                  marginBottom: 'var(--space-2)',
+                  margin: 0,
+                  fontSize: 'clamp(2.2rem, 4.5vw, 3.6rem)',
+                  letterSpacing: '-0.065em',
+                  lineHeight: 1.04,
+                  fontWeight: 900,
+                  color: 'var(--text)',
                 }}
               >
                 Hand-Crafted Digital Solutions
               </h2>
-              <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)', maxWidth: '580px' }}>
-                Selected digital resources featuring full documentation, verified system requirements, and clear licensing scopes.
-                All items are sample demonstration records.
+              <p
+                style={{
+                  marginTop: '12px',
+                  fontSize: '1rem',
+                  color: 'var(--muted)',
+                  maxWidth: '580px',
+                  lineHeight: 1.6,
+                }}
+              >
+                A preview of curated digital products built for builders and creators. All items are demonstration records; purchases are currently disabled.
               </p>
             </div>
 
-            <Link to="/products" className="btn btn-secondary btn-sm" style={{ alignSelf: 'flex-start' }}>
+            <Link
+              to="/products"
+              className="btn btn-secondary btn-sm"
+              style={{ alignSelf: 'flex-start' }}
+            >
               <span>View All {products.length} Products</span>
-              <ArrowRight size={14} />
+              <span aria-hidden="true">↗</span>
             </Link>
           </div>
         </RevealOnScroll>
@@ -68,8 +89,8 @@ export const FeaturedProducts: React.FC<FeaturedProductsProps> = ({ products }) 
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-            gap: 'var(--space-6)',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(290px, 1fr))',
+            gap: '20px',
           }}
         >
           {featured.map((product, idx) => (

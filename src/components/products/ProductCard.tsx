@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Sparkles } from 'lucide-react';
 import { Product } from '../../types/product';
 import { ProductCoverVisual } from './ProductCoverVisual';
 import { formatINR } from '../../utils/currency';
@@ -12,7 +11,7 @@ interface ProductCardProps {
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   return (
     <article
-      className="card card-interactive"
+      className="card card-interactive product-card"
       style={{
         padding: 0,
         display: 'flex',
@@ -20,7 +19,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         height: '100%',
         overflow: 'hidden',
         position: 'relative',
-        background: 'var(--bg-surface)',
+        background: '#26223e',
+        border: '1px solid rgba(255, 255, 255, 0.09)',
+        borderRadius: 'var(--radius)',
+        transition: 'transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease, border-color 0.3s ease',
       }}
     >
       {/* Product Cover Visual */}
@@ -34,51 +36,61 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
       {/* Card Content */}
       <div
+        className="product-info"
         style={{
-          padding: 'var(--space-5)',
+          padding: '20px',
           display: 'flex',
           flexDirection: 'column',
           flex: 1,
           justifyContent: 'space-between',
-          gap: 'var(--space-3)',
+          gap: '12px',
         }}
       >
         <div>
-          {/* Category Tag & Featured Pill */}
+          {/* Metadata Row */}
           <div
+            className="product-meta"
             style={{
               display: 'flex',
+              justifyContent: 'space-between',
               alignItems: 'center',
-              gap: 'var(--space-2)',
-              marginBottom: 'var(--space-2)',
+              gap: '12px',
+              color: 'var(--muted)',
+              fontSize: '0.74rem',
+              marginBottom: '10px',
             }}
           >
-            <span className="badge badge-violet" style={{ fontSize: '11px' }}>
+            <span
+              className="product-tag"
+              style={{
+                color: 'var(--lime)',
+                fontWeight: 800,
+                letterSpacing: '0.04em',
+                textTransform: 'uppercase',
+              }}
+            >
               {product.categoryLabel}
             </span>
-            {product.isFeatured && (
-              <span className="badge badge-lime" style={{ fontSize: '11px' }}>
-                <Sparkles size={10} />
-                Featured
-              </span>
-            )}
+            <span style={{ fontFamily: 'var(--font-mono)' }}>
+              {product.fileFormats.slice(0, 2).join(' · ')} &bull; DEMO
+            </span>
           </div>
 
           {/* Product Title */}
           <h3
             style={{
-              fontSize: 'var(--text-base)',
-              fontWeight: 700,
-              lineHeight: 1.35,
-              marginBottom: 'var(--space-2)',
-              color: 'var(--text-primary)',
+              margin: '0 0 8px',
+              fontSize: '1.2rem',
+              fontWeight: 800,
+              letterSpacing: '-0.035em',
+              lineHeight: 1.25,
             }}
           >
             <Link
               to={`/products/${product.slug}`}
-              style={{ textDecoration: 'none', color: 'inherit' }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--accent-lime)')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = 'inherit')}
+              style={{ textDecoration: 'none', color: 'var(--text)' }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--lime)')}
+              onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text)')}
             >
               {product.name}
             </Link>
@@ -87,8 +99,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           {/* Short Benefit-oriented Description */}
           <p
             style={{
-              fontSize: 'var(--text-xs)',
-              color: 'var(--text-secondary)',
+              color: 'var(--muted)',
+              margin: 0,
+              fontSize: '0.86rem',
               lineHeight: 1.5,
               display: '-webkit-box',
               WebkitLineClamp: 2,
@@ -100,48 +113,50 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           </p>
         </div>
 
-        {/* Inclusions / Compatibility snippet */}
+        {/* Product Bottom Row matching demo */}
         <div
+          className="product-bottom"
           style={{
-            paddingTop: 'var(--space-3)',
-            borderTop: '1px solid var(--border-card)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            gap: 'var(--space-2)',
+            gap: '12px',
+            marginTop: '16px',
+            paddingTop: '16px',
+            borderTop: '1px solid var(--line)',
           }}
         >
-          <div>
+          <div className="price">
             <span
               style={{
-                fontSize: '11px',
-                color: 'var(--text-dim)',
-                textTransform: 'uppercase',
-                display: 'block',
                 fontFamily: 'var(--font-mono)',
-              }}
-            >
-              Price (INR)
-            </span>
-            <div
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: 'var(--text-lg)',
-                fontWeight: 700,
-                color: 'var(--accent-lime)',
+                fontSize: '1.15rem',
+                fontWeight: 900,
+                color: 'var(--text)',
               }}
             >
               {formatINR(product.pricePaise)}
-            </div>
+            </span>
+            <small
+              style={{
+                display: 'block',
+                color: 'var(--muted)',
+                fontSize: '0.64rem',
+                fontWeight: 500,
+              }}
+            >
+              Preview only &bull; Not for sale
+            </small>
           </div>
 
           <Link
             to={`/products/${product.slug}`}
-            className="btn btn-secondary btn-sm"
-            style={{ fontSize: '12px', padding: '0.4rem 0.75rem' }}
+            className="round-link"
+            aria-label={`View details for ${product.name}`}
           >
-            <span>View Details</span>
-            <ArrowRight size={12} />
+            <span aria-hidden="true" style={{ fontSize: '1.1rem', fontWeight: 700 }}>
+              ↗
+            </span>
           </Link>
         </div>
       </div>

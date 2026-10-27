@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Sparkles, Terminal, FileCode, CheckCircle2, Shield } from 'lucide-react';
+import { Terminal, CheckCircle2, Shield } from 'lucide-react';
 import { siteConfig } from '../../config/siteConfig';
 import { HeroHumanAnimation } from './HeroHumanAnimation';
 
@@ -13,36 +13,37 @@ export const Hero: React.FC = () => {
         paddingTop: 'var(--space-12)',
         paddingBottom: 'var(--space-16)',
         overflow: 'hidden',
+        isolation: 'isolate',
       }}
     >
-      {/* Background layered ambient glow shapes */}
+      {/* Background layered ambient glow shapes from demo */}
       <div
         style={{
           position: 'absolute',
-          top: '-15%',
-          left: '10%',
-          width: '420px',
-          height: '420px',
+          top: '-90px',
+          right: '-120px',
+          width: '540px',
+          height: '540px',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(168, 85, 247, 0.12) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(130, 83, 255, 0.2), transparent 68%)',
           pointerEvents: 'none',
-          animation: 'ambientGlowPulse 9s ease-in-out infinite alternate',
           zIndex: 0,
+          filter: 'blur(2px)',
         }}
         aria-hidden="true"
       />
       <div
         style={{
           position: 'absolute',
-          top: '25%',
-          right: '5%',
-          width: '500px',
-          height: '500px',
+          bottom: '-70px',
+          left: '-180px',
+          width: '380px',
+          height: '380px',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(16, 239, 138, 0.08) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(198, 255, 101, 0.12), transparent 70%)',
           pointerEvents: 'none',
-          animation: 'ambientGlowPulse 11s ease-in-out infinite alternate-reverse',
           zIndex: 0,
+          filter: 'blur(2px)',
         }}
         aria-hidden="true"
       />
@@ -57,47 +58,47 @@ export const Hero: React.FC = () => {
           }}
           className="hero-grid"
         >
-          {/* Left Column: Headlines & CTAs with Staggered Entrance */}
+          {/* Left Column: Headlines & CTAs */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
-            {/* Top Badge */}
+            {/* Top Eyebrow */}
             <div className="hero-stagger-1" style={{ display: 'inline-flex' }}>
-              <span className="badge badge-lime" style={{ padding: '0.35rem 0.85rem' }}>
-                <Sparkles size={12} />
-                <span>Storefront Preview &bull; Curated Creator & Developer Assets</span>
-              </span>
+              <div className="eyebrow">
+                <span className="eyebrow-dot" />
+                <span>The digital resource marketplace &bull; Storefront preview</span>
+              </div>
             </div>
 
-            {/* Headline */}
+            {/* Headline with Text-Rise Animation */}
             <h1
               id="hero-heading"
-              className="hero-stagger-2"
+              aria-label="Your Next Big Idea Starts With the Right Digital Tools."
               style={{
-                fontSize: 'clamp(2.25rem, 5vw, 3.75rem)',
-                fontWeight: 800,
-                lineHeight: 1.1,
-                letterSpacing: '-0.03em',
+                margin: '18px 0 16px',
+                fontSize: 'clamp(2.75rem, 5.5vw, 4.75rem)',
+                letterSpacing: '-0.065em',
+                lineHeight: 1.02,
+                fontWeight: 900,
               }}
             >
-              {siteConfig.heroHeadline}{' '}
-              <span
-                style={{
-                  background: 'linear-gradient(135deg, #10ef8a 0%, #38bdf8 50%, #c084fc 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                }}
-              >
-                {siteConfig.heroHighlightWord}
+              <span className="hero-line">
+                <span>Your Next Big Idea</span>
+              </span>
+              <span className="hero-line">
+                <span>Starts With the Right</span>
+              </span>
+              <span className="hero-line">
+                <span className="accent" style={{ color: 'var(--lime)' }}>Digital Tools.</span>
               </span>
             </h1>
 
             {/* Supporting Copy */}
             <p
-              className="hero-stagger-3"
+              className="hero-copy hero-stagger-3"
               style={{
-                fontSize: 'var(--text-lg)',
-                color: 'var(--text-secondary)',
+                fontSize: '1.08rem',
+                color: 'var(--muted)',
                 lineHeight: 1.6,
-                maxWidth: '620px',
+                maxWidth: '560px',
               }}
             >
               {siteConfig.heroSubheadline}
@@ -105,26 +106,42 @@ export const Hero: React.FC = () => {
 
             {/* CTAs */}
             <div
-              className="hero-stagger-4"
+              className="hero-actions hero-stagger-4"
               style={{
                 display: 'flex',
                 flexWrap: 'wrap',
-                gap: 'var(--space-4)',
+                gap: '12px',
                 alignItems: 'center',
               }}
             >
               <Link to="/products" className="btn btn-primary btn-lg">
                 <span>Explore Products</span>
-                <ArrowRight size={18} />
+                <span aria-hidden="true">↗</span>
               </Link>
               <a href="#category-explorer" className="btn btn-secondary btn-lg">
                 Browse Categories
               </a>
             </div>
 
+            {/* Hero Proof Dots */}
+            <div
+              className="hero-proof hero-stagger-5"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                color: 'var(--muted)',
+                fontSize: '0.85rem',
+              }}
+            >
+              <span className="proof-dots" aria-hidden="true">
+                <i></i><i></i><i></i>
+              </span>
+              <span>Find your next useful digital resource.</span>
+            </div>
+
             {/* Honest Highlights / Specs */}
             <div
-              className="hero-stagger-5"
               style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
@@ -134,27 +151,27 @@ export const Hero: React.FC = () => {
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
-                <CheckCircle2 size={16} color="var(--accent-lime)" />
-                <span style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)' }}>
+                <CheckCircle2 size={16} color="var(--lime)" />
+                <span style={{ fontSize: 'var(--text-xs)', color: 'var(--muted)' }}>
                   DRM-Free Open Formats
                 </span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
-                <Shield size={16} color="var(--accent-violet)" />
-                <span style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)' }}>
+                <Shield size={16} color="var(--lavender)" />
+                <span style={{ fontSize: 'var(--text-xs)', color: 'var(--muted)' }}>
                   Direct Transparent Pricing
                 </span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
-                <Terminal size={16} color="var(--accent-orange)" />
-                <span style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)' }}>
+                <Terminal size={16} color="var(--orange)" />
+                <span style={{ fontSize: 'var(--text-xs)', color: 'var(--muted)' }}>
                   Practitioner Tested
                 </span>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Human Presenter & Floating Digital Product Showcase */}
+          {/* Right Column: 3D Floating Product Mockups & Presenter */}
           <div
             className="hero-showcase-wrapper"
             style={{
@@ -163,9 +180,33 @@ export const Hero: React.FC = () => {
               flexDirection: 'column',
               gap: 'var(--space-6)',
               alignItems: 'center',
+              width: '100%',
             }}
           >
-            {/* Photorealistic Presenter walking in and presenting products */}
+            {/* Standalone Demo 3D Floating Product Mockups */}
+            <div className="hero-art" aria-label="Decorative digital product mockups">
+              <div className="art-glow" />
+              <div className="art-orbit" />
+              <div className="product-mock mock-pink">
+                <div style={{ fontSize: '0.62rem', fontWeight: 900, textTransform: 'uppercase', marginBottom: '4px' }}>E-Book</div>
+                <h3 style={{ fontSize: '0.88rem', lineHeight: 1.15 }}>The Pragmatic System Design Handbook</h3>
+                <p style={{ fontSize: '0.64rem', margin: '4px 0', opacity: 0.8 }}>340 pages &bull; Architecture</p>
+                <div className="mini-lines"><span></span><span></span><span></span></div>
+              </div>
+              <div className="product-mock mock-main">
+                <span className="mock-label">DIGIECOM / STOREFRONT</span>
+              </div>
+              <div className="product-mock mock-orange">
+                <div style={{ fontSize: '0.62rem', fontWeight: 900, textTransform: 'uppercase', marginBottom: '4px' }}>AI Prompts</div>
+                <h3 style={{ fontSize: '0.88rem', lineHeight: 1.15 }}>Enterprise Prompt Vault: 450+ Tested System Prompts</h3>
+                <p style={{ fontSize: '0.64rem', margin: '4px 0', opacity: 0.8 }}>450+ tested schemas</p>
+                <div className="mini-lines"><span></span><span></span><span></span></div>
+              </div>
+              <div className="art-sticker" aria-hidden="true">✳</div>
+              <div className="art-caption">Tools for your next chapter</div>
+            </div>
+
+            {/* Photorealistic Presenter Animation */}
             <div
               className="hero-presenter-wrapper"
               style={{
@@ -178,105 +219,6 @@ export const Hero: React.FC = () => {
               }}
             >
               <HeroHumanAnimation />
-            </div>
-
-            {/* Floating Digital Product Showcase Collage */}
-            <div
-              className="hero-collage"
-              style={{
-                position: 'relative',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 'var(--space-4)',
-                width: '100%',
-              }}
-            >
-              {/* Primary Collage Card: Cloud Microservices Playbook */}
-              <div
-                className="card hero-float-primary"
-                style={{
-                  background: 'linear-gradient(135deg, #160d33 0%, #20134d 100%)',
-                  border: '1px solid rgba(168, 85, 247, 0.35)',
-                  boxShadow: 'var(--shadow-lg), var(--shadow-glow-violet)',
-                  position: 'relative',
-                  zIndex: 3,
-                  transition: 'box-shadow var(--duration-base) var(--ease-out-smooth), border-color var(--duration-fast)',
-                }}
-              >
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-3)' }}>
-                  <span className="badge badge-lime">E-books & Guides</span>
-                  <span className="badge badge-demo">Sample Asset</span>
-                </div>
-                <div style={{ display: 'flex', gap: 'var(--space-3)', alignItems: 'center', marginBottom: 'var(--space-2)' }}>
-                  <FileCode size={24} color="var(--accent-lime)" />
-                  <h3 style={{ fontSize: 'var(--text-base)', color: '#ffffff' }}>
-                    The Pragmatic System Design Handbook
-                  </h3>
-                </div>
-                <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', marginBottom: 'var(--space-3)' }}>
-                  Distributed transactions, caching invalidation, latency SLAs &bull; 340 pages
-                </p>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent-lime)', fontWeight: 700 }}>
-                    ₹799
-                  </span>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text-dim)' }}>
-                    .pdf &bull; .epub
-                  </span>
-                </div>
-              </div>
-
-              {/* Overlapping Secondary Card: AI Prompt Vault */}
-              <div
-                className="card hero-float-secondary"
-                style={{
-                  background: 'linear-gradient(135deg, #0d2820 0%, #153e32 100%)',
-                  border: '1px solid rgba(16, 239, 138, 0.35)',
-                  boxShadow: 'var(--shadow-md), var(--shadow-glow-lime)',
-                  marginLeft: 'auto',
-                  maxWidth: '90%',
-                  zIndex: 2,
-                  transition: 'box-shadow var(--duration-base) var(--ease-out-smooth)',
-                }}
-              >
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-2)' }}>
-                  <span className="badge badge-violet">AI Prompts</span>
-                  <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent-lime)', fontWeight: 700, fontSize: 'var(--text-sm)' }}>
-                    ₹999
-                  </span>
-                </div>
-                <h4 style={{ fontSize: 'var(--text-sm)', color: '#ffffff', marginBottom: 'var(--space-1)' }}>
-                  Enterprise Prompt Vault: 450+ Tested System Prompts
-                </h4>
-                <p style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.7)' }}>
-                  Conditioned few-shot schemas formatted in .json, .md, and .csv
-                </p>
-              </div>
-
-              {/* Overlapping Tertiary Card: Figma Design System */}
-              <div
-                className="card hero-float-tertiary"
-                style={{
-                  background: 'linear-gradient(135deg, #2b0c20 0%, #431235 100%)',
-                  border: '1px solid rgba(236, 72, 153, 0.35)',
-                  boxShadow: 'var(--shadow-sm)',
-                  width: '85%',
-                  zIndex: 1,
-                  transition: 'box-shadow var(--duration-base) var(--ease-out-smooth)',
-                }}
-              >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <div>
-                    <span className="badge badge-pink" style={{ marginBottom: '4px' }}>Design Kit</span>
-                    <div style={{ fontSize: 'var(--text-xs)', fontWeight: 600, color: '#ffffff' }}>
-                      Lumina UI: 1,200+ Components
-                    </div>
-                  </div>
-                  <span style={{ fontFamily: 'var(--font-mono)', color: '#f472b6', fontWeight: 700, fontSize: 'var(--text-sm)' }}>
-                    ₹1,999
-                  </span>
-                </div>
-              </div>
             </div>
           </div>
         </div>
