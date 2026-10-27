@@ -13,12 +13,18 @@ export const ProductsPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const categoryParam = searchParams.get('category') as CategoryId | null;
   const qParam = searchParams.get('q') || '';
+  const formatParam = searchParams.get('format') || 'all';
+  const maxPriceParam = searchParams.get('maxPrice');
 
   const [searchQuery, setSearchQuery] = useState(qParam);
   const [selectedCategory, setSelectedCategory] = useState<CategoryId | 'all'>(
     categoryParam && categoriesData.some((c) => c.id === categoryParam) ? categoryParam : 'all'
   );
   const [selectedSort, setSelectedSort] = useState<ProductSortOption>('featured');
+  const [selectedFormat, setSelectedFormat] = useState<string | 'all'>(formatParam);
+  const [maxPricePaise, setMaxPricePaise] = useState<number>(
+    maxPriceParam && !isNaN(Number(maxPriceParam)) ? Number(maxPriceParam) : 200000
+  );
 
   // Sync state if URL changes
   useEffect(() => {
@@ -34,6 +40,23 @@ export const ProductsPage: React.FC = () => {
       setSearchQuery(qParam);
     }
   }, [qParam]);
+
+  useEffect(() => {
+    if (formatParam !== selectedFormat) {
+      setSelectedFormat(formatParam);
+    }
+  }, [formatParam]);
+
+  useEffect(() => {
+    if (maxPriceParam) {
+      const num = Number(maxPriceParam);
+      if (!isNaN(num) && num !== maxPricePaise) {
+        setMaxPricePaise(num);
+      }
+    } else if (maxPricePaise !== 200000 && !maxPriceParam) {
+      setMaxPricePaise(200000);
+    }
+  }, [maxPriceParam]);
 
   const activeCategoryObject = categoriesData.find((c) => c.id === selectedCategory);
 
@@ -53,10 +76,26 @@ export const ProductsPage: React.FC = () => {
   const filteredProducts = useMemo(() => {
     let list = [...products];
 
+    // Category Filter
     if (selectedCategory !== 'all') {
       list = list.filter((p) => p.category === selectedCategory);
     }
 
+    // Format Filter
+    if (selectedFormat !== 'all') {
+      if (selectedFormat === '.mp3') {
+        list = list.filter((p) => p.fileFormats.some((f) => f === '.mp3' || f === '.wav' || f === '.flac'));
+      } else {
+        list = list.filter((p) => p.fileFormats.includes(selectedFormat));
+      }
+    }
+
+    // Price Budget Filter
+    if (maxPricePaise < 200000) {
+      list = list.filter((p) => p.pricePaise <= maxPricePaise);
+    }
+
+    // Text Search Filter
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase().trim();
       list = list.filter(
@@ -68,6 +107,7 @@ export const ProductsPage: React.FC = () => {
       );
     }
 
+    // Sorting
     switch (selectedSort) {
       case 'newest':
         list.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
@@ -88,7 +128,7 @@ export const ProductsPage: React.FC = () => {
     }
 
     return list;
-  }, [products, searchQuery, selectedCategory, selectedSort]);
+  }, [products, searchQuery, selectedCategory, selectedFormat, maxPricePaise, selectedSort]);
 
   const handleCategoryChange = (category: CategoryId | 'all') => {
     setSelectedCategory(category);
@@ -97,6 +137,28 @@ export const ProductsPage: React.FC = () => {
       newParams.delete('category');
     } else {
       newParams.set('category', category);
+    }
+    setSearchParams(newParams);
+  };
+
+  const handleFormatChange = (format: string | 'all') => {
+    setSelectedFormat(format);
+    const newParams = new URLSearchParams(searchParams);
+    if (format === 'all') {
+      newParams.delete('format');
+    } else {
+      newParams.set('format', format);
+    }
+    setSearchParams(newParams);
+  };
+
+  const handleMaxPriceChange = (pricePaise: number) => {
+    setMaxPricePaise(pricePaise);
+    const newParams = new URLSearchParams(searchParams);
+    if (pricePaise >= 200000) {
+      newParams.delete('maxPrice');
+    } else {
+      newParams.set('maxPrice', String(pricePaise));
     }
     setSearchParams(newParams);
   };
@@ -115,6 +177,8 @@ export const ProductsPage: React.FC = () => {
   const handleReset = () => {
     setSearchQuery('');
     setSelectedCategory('all');
+    setSelectedFormat('all');
+    setMaxPricePaise(200000);
     setSelectedSort('featured');
     setSearchParams(new URLSearchParams());
   };
@@ -156,6 +220,10 @@ export const ProductsPage: React.FC = () => {
           onCategoryChange={handleCategoryChange}
           selectedSort={selectedSort}
           onSortChange={setSelectedSort}
+          selectedFormat={selectedFormat}
+          onFormatChange={handleFormatChange}
+          maxPricePaise={maxPricePaise}
+          onMaxPriceChange={handleMaxPriceChange}
           totalCount={products.length}
           filteredCount={filteredProducts.length}
           onReset={handleReset}

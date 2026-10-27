@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingBag } from 'lucide-react';
+import { ShoppingBag, Eye } from 'lucide-react';
 import { Product } from '../../types/product';
 import { ProductCoverVisual } from './ProductCoverVisual';
 import { formatINR } from '../../utils/currency';
 import { useCart } from '../../context/CartContext';
+import { ProductQuickViewModal } from './ProductQuickViewModal';
 
 interface ProductCardProps {
   product: Product;
@@ -12,6 +13,7 @@ interface ProductCardProps {
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const { addItem } = useCart();
+  const [isQuickViewOpen, setIsQuickViewOpen] = useState(false);
 
   return (
     <article
@@ -153,26 +155,50 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             </small>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <button
+              type="button"
+              onClick={() => setIsQuickViewOpen(true)}
+              className="btn btn-ghost btn-sm"
+              style={{
+                padding: '6px 8px',
+                fontSize: '0.75rem',
+                borderRadius: 'var(--radius-sm)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                color: 'var(--text-secondary)',
+                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                border: '1px solid var(--border-card)',
+                cursor: 'pointer',
+              }}
+              aria-label={`Quick view ${product.name}`}
+              title={`Quick view ${product.name}`}
+            >
+              <Eye size={13} />
+              <span>Preview</span>
+            </button>
+
             <button
               type="button"
               onClick={() => addItem(product)}
               className="btn btn-secondary btn-sm"
               style={{
-                padding: '6px 12px',
+                padding: '6px 10px',
                 fontSize: '0.78rem',
                 borderRadius: 'var(--radius-sm)',
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '6px',
+                gap: '5px',
                 fontWeight: 600,
                 cursor: 'pointer',
               }}
               aria-label={`Add ${product.name} to cart`}
             >
-              <ShoppingBag size={14} />
+              <ShoppingBag size={13} />
               <span>Add</span>
             </button>
+
             <Link
               to={`/products/${product.slug}`}
               className="round-link"
@@ -185,6 +211,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           </div>
         </div>
       </div>
+
+      {/* Quick View Modal */}
+      <ProductQuickViewModal
+        product={product}
+        isOpen={isQuickViewOpen}
+        onClose={() => setIsQuickViewOpen(false)}
+      />
     </article>
   );
 };

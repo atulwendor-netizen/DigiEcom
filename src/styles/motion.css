@@ -928,6 +928,14 @@
   animation: checkoutModalPop 0.26s var(--ease-out-smooth) forwards;
 }
 
+.quickview-backdrop {
+  animation: cartBackdropFadeIn 0.22s ease-out forwards;
+}
+
+.quickview-modal {
+  animation: checkoutModalPop 0.28s var(--ease-out-smooth) forwards;
+}
+
 .cart-trigger-btn:hover {
   transform: translateY(-1px);
 }
@@ -941,6 +949,8 @@
   .cart-drawer-backdrop,
   .checkout-modal,
   .checkout-modal-backdrop,
+  .quickview-backdrop,
+  .quickview-modal,
   .cart-count-badge,
   .cart-trigger-btn:hover {
     animation: none !important;
