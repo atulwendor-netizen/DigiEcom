@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Sparkles, Terminal, FileCode, CheckCircle2, Shield } from 'lucide-react';
 import { siteConfig } from '../../config/siteConfig';
+import { HeroHumanAnimation } from './HeroHumanAnimation';
 
 export const Hero: React.FC = () => {
   return (
@@ -153,100 +154,128 @@ export const Hero: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Column: Floating Digital Product Showcase Collage */}
+          {/* Right Column: Human Presenter & Floating Digital Product Showcase */}
           <div
-            className="hero-collage"
+            className="hero-showcase-wrapper"
             style={{
               position: 'relative',
               display: 'flex',
               flexDirection: 'column',
-              gap: 'var(--space-4)',
+              gap: 'var(--space-6)',
+              alignItems: 'center',
             }}
           >
-            {/* Primary Collage Card: Cloud Microservices Playbook */}
+            {/* Photorealistic Presenter walking in and presenting products */}
             <div
-              className="card hero-float-primary"
+              className="hero-presenter-wrapper"
               style={{
-                background: 'linear-gradient(135deg, #160d33 0%, #20134d 100%)',
-                border: '1px solid rgba(168, 85, 247, 0.35)',
-                boxShadow: 'var(--shadow-lg), var(--shadow-glow-violet)',
                 position: 'relative',
-                zIndex: 3,
-                transition: 'box-shadow var(--duration-base) var(--ease-out-smooth), border-color var(--duration-fast)',
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+                zIndex: 4,
+                pointerEvents: 'none',
               }}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-3)' }}>
-                <span className="badge badge-lime">E-books & Guides</span>
-                <span className="badge badge-demo">Sample Asset</span>
-              </div>
-              <div style={{ display: 'flex', gap: 'var(--space-3)', alignItems: 'center', marginBottom: 'var(--space-2)' }}>
-                <FileCode size={24} color="var(--accent-lime)" />
-                <h3 style={{ fontSize: 'var(--text-base)', color: '#ffffff' }}>
-                  The Pragmatic System Design Handbook
-                </h3>
-              </div>
-              <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', marginBottom: 'var(--space-3)' }}>
-                Distributed transactions, caching invalidation, latency SLAs &bull; 340 pages
-              </p>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent-lime)', fontWeight: 700 }}>
-                  ₹799
-                </span>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text-dim)' }}>
-                  .pdf &bull; .epub
-                </span>
-              </div>
+              <HeroHumanAnimation />
             </div>
 
-            {/* Overlapping Secondary Card: AI Prompt Vault */}
+            {/* Floating Digital Product Showcase Collage */}
             <div
-              className="card hero-float-secondary"
+              className="hero-collage"
               style={{
-                background: 'linear-gradient(135deg, #0d2820 0%, #153e32 100%)',
-                border: '1px solid rgba(16, 239, 138, 0.35)',
-                boxShadow: 'var(--shadow-md), var(--shadow-glow-lime)',
-                marginLeft: 'auto',
-                maxWidth: '90%',
-                zIndex: 2,
-                transition: 'box-shadow var(--duration-base) var(--ease-out-smooth)',
+                position: 'relative',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 'var(--space-4)',
+                width: '100%',
               }}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-2)' }}>
-                <span className="badge badge-violet">AI Prompts</span>
-                <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent-lime)', fontWeight: 700, fontSize: 'var(--text-sm)' }}>
-                  ₹999
-                </span>
-              </div>
-              <h4 style={{ fontSize: 'var(--text-sm)', color: '#ffffff', marginBottom: 'var(--space-1)' }}>
-                Enterprise Prompt Vault: 450+ Tested System Prompts
-              </h4>
-              <p style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.7)' }}>
-                Conditioned few-shot schemas formatted in .json, .md, and .csv
-              </p>
-            </div>
-
-            {/* Overlapping Tertiary Card: Figma Design System */}
-            <div
-              className="card hero-float-tertiary"
-              style={{
-                background: 'linear-gradient(135deg, #2b0c20 0%, #431235 100%)',
-                border: '1px solid rgba(236, 72, 153, 0.35)',
-                boxShadow: 'var(--shadow-sm)',
-                width: '85%',
-                zIndex: 1,
-                transition: 'box-shadow var(--duration-base) var(--ease-out-smooth)',
-              }}
-            >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div>
-                  <span className="badge badge-pink" style={{ marginBottom: '4px' }}>Design Kit</span>
-                  <div style={{ fontSize: 'var(--text-xs)', fontWeight: 600, color: '#ffffff' }}>
-                    Lumina UI: 1,200+ Components
-                  </div>
+              {/* Primary Collage Card: Cloud Microservices Playbook */}
+              <div
+                className="card hero-float-primary"
+                style={{
+                  background: 'linear-gradient(135deg, #160d33 0%, #20134d 100%)',
+                  border: '1px solid rgba(168, 85, 247, 0.35)',
+                  boxShadow: 'var(--shadow-lg), var(--shadow-glow-violet)',
+                  position: 'relative',
+                  zIndex: 3,
+                  transition: 'box-shadow var(--duration-base) var(--ease-out-smooth), border-color var(--duration-fast)',
+                }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-3)' }}>
+                  <span className="badge badge-lime">E-books & Guides</span>
+                  <span className="badge badge-demo">Sample Asset</span>
                 </div>
-                <span style={{ fontFamily: 'var(--font-mono)', color: '#f472b6', fontWeight: 700, fontSize: 'var(--text-sm)' }}>
-                  ₹1,999
-                </span>
+                <div style={{ display: 'flex', gap: 'var(--space-3)', alignItems: 'center', marginBottom: 'var(--space-2)' }}>
+                  <FileCode size={24} color="var(--accent-lime)" />
+                  <h3 style={{ fontSize: 'var(--text-base)', color: '#ffffff' }}>
+                    The Pragmatic System Design Handbook
+                  </h3>
+                </div>
+                <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', marginBottom: 'var(--space-3)' }}>
+                  Distributed transactions, caching invalidation, latency SLAs &bull; 340 pages
+                </p>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent-lime)', fontWeight: 700 }}>
+                    ₹799
+                  </span>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text-dim)' }}>
+                    .pdf &bull; .epub
+                  </span>
+                </div>
+              </div>
+
+              {/* Overlapping Secondary Card: AI Prompt Vault */}
+              <div
+                className="card hero-float-secondary"
+                style={{
+                  background: 'linear-gradient(135deg, #0d2820 0%, #153e32 100%)',
+                  border: '1px solid rgba(16, 239, 138, 0.35)',
+                  boxShadow: 'var(--shadow-md), var(--shadow-glow-lime)',
+                  marginLeft: 'auto',
+                  maxWidth: '90%',
+                  zIndex: 2,
+                  transition: 'box-shadow var(--duration-base) var(--ease-out-smooth)',
+                }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-2)' }}>
+                  <span className="badge badge-violet">AI Prompts</span>
+                  <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent-lime)', fontWeight: 700, fontSize: 'var(--text-sm)' }}>
+                    ₹999
+                  </span>
+                </div>
+                <h4 style={{ fontSize: 'var(--text-sm)', color: '#ffffff', marginBottom: 'var(--space-1)' }}>
+                  Enterprise Prompt Vault: 450+ Tested System Prompts
+                </h4>
+                <p style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.7)' }}>
+                  Conditioned few-shot schemas formatted in .json, .md, and .csv
+                </p>
+              </div>
+
+              {/* Overlapping Tertiary Card: Figma Design System */}
+              <div
+                className="card hero-float-tertiary"
+                style={{
+                  background: 'linear-gradient(135deg, #2b0c20 0%, #431235 100%)',
+                  border: '1px solid rgba(236, 72, 153, 0.35)',
+                  boxShadow: 'var(--shadow-sm)',
+                  width: '85%',
+                  zIndex: 1,
+                  transition: 'box-shadow var(--duration-base) var(--ease-out-smooth)',
+                }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div>
+                    <span className="badge badge-pink" style={{ marginBottom: '4px' }}>Design Kit</span>
+                    <div style={{ fontSize: 'var(--text-xs)', fontWeight: 600, color: '#ffffff' }}>
+                      Lumina UI: 1,200+ Components
+                    </div>
+                  </div>
+                  <span style={{ fontFamily: 'var(--font-mono)', color: '#f472b6', fontWeight: 700, fontSize: 'var(--text-sm)' }}>
+                    ₹1,999
+                  </span>
+                </div>
               </div>
             </div>
           </div>

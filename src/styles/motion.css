@@ -244,6 +244,15 @@
   .card-interactive:hover .cover-visual-icon {
     transform: none !important;
   }
+
+  .hero-human-container {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  .hero-human-video {
+    display: none !important;
+  }
 }
 
 /* Mobile viewport adjustments: pause continuous floats on small screens to save battery */
@@ -253,5 +262,13 @@
   .hero-float-tertiary {
     animation: none !important;
     transform: none !important;
+  }
+
+  .hero-human-video {
+    display: none !important;
+  }
+
+  .hero-human-poster {
+    max-height: 240px !important;
   }
 }
