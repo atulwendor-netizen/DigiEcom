@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Allow: /products
+Allow: /about
+Allow: /contact
+Allow: /policies/
+Disallow: /api/
+Disallow: /downloads/private/
+Disallow: /checkout/
+
+Sitemap: /sitemap.xml

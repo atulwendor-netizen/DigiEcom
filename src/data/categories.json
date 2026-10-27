@@ -1,0 +1,56 @@
+[
+  {
+    "id": "ebooks-guides",
+    "name": "E-books & Guides",
+    "tagline": "Field-tested architectural manuals and zero-to-one playbooks",
+    "description": "Comprehensive digital books, technical playbooks, and in-depth reference guides written by senior engineers and operators.",
+    "iconName": "BookOpen",
+    "accentColor": "violet",
+    "popularFormats": [".pdf", ".epub"]
+  },
+  {
+    "id": "ai-prompts",
+    "name": "AI Prompts & Resources",
+    "tagline": "Curated LLM frameworks and autonomous agent prompts",
+    "description": "System prompts, chaining workflows, evaluation rubrics, and meta-prompts benchmarked for GPT-4o, Claude 3.5, and Gemini.",
+    "iconName": "Sparkles",
+    "accentColor": "lime",
+    "popularFormats": [".json", ".md", ".csv"]
+  },
+  {
+    "id": "business-templates",
+    "name": "Business Templates",
+    "tagline": "SaaS financial projections, agreements, and investor kits",
+    "description": "Dynamic spreadsheet models, contractor agreements, pitch deck templates, and operational checklists ready to adapt.",
+    "iconName": "Briefcase",
+    "accentColor": "orange",
+    "popularFormats": [".xlsx", ".docx", ".pdf"]
+  },
+  {
+    "id": "productivity-tools",
+    "name": "Productivity Tools",
+    "tagline": "Engineered workspaces for Notion, Obsidian, and daily workflow",
+    "description": "Structured knowledge graphs, sprint trackers, and second-brain systems to eliminate organizational friction.",
+    "iconName": "CheckCircle2",
+    "accentColor": "cyan",
+    "popularFormats": [".notion-template", ".zip", ".md"]
+  },
+  {
+    "id": "design-assets",
+    "name": "Design & Creative Assets",
+    "tagline": "Component libraries, design tokens, and high-fidelity 3D assets",
+    "description": "Production-ready Figma UI kits, accessible design token architectures, vector icons, and bespoke 3D illustration packages.",
+    "iconName": "Layers",
+    "accentColor": "pink",
+    "popularFormats": [".fig", ".tokens.json", ".blend"]
+  },
+  {
+    "id": "other-downloads",
+    "name": "Other Digital Downloads",
+    "tagline": "Specialized audio soundscapes, dotfiles, and developer utilities",
+    "description": "Carefully mastered deep-work focus audio, fine-tuned terminal dotfiles, and specialized developer configuration archives.",
+    "iconName": "Terminal",
+    "accentColor": "violet",
+    "popularFormats": [".flac", ".tar.gz", ".sh"]
+  }
+]

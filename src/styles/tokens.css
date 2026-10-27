@@ -1,0 +1,111 @@
+/* ==========================================================================
+   DigiEcom Design Tokens — CSS Custom Properties
+   High-contrast Dark Ink / Purple with Vibrant Lime, Violet, Orange & Pink
+   ========================================================================== */
+
+:root {
+  /* Brand Palette */
+  --bg-app: #080514;
+  --bg-surface: #100c24;
+  --bg-surface-elevated: #171133;
+  --bg-surface-hover: #211948;
+  --bg-surface-glass: rgba(16, 12, 36, 0.85);
+
+  /* Borders & Dividers */
+  --border-subtle: rgba(168, 85, 247, 0.15);
+  --border-card: rgba(255, 255, 255, 0.08);
+  --border-focus: #10ef8a;
+  --border-active: #a855f7;
+
+  /* Accent Colors */
+  --accent-lime: #10ef8a;
+  --accent-lime-hover: #0cd477;
+  --accent-lime-subtle: rgba(16, 239, 138, 0.12);
+  --accent-lime-glow: rgba(16, 239, 138, 0.25);
+
+  --accent-violet: #a855f7;
+  --accent-violet-hover: #9333ea;
+  --accent-violet-subtle: rgba(168, 85, 247, 0.14);
+  --accent-violet-glow: rgba(168, 85, 247, 0.3);
+
+  --accent-orange: #f97316;
+  --accent-orange-hover: #ea580c;
+  --accent-orange-subtle: rgba(249, 115, 22, 0.14);
+
+  --accent-pink: #ec4899;
+  --accent-pink-hover: #db2777;
+  --accent-pink-subtle: rgba(236, 72, 153, 0.14);
+
+  --accent-cyan: #06b6d4;
+
+  /* Functional Status Colors */
+  --color-success: #10ef8a;
+  --color-warning: #f59e0b;
+  --color-warning-subtle: rgba(245, 158, 11, 0.14);
+  --color-error: #f43f5e;
+  --color-error-subtle: rgba(244, 63, 94, 0.14);
+  --color-info: #38bdf8;
+  --color-info-subtle: rgba(56, 189, 248, 0.14);
+
+  /* Typography Colors */
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+  --text-on-accent: #05040a;
+
+  /* Typography Font Families */
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', Menlo, Monaco, Consolas, monospace;
+
+  /* Font Sizes */
+  --text-xs: 0.75rem;     /* 12px */
+  --text-sm: 0.875rem;    /* 14px */
+  --text-base: 1rem;       /* 16px */
+  --text-lg: 1.125rem;    /* 18px */
+  --text-xl: 1.25rem;     /* 20px */
+  --text-2xl: 1.5rem;     /* 24px */
+  --text-3xl: 1.875rem;   /* 30px */
+  --text-4xl: 2.25rem;    /* 36px */
+  --text-5xl: 3rem;       /* 48px */
+  --text-6xl: 3.75rem;    /* 60px */
+
+  /* Spacing Scale */
+  --space-1: 0.25rem;     /* 4px */
+  --space-2: 0.5rem;      /* 8px */
+  --space-3: 0.75rem;     /* 12px */
+  --space-4: 1rem;        /* 16px */
+  --space-5: 1.25rem;     /* 20px */
+  --space-6: 1.5rem;      /* 24px */
+  --space-8: 2rem;        /* 32px */
+  --space-10: 2.5rem;     /* 40px */
+  --space-12: 3rem;       /* 48px */
+  --space-16: 4rem;       /* 64px */
+  --space-20: 5rem;       /* 80px */
+  --space-24: 6rem;       /* 96px */
+
+  /* Border Radii */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-2xl: 32px;
+  --radius-full: 9999px;
+
+  /* Box Shadows & Glows */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.6);
+  --shadow-glow-lime: 0 0 24px rgba(16, 239, 138, 0.25);
+  --shadow-glow-violet: 0 0 30px rgba(168, 85, 247, 0.28);
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 220ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Layout Max Widths */
+  --container-max: 1240px;
+  --container-narrow: 880px;
+}
