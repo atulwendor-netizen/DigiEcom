@@ -1,0 +1,98 @@
+[
+  {
+    "id": "rev-001-1",
+    "productId": "de-prod-001",
+    "authorName": "Arjun Mehta",
+    "authorRole": "Principal Cloud Architect",
+    "rating": 5,
+    "date": "October 2026",
+    "title": "Clear, practical blueprints with zero filler",
+    "comment": "The event-driven saga diagrams and partition strategies alone saved our engineering team weeks of trial and error during our Kubernetes migration. Highly structured and immediately applicable.",
+    "isVerifiedBuyer": true,
+    "helpfulCount": 18
+  },
+  {
+    "id": "rev-001-2",
+    "productId": "de-prod-001",
+    "authorName": "Elena Rostova",
+    "authorRole": "Staff Backend Engineer",
+    "rating": 5,
+    "date": "September 2026",
+    "title": "Best real-world failure mode trade-off breakdown",
+    "comment": "Most books stop at theoretical CAP theorem. This guide dives straight into idempotent retry deadlocks, distributed transaction timeouts, and concrete gRPC schema designs.",
+    "isVerifiedBuyer": true,
+    "helpfulCount": 14
+  },
+  {
+    "id": "rev-001-3",
+    "productId": "de-prod-001",
+    "authorName": "Devon Vance",
+    "authorRole": "Tech Lead @ ScaleOps",
+    "rating": 4,
+    "date": "August 2026",
+    "title": "Comprehensive material, loved the diagrams",
+    "comment": "Great depth across message broker clustering (Kafka vs RabbitMQ). Would have loved an extra chapter on multi-region Spanner replication, but still exceptional value.",
+    "isVerifiedBuyer": true,
+    "helpfulCount": 9
+  },
+  {
+    "id": "rev-003-1",
+    "productId": "de-prod-003",
+    "authorName": "Priya Sharma",
+    "authorRole": "AI Product Manager",
+    "rating": 5,
+    "date": "October 2026",
+    "title": "Turnkey prompt infrastructure for production LLMs",
+    "comment": "The chain-of-density and tool-calling validation prompts cut down model hallucinations dramatically. The JSON schema guardrails are now part of our daily CI test harness.",
+    "isVerifiedBuyer": true,
+    "helpfulCount": 24
+  },
+  {
+    "id": "rev-003-2",
+    "productId": "de-prod-003",
+    "authorName": "Marcus Thorne",
+    "authorRole": "Senior ML Engineer",
+    "rating": 5,
+    "date": "September 2026",
+    "title": "Tremendous time saver for prompt evaluations",
+    "comment": "Every prompt comes with clear input/output assertions and few-shot calibration examples. Easily the best structured prompt collection I have evaluated.",
+    "isVerifiedBuyer": true,
+    "helpfulCount": 11
+  },
+  {
+    "id": "rev-009-1",
+    "productId": "de-prod-009",
+    "authorName": "Kavita Reddy",
+    "authorRole": "Design Systems Lead",
+    "rating": 5,
+    "date": "October 2026",
+    "title": "Flawless Figma variables, auto-layout and token mappings",
+    "comment": "The accessibility color contrast ratios and responsive variant bindings are top tier. Exported design tokens mapped directly to our Tailwind and CSS custom properties without friction.",
+    "isVerifiedBuyer": true,
+    "helpfulCount": 21
+  },
+  {
+    "id": "rev-009-2",
+    "productId": "de-prod-009",
+    "authorName": "Lucas Silva",
+    "authorRole": "Product Designer",
+    "rating": 5,
+    "date": "September 2026",
+    "title": "Incredible component fidelity and state coverage",
+    "comment": "Every single interactive component has active, focused, hover, disabled, and loading states mapped correctly. Our design sprint velocity doubled.",
+    "isVerifiedBuyer": true,
+    "helpfulCount": 15
+  },
+  {
+    "id": "rev-012-1",
+    "productId": "de-prod-012",
+    "authorName": "Rohan Desai",
+    "authorRole": "DevOps Engineer",
+    "rating": 5,
+    "date": "October 2026",
+    "title": "Fastest terminal setup I have ever used",
+    "comment": "Clean Neovim Lua configurations, instant tmux session restoration, and sensible zsh alias bindings. Worked immediately on both my Ubuntu workstation and macOS M-series laptop.",
+    "isVerifiedBuyer": true,
+    "helpfulCount": 16
+  }
+]

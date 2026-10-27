@@ -4,6 +4,7 @@ import { X, Plus, Minus, Trash2, ShoppingBag, ArrowRight } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 import { formatINR } from '../../utils/currency';
 import { CheckoutDemoModal } from './CheckoutDemoModal';
+import { CheckoutSimulatorModal } from './CheckoutSimulatorModal';
 
 export const CartDrawer: React.FC = () => {
   const {
@@ -19,21 +20,22 @@ export const CartDrawer: React.FC = () => {
   } = useCart();
 
   const [checkoutModalOpen, setCheckoutModalOpen] = useState(false);
+  const [simulatorOpen, setSimulatorOpen] = useState(false);
   const navigate = useNavigate();
 
-  // Close drawer on Escape key (if checkout modal is not open)
+  // Close drawer on Escape key (if checkout modal or simulator is not open)
   useEffect(() => {
     if (!isCartOpen) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && !checkoutModalOpen) {
+      if (e.key === 'Escape' && !checkoutModalOpen && !simulatorOpen) {
         closeCart();
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isCartOpen, checkoutModalOpen, closeCart]);
+  }, [isCartOpen, checkoutModalOpen, simulatorOpen, closeCart]);
 
   // Lock body scroll when drawer is open
   useEffect(() => {
@@ -499,6 +501,16 @@ export const CartDrawer: React.FC = () => {
         onClose={() => setCheckoutModalOpen(false)}
         itemCount={itemCount}
         subtotalPaise={subtotalPaise}
+        onLaunchSimulator={() => setSimulatorOpen(true)}
+      />
+
+      {/* 3-Step Sandbox Checkout Simulator */}
+      <CheckoutSimulatorModal
+        isOpen={simulatorOpen}
+        onClose={() => setSimulatorOpen(false)}
+        items={items}
+        subtotalPaise={subtotalPaise}
+        onOrderCompleted={() => clearCart()}
       />
     </>
   );

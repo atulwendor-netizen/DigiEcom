@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { X, AlertTriangle, ShieldCheck, ArrowRight } from 'lucide-react';
+import { X, AlertTriangle, ShieldCheck, ArrowRight, Play } from 'lucide-react';
 import { formatINR } from '../../utils/currency';
 
 interface CheckoutDemoModalProps {
@@ -7,6 +7,7 @@ interface CheckoutDemoModalProps {
   onClose: () => void;
   itemCount: number;
   subtotalPaise: number;
+  onLaunchSimulator?: () => void;
 }
 
 export const CheckoutDemoModal: React.FC<CheckoutDemoModalProps> = ({
@@ -14,6 +15,7 @@ export const CheckoutDemoModal: React.FC<CheckoutDemoModalProps> = ({
   onClose,
   itemCount,
   subtotalPaise,
+  onLaunchSimulator,
 }) => {
   // Listen for Escape key
   useEffect(() => {
@@ -197,10 +199,25 @@ export const CheckoutDemoModal: React.FC<CheckoutDemoModalProps> = ({
             marginTop: 'var(--space-6)',
           }}
         >
+          {onLaunchSimulator && (
+            <button
+              type="button"
+              onClick={() => {
+                onClose();
+                onLaunchSimulator();
+              }}
+              className="btn btn-primary"
+              style={{ width: '100%', justifyContent: 'center', gap: '8px' }}
+            >
+              <Play size={16} />
+              <span>Launch 3-Step Sandbox Checkout Simulator</span>
+            </button>
+          )}
+
           <button
             type="button"
             onClick={onClose}
-            className="btn btn-primary"
+            className={onLaunchSimulator ? 'btn btn-secondary' : 'btn btn-primary'}
             style={{ width: '100%', justifyContent: 'center' }}
           >
             <span>Got it, Return to Store</span>

@@ -20,6 +20,7 @@ import { Breadcrumbs } from '../components/common/Breadcrumbs';
 import { formatINR } from '../utils/currency';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { useCart } from '../context/CartContext';
+import { ProductReviewsSection } from '../components/products/ProductReviewsSection';
 
 export const ProductDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -471,6 +472,9 @@ export const ProductDetailPage: React.FC = () => {
             )}
           </div>
         </div>
+
+        {/* Customer Reviews & Community Feedback Section */}
+        <ProductReviewsSection product={product} />
 
         {/* Related Products */}
         {relatedProducts.length > 0 && (
