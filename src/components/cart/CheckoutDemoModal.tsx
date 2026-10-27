@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { X, AlertTriangle, ShieldCheck, ArrowRight, Play } from 'lucide-react';
+import { X, AlertTriangle, ShieldCheck, ArrowRight, Play, Lock } from 'lucide-react';
 import { formatINR } from '../../utils/currency';
 
 interface CheckoutDemoModalProps {
@@ -8,6 +8,7 @@ interface CheckoutDemoModalProps {
   itemCount: number;
   subtotalPaise: number;
   onLaunchSimulator?: () => void;
+  onLaunchRazorpay?: () => void;
 }
 
 export const CheckoutDemoModal: React.FC<CheckoutDemoModalProps> = ({
@@ -16,6 +17,7 @@ export const CheckoutDemoModal: React.FC<CheckoutDemoModalProps> = ({
   itemCount,
   subtotalPaise,
   onLaunchSimulator,
+  onLaunchRazorpay,
 }) => {
   // Listen for Escape key
   useEffect(() => {
@@ -199,6 +201,26 @@ export const CheckoutDemoModal: React.FC<CheckoutDemoModalProps> = ({
             marginTop: 'var(--space-6)',
           }}
         >
+          {onLaunchRazorpay && (
+            <button
+              type="button"
+              onClick={() => {
+                onClose();
+                onLaunchRazorpay();
+              }}
+              className="btn btn-primary"
+              style={{
+                width: '100%',
+                justifyContent: 'center',
+                gap: '8px',
+                fontWeight: 800,
+              }}
+            >
+              <Lock size={16} />
+              <span>Pay with Razorpay (Active Gateway)</span>
+            </button>
+          )}
+
           {onLaunchSimulator && (
             <button
               type="button"
@@ -206,7 +228,7 @@ export const CheckoutDemoModal: React.FC<CheckoutDemoModalProps> = ({
                 onClose();
                 onLaunchSimulator();
               }}
-              className="btn btn-primary"
+              className={onLaunchRazorpay ? 'btn btn-secondary' : 'btn btn-primary'}
               style={{ width: '100%', justifyContent: 'center', gap: '8px' }}
             >
               <Play size={16} />
@@ -217,7 +239,7 @@ export const CheckoutDemoModal: React.FC<CheckoutDemoModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className={onLaunchSimulator ? 'btn btn-secondary' : 'btn btn-primary'}
+            className="btn btn-secondary"
             style={{ width: '100%', justifyContent: 'center' }}
           >
             <span>Got it, Return to Store</span>

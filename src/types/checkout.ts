@@ -60,3 +60,92 @@ export interface CheckoutFeatureStatus {
   reason: string;
   maintenanceNotice: string;
 }
+
+// ==========================================
+// Razorpay Payment Gateway & Order Architecture
+// ==========================================
+
+export interface RazorpayCustomerInfo {
+  fullName: string;
+  email: string;
+  phone?: string;
+}
+
+export interface RazorpayOrderRequest {
+  items: Array<{
+    productId: string;
+    quantity: number;
+  }>;
+  customer: RazorpayCustomerInfo;
+}
+
+export interface RazorpayOrderResponse {
+  success: boolean;
+  orderId: string;
+  amountPaise: number;
+  currency: 'INR';
+  keyId: string;
+  receipt: string;
+  customer: RazorpayCustomerInfo;
+  items: Array<{
+    productId: string;
+    productName: string;
+    quantity: number;
+    unitPricePaise: number;
+    amountPaise: number;
+  }>;
+  isSandboxMode: boolean;
+}
+
+export interface RazorpayPaymentSuccessPayload {
+  razorpay_payment_id: string;
+  razorpay_order_id: string;
+  razorpay_signature: string;
+}
+
+export interface RazorpayVerificationRequest {
+  orderId: string;
+  paymentId: string;
+  signature: string;
+  items: Array<{
+    productId: string;
+    quantity: number;
+  }>;
+  customer: RazorpayCustomerInfo;
+}
+
+export interface OrderDeliverable {
+  productId: string;
+  productName: string;
+  downloadUrl: string;
+  fileFormat: string;
+  fileSize: string;
+  licenseKey: string;
+  expiresIn: string;
+}
+
+export interface VerifiedOrder {
+  id: string;
+  paymentId: string;
+  amountPaise: number;
+  currency: 'INR';
+  status: 'succeeded' | 'failed';
+  provider: 'razorpay';
+  customer: RazorpayCustomerInfo;
+  items: Array<{
+    productId: string;
+    productName: string;
+    quantity: number;
+    amountPaise: number;
+  }>;
+  deliverables: OrderDeliverable[];
+  receiptId: string;
+  createdAt: string;
+}
+
+export interface RazorpayVerificationResponse {
+  success: boolean;
+  verified: boolean;
+  order?: VerifiedOrder;
+  error?: string;
+}

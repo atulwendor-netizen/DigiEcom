@@ -1,9 +1,25 @@
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import path from 'path';
+import { handleCheckoutApi } from './server/checkoutApi';
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    {
+      name: 'digiecom-checkout-api',
+      configureServer(server) {
+        server.middlewares.use('/api/checkout', (req, res) => {
+          handleCheckoutApi(req, res);
+        });
+      },
+      configurePreviewServer(server) {
+        server.middlewares.use('/api/checkout', (req, res) => {
+          handleCheckoutApi(req, res);
+        });
+      },
+    },
+  ],
   server: {
     port: 5173,
     strictPort: false,

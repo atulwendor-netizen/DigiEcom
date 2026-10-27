@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { X, Plus, Minus, Trash2, ShoppingBag, ArrowRight } from 'lucide-react';
+import { X, Plus, Minus, Trash2, ShoppingBag, ArrowRight, Lock } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 import { formatINR } from '../../utils/currency';
 import { CheckoutDemoModal } from './CheckoutDemoModal';
 import { CheckoutSimulatorModal } from './CheckoutSimulatorModal';
+import { RazorpayCheckoutModal } from '../checkout/RazorpayCheckoutModal';
+import { OrderConfirmationModal } from '../checkout/OrderConfirmationModal';
+import type { VerifiedOrder } from '../../types/checkout';
 
 export const CartDrawer: React.FC = () => {
   const {
@@ -21,6 +24,8 @@ export const CartDrawer: React.FC = () => {
 
   const [checkoutModalOpen, setCheckoutModalOpen] = useState(false);
   const [simulatorOpen, setSimulatorOpen] = useState(false);
+  const [razorpayModalOpen, setRazorpayModalOpen] = useState(false);
+  const [confirmedOrder, setConfirmedOrder] = useState<VerifiedOrder | null>(null);
   const navigate = useNavigate();
 
   // Close drawer on Escape key (if checkout modal or simulator is not open)
@@ -28,14 +33,14 @@ export const CartDrawer: React.FC = () => {
     if (!isCartOpen) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && !checkoutModalOpen && !simulatorOpen) {
+      if (e.key === 'Escape' && !checkoutModalOpen && !simulatorOpen && !razorpayModalOpen && !confirmedOrder) {
         closeCart();
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isCartOpen, checkoutModalOpen, simulatorOpen, closeCart]);
+  }, [isCartOpen, checkoutModalOpen, simulatorOpen, razorpayModalOpen, confirmedOrder, closeCart]);
 
   // Lock body scroll when drawer is open
   useEffect(() => {
@@ -451,24 +456,48 @@ export const CartDrawer: React.FC = () => {
               Taxes calculated at checkout &bull; Instant digital delivery via direct secure link
             </p>
 
-            {/* Primary Proceed CTA */}
+            {/* Razorpay Instant Checkout CTA */}
             <button
               type="button"
-              onClick={() => setCheckoutModalOpen(true)}
+              onClick={() => setRazorpayModalOpen(true)}
               className="btn btn-primary"
               style={{
                 width: '100%',
                 padding: 'var(--space-3)',
                 fontSize: 'var(--text-base)',
-                fontWeight: 700,
+                fontWeight: 800,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '8px',
+                background: 'var(--accent-lime)',
+                color: '#000',
+                border: 'none',
+                boxShadow: '0 4px 20px rgba(187, 242, 70, 0.25)',
+              }}
+            >
+              <Lock size={16} />
+              <span>Pay with Razorpay</span>
+            </button>
+
+            {/* Standard Proceed CTA */}
+            <button
+              type="button"
+              onClick={() => setCheckoutModalOpen(true)}
+              className="btn btn-secondary"
+              style={{
+                width: '100%',
+                padding: 'var(--space-2) var(--space-3)',
+                fontSize: 'var(--text-xs)',
+                fontWeight: 600,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '6px',
               }}
             >
               <span>Proceed to Checkout</span>
-              <ArrowRight size={18} />
+              <ArrowRight size={14} />
             </button>
 
             {/* Clear Cart link */}
@@ -502,6 +531,7 @@ export const CartDrawer: React.FC = () => {
         itemCount={itemCount}
         subtotalPaise={subtotalPaise}
         onLaunchSimulator={() => setSimulatorOpen(true)}
+        onLaunchRazorpay={() => setRazorpayModalOpen(true)}
       />
 
       {/* 3-Step Sandbox Checkout Simulator */}
@@ -511,6 +541,30 @@ export const CartDrawer: React.FC = () => {
         items={items}
         subtotalPaise={subtotalPaise}
         onOrderCompleted={() => clearCart()}
+      />
+
+      {/* Active Razorpay Payment Gateway Modal */}
+      <RazorpayCheckoutModal
+        isOpen={razorpayModalOpen}
+        onClose={() => setRazorpayModalOpen(false)}
+        items={items.map((i) => ({
+          productId: i.product.id,
+          productName: i.product.name,
+          quantity: i.quantity,
+          pricePaise: i.product.pricePaise,
+        }))}
+        subtotalPaise={subtotalPaise}
+        onPaymentSuccess={(order) => {
+          setConfirmedOrder(order);
+          clearCart();
+        }}
+      />
+
+      {/* Post-Payment Order Confirmation & Instant Fulfillment */}
+      <OrderConfirmationModal
+        isOpen={Boolean(confirmedOrder)}
+        order={confirmedOrder}
+        onClose={() => setConfirmedOrder(null)}
       />
     </>
   );

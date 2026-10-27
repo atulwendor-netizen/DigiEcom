@@ -11,6 +11,7 @@ import {
   ChevronDown,
   Layers,
   ShoppingBag,
+  Lock,
 } from 'lucide-react';
 import productsData from '../data/products.json';
 import { Product } from '../types/product';
@@ -21,10 +22,15 @@ import { formatINR } from '../utils/currency';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { useCart } from '../context/CartContext';
 import { ProductReviewsSection } from '../components/products/ProductReviewsSection';
+import { RazorpayCheckoutModal } from '../components/checkout/RazorpayCheckoutModal';
+import { OrderConfirmationModal } from '../components/checkout/OrderConfirmationModal';
+import type { VerifiedOrder } from '../types/checkout';
 
 export const ProductDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
+  const [buyNowModalOpen, setBuyNowModalOpen] = useState(false);
+  const [confirmedOrder, setConfirmedOrder] = useState<VerifiedOrder | null>(null);
   const { addItem } = useCart();
 
   const products = productsData as unknown as Product[];
@@ -249,6 +255,29 @@ export const ProductDetailPage: React.FC = () => {
               >
                 <ShoppingBag size={18} />
                 <span>Add to Cart</span>
+              </button>
+
+              {/* Instant Buy with Razorpay Action */}
+              <button
+                type="button"
+                onClick={() => setBuyNowModalOpen(true)}
+                className="btn btn-secondary btn-lg"
+                style={{
+                  width: '100%',
+                  fontWeight: 800,
+                  fontSize: 'var(--text-base)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  cursor: 'pointer',
+                  border: '1px solid var(--accent-lime)',
+                  color: 'var(--accent-lime)',
+                  background: 'rgba(187, 242, 70, 0.08)',
+                }}
+              >
+                <Lock size={18} />
+                <span>Instant Buy with Razorpay</span>
               </button>
 
               {/* Honest Checkout Disabled Notification */}
@@ -499,6 +528,31 @@ export const ProductDetailPage: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Razorpay Instant Checkout Modal */}
+      <RazorpayCheckoutModal
+        isOpen={buyNowModalOpen}
+        onClose={() => setBuyNowModalOpen(false)}
+        items={[
+          {
+            productId: product.id,
+            productName: product.name,
+            quantity: 1,
+            pricePaise: product.pricePaise,
+          },
+        ]}
+        subtotalPaise={product.pricePaise}
+        onPaymentSuccess={(order) => {
+          setConfirmedOrder(order);
+        }}
+      />
+
+      {/* Order Confirmation & Instant Fulfillment Modal */}
+      <OrderConfirmationModal
+        isOpen={Boolean(confirmedOrder)}
+        order={confirmedOrder}
+        onClose={() => setConfirmedOrder(null)}
+      />
     </div>
   );
 };
