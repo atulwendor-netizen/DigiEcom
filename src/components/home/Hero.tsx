@@ -14,7 +14,39 @@ export const Hero: React.FC = () => {
         overflow: 'hidden',
       }}
     >
-      <div className="container">
+      {/* Background layered ambient glow shapes */}
+      <div
+        style={{
+          position: 'absolute',
+          top: '-15%',
+          left: '10%',
+          width: '420px',
+          height: '420px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(168, 85, 247, 0.12) 0%, transparent 70%)',
+          pointerEvents: 'none',
+          animation: 'ambientGlowPulse 9s ease-in-out infinite alternate',
+          zIndex: 0,
+        }}
+        aria-hidden="true"
+      />
+      <div
+        style={{
+          position: 'absolute',
+          top: '25%',
+          right: '5%',
+          width: '500px',
+          height: '500px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(16, 239, 138, 0.08) 0%, transparent 70%)',
+          pointerEvents: 'none',
+          animation: 'ambientGlowPulse 11s ease-in-out infinite alternate-reverse',
+          zIndex: 0,
+        }}
+        aria-hidden="true"
+      />
+
+      <div className="container" style={{ position: 'relative', zIndex: 1 }}>
         <div
           style={{
             display: 'grid',
@@ -24,10 +56,10 @@ export const Hero: React.FC = () => {
           }}
           className="hero-grid"
         >
-          {/* Left Column: Headlines & CTAs */}
+          {/* Left Column: Headlines & CTAs with Staggered Entrance */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
             {/* Top Badge */}
-            <div style={{ display: 'inline-flex' }}>
+            <div className="hero-stagger-1" style={{ display: 'inline-flex' }}>
               <span className="badge badge-lime" style={{ padding: '0.35rem 0.85rem' }}>
                 <Sparkles size={12} />
                 <span>Storefront Preview &bull; Curated Creator & Developer Assets</span>
@@ -37,6 +69,7 @@ export const Hero: React.FC = () => {
             {/* Headline */}
             <h1
               id="hero-heading"
+              className="hero-stagger-2"
               style={{
                 fontSize: 'clamp(2.25rem, 5vw, 3.75rem)',
                 fontWeight: 800,
@@ -58,6 +91,7 @@ export const Hero: React.FC = () => {
 
             {/* Supporting Copy */}
             <p
+              className="hero-stagger-3"
               style={{
                 fontSize: 'var(--text-lg)',
                 color: 'var(--text-secondary)',
@@ -70,6 +104,7 @@ export const Hero: React.FC = () => {
 
             {/* CTAs */}
             <div
+              className="hero-stagger-4"
               style={{
                 display: 'flex',
                 flexWrap: 'wrap',
@@ -88,6 +123,7 @@ export const Hero: React.FC = () => {
 
             {/* Honest Highlights / Specs */}
             <div
+              className="hero-stagger-5"
               style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
@@ -117,7 +153,7 @@ export const Hero: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Column: Original CSS/SVG Digital Product Showcase Collage */}
+          {/* Right Column: Floating Digital Product Showcase Collage */}
           <div
             className="hero-collage"
             style={{
@@ -129,14 +165,14 @@ export const Hero: React.FC = () => {
           >
             {/* Primary Collage Card: Cloud Microservices Playbook */}
             <div
-              className="card"
+              className="card hero-float-primary"
               style={{
                 background: 'linear-gradient(135deg, #160d33 0%, #20134d 100%)',
-                border: '1px solid rgba(168, 85, 247, 0.3)',
+                border: '1px solid rgba(168, 85, 247, 0.35)',
                 boxShadow: 'var(--shadow-lg), var(--shadow-glow-violet)',
-                transform: 'rotate(-1.5deg)',
                 position: 'relative',
                 zIndex: 3,
+                transition: 'box-shadow var(--duration-base) var(--ease-out-smooth), border-color var(--duration-fast)',
               }}
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-3)' }}>
@@ -164,15 +200,15 @@ export const Hero: React.FC = () => {
 
             {/* Overlapping Secondary Card: AI Prompt Vault */}
             <div
-              className="card"
+              className="card hero-float-secondary"
               style={{
                 background: 'linear-gradient(135deg, #0d2820 0%, #153e32 100%)',
-                border: '1px solid rgba(16, 239, 138, 0.3)',
-                boxShadow: 'var(--shadow-md)',
-                transform: 'rotate(2deg) translateY(-10px)',
+                border: '1px solid rgba(16, 239, 138, 0.35)',
+                boxShadow: 'var(--shadow-md), var(--shadow-glow-lime)',
                 marginLeft: 'auto',
                 maxWidth: '90%',
                 zIndex: 2,
+                transition: 'box-shadow var(--duration-base) var(--ease-out-smooth)',
               }}
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-2)' }}>
@@ -191,14 +227,14 @@ export const Hero: React.FC = () => {
 
             {/* Overlapping Tertiary Card: Figma Design System */}
             <div
-              className="card"
+              className="card hero-float-tertiary"
               style={{
                 background: 'linear-gradient(135deg, #2b0c20 0%, #431235 100%)',
-                border: '1px solid rgba(236, 72, 153, 0.3)',
+                border: '1px solid rgba(236, 72, 153, 0.35)',
                 boxShadow: 'var(--shadow-sm)',
-                transform: 'rotate(-1deg) translateY(-20px)',
                 width: '85%',
                 zIndex: 1,
+                transition: 'box-shadow var(--duration-base) var(--ease-out-smooth)',
               }}
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

@@ -128,6 +128,7 @@ export const ProductCoverVisual: React.FC<ProductCoverVisualProps> = ({
         }}
       >
         <div
+          className="cover-visual-icon"
           style={{
             width: size === 'lg' ? '72px' : '52px',
             height: size === 'lg' ? '72px' : '52px',

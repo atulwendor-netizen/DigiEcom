@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Search, Menu, X, ChevronDown, Layers, Sparkles } from 'lucide-react';
+import { Search, Menu, X, ChevronDown, Layers } from 'lucide-react';
 import categoriesData from '../../data/categories.json';
 import { DemoBanner } from './DemoBanner';
-import { siteConfig } from '../../config/siteConfig';
+import { BrandLogo } from './BrandLogo';
 
 export const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -55,53 +55,11 @@ export const Header: React.FC = () => {
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: 'var(--space-2)',
                 textDecoration: 'none',
               }}
               aria-label="DigiEcom Home"
             >
-              <div
-                style={{
-                  width: '38px',
-                  height: '38px',
-                  borderRadius: 'var(--radius-md)',
-                  background: 'linear-gradient(135deg, #1f1442 0%, #3b1b6e 100%)',
-                  border: '1px solid rgba(168, 85, 247, 0.4)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: 'var(--accent-lime)',
-                  boxShadow: '0 0 16px var(--accent-violet-glow)',
-                }}
-              >
-                <Sparkles size={20} />
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <span
-                  style={{
-                    fontSize: 'var(--text-xl)',
-                    fontWeight: 800,
-                    letterSpacing: '-0.02em',
-                    background: 'linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #10ef8a 100%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    lineHeight: 1.1,
-                  }}
-                >
-                  {siteConfig.brandName}
-                </span>
-                <span
-                  style={{
-                    fontSize: '10px',
-                    fontFamily: 'var(--font-mono)',
-                    color: 'var(--accent-violet)',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.1em',
-                  }}
-                >
-                  Storefront
-                </span>
-              </div>
+              <BrandLogo size="md" showTagline={true} />
             </Link>
 
             {/* Desktop Navigation */}
@@ -320,7 +278,7 @@ export const Header: React.FC = () => {
         {/* Mobile Navigation Drawer */}
         {mobileMenuOpen && (
           <div
-            className="mobile-drawer"
+            className="mobile-drawer mobile-drawer-animated"
             style={{
               backgroundColor: 'var(--bg-surface-elevated)',
               borderBottom: '1px solid var(--border-subtle)',

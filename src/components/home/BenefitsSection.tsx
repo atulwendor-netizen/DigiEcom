@@ -1,5 +1,6 @@
 import React from 'react';
 import { BookOpen, Sparkles, Briefcase, Workflow, Palette, Terminal } from 'lucide-react';
+import { RevealOnScroll } from '../common/RevealOnScroll';
 
 export const BenefitsSection: React.FC = () => {
   const benefits = [
@@ -60,26 +61,28 @@ export const BenefitsSection: React.FC = () => {
     >
       <div className="container">
         {/* Header */}
-        <div style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto var(--space-12) auto' }}>
-          <span className="badge badge-lime" style={{ marginBottom: 'var(--space-2)' }}>
-            Real Utility Focus
-          </span>
-          <h2
-            id="benefits-heading"
-            style={{
-              fontSize: 'clamp(1.75rem, 3.5vw, 2.5rem)',
-              fontWeight: 800,
-              letterSpacing: '-0.02em',
-              marginBottom: 'var(--space-3)',
-            }}
-          >
-            How Digital Assets Support Real Workflows
-          </h2>
-          <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)' }}>
-            We focus on transparent deliverables and practical tools. We avoid hype and make no unsubstantiated
-            revenue or automated outcome claims.
-          </p>
-        </div>
+        <RevealOnScroll>
+          <div style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto var(--space-12) auto' }}>
+            <span className="badge badge-lime" style={{ marginBottom: 'var(--space-2)' }}>
+              Real Utility Focus
+            </span>
+            <h2
+              id="benefits-heading"
+              style={{
+                fontSize: 'clamp(1.75rem, 3.5vw, 2.5rem)',
+                fontWeight: 800,
+                letterSpacing: '-0.02em',
+                marginBottom: 'var(--space-3)',
+              }}
+            >
+              How Digital Assets Support Real Workflows
+            </h2>
+            <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)' }}>
+              We focus on transparent deliverables and practical tools. We avoid hype and make no unsubstantiated
+              revenue or automated outcome claims.
+            </p>
+          </div>
+        </RevealOnScroll>
 
         {/* Benefits Grid */}
         <div
@@ -90,52 +93,54 @@ export const BenefitsSection: React.FC = () => {
           }}
         >
           {benefits.map((benefit, idx) => (
-            <div
-              key={idx}
-              className="card"
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 'var(--space-3)',
-                background: 'var(--bg-surface)',
-                border: '1px solid var(--border-card)',
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <div
-                  style={{
-                    width: '42px',
-                    height: '42px',
-                    borderRadius: 'var(--radius-md)',
-                    background: 'var(--bg-surface-elevated)',
-                    border: '1px solid var(--border-subtle)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  {benefit.icon}
+            <RevealOnScroll key={idx} delay={idx * 60} style={{ height: '100%' }}>
+              <div
+                className="card card-interactive"
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 'var(--space-3)',
+                  background: 'var(--bg-surface)',
+                  border: '1px solid var(--border-card)',
+                  height: '100%',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div
+                    style={{
+                      width: '42px',
+                      height: '42px',
+                      borderRadius: 'var(--radius-md)',
+                      background: 'var(--bg-surface-elevated)',
+                      border: '1px solid var(--border-subtle)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    {benefit.icon}
+                  </div>
+                  <span
+                    style={{
+                      fontSize: '11px',
+                      fontFamily: 'var(--font-mono)',
+                      color: 'var(--text-dim)',
+                      textTransform: 'uppercase',
+                    }}
+                  >
+                    {benefit.badge}
+                  </span>
                 </div>
-                <span
-                  style={{
-                    fontSize: '11px',
-                    fontFamily: 'var(--font-mono)',
-                    color: 'var(--text-dim)',
-                    textTransform: 'uppercase',
-                  }}
-                >
-                  {benefit.badge}
-                </span>
+
+                <h3 style={{ fontSize: 'var(--text-base)', fontWeight: 700, color: 'var(--text-primary)' }}>
+                  {benefit.title}
+                </h3>
+
+                <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                  {benefit.description}
+                </p>
               </div>
-
-              <h3 style={{ fontSize: 'var(--text-base)', fontWeight: 700, color: 'var(--text-primary)' }}>
-                {benefit.title}
-              </h3>
-
-              <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-                {benefit.description}
-              </p>
-            </div>
+            </RevealOnScroll>
           ))}
         </div>
       </div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Mail, BellOff, Info } from 'lucide-react';
+import { RevealOnScroll } from '../common/RevealOnScroll';
 
 export const NewsletterSection: React.FC = () => {
   return (
@@ -11,17 +12,18 @@ export const NewsletterSection: React.FC = () => {
       }}
     >
       <div className="container">
-        <div
-          className="card"
-          style={{
-            background: 'linear-gradient(135deg, #130c2c 0%, #1a103d 100%)',
-            border: '1px solid rgba(168, 85, 247, 0.3)',
-            borderRadius: 'var(--radius-xl)',
-            padding: 'var(--space-10) var(--space-8)',
-            position: 'relative',
-            overflow: 'hidden',
-          }}
-        >
+        <RevealOnScroll>
+          <div
+            className="card"
+            style={{
+              background: 'linear-gradient(135deg, #130c2c 0%, #1a103d 100%)',
+              border: '1px solid rgba(168, 85, 247, 0.3)',
+              borderRadius: 'var(--radius-xl)',
+              padding: 'var(--space-10) var(--space-8)',
+              position: 'relative',
+              overflow: 'hidden',
+            }}
+          >
           <div
             style={{
               maxWidth: '680px',
@@ -130,7 +132,8 @@ export const NewsletterSection: React.FC = () => {
             </div>
           </div>
         </div>
-      </div>
-    </section>
-  );
+      </RevealOnScroll>
+    </div>
+  </section>
+);
 };

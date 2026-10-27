@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Sparkles, ShieldAlert, ArrowUpRight } from 'lucide-react';
+import { ShieldAlert, ArrowUpRight } from 'lucide-react';
 import categoriesData from '../../data/categories.json';
 import { siteConfig } from '../../config/siteConfig';
+import { BrandLogo } from './BrandLogo';
 
 export const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
@@ -74,37 +75,13 @@ export const Footer: React.FC = () => {
             <Link
               to="/"
               style={{
-                display: 'flex',
+                display: 'inline-flex',
                 alignItems: 'center',
-                gap: 'var(--space-2)',
                 textDecoration: 'none',
               }}
+              aria-label={`${siteConfig.brandName} Footer Home`}
             >
-              <div
-                style={{
-                  width: '32px',
-                  height: '32px',
-                  borderRadius: 'var(--radius-sm)',
-                  background: 'linear-gradient(135deg, #1f1442 0%, #3b1b6e 100%)',
-                  border: '1px solid rgba(168, 85, 247, 0.4)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: 'var(--accent-lime)',
-                }}
-              >
-                <Sparkles size={16} />
-              </div>
-              <span
-                style={{
-                  fontSize: 'var(--text-lg)',
-                  fontWeight: 800,
-                  letterSpacing: '-0.02em',
-                  color: '#ffffff',
-                }}
-              >
-                {siteConfig.brandName}
-              </span>
+              <BrandLogo size="md" showTagline={false} />
             </Link>
             <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-muted)', lineHeight: 1.6 }}>
               Curated digital assets, system design handbooks, prompt vaults, and business models built for modern

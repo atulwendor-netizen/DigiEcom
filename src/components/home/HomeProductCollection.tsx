@@ -3,6 +3,7 @@ import { Product, ProductSortOption } from '../../types/product';
 import { CategoryId } from '../../types/category';
 import { ProductFilters } from '../products/ProductFilters';
 import { ProductGrid } from '../products/ProductGrid';
+import { RevealOnScroll } from '../common/RevealOnScroll';
 
 interface HomeProductCollectionProps {
   products: Product[];
@@ -73,25 +74,27 @@ export const HomeProductCollection: React.FC<HomeProductCollectionProps> = ({ pr
     >
       <div className="container">
         {/* Header */}
-        <div style={{ marginBottom: 'var(--space-8)' }}>
-          <span className="badge badge-lime" style={{ marginBottom: 'var(--space-2)' }}>
-            Live Catalogue Explorer
-          </span>
-          <h2
-            id="collection-heading"
-            style={{
-              fontSize: 'clamp(1.75rem, 3.5vw, 2.5rem)',
-              fontWeight: 800,
-              letterSpacing: '-0.02em',
-              marginBottom: 'var(--space-2)',
-            }}
-          >
-            Browse All Digital Products
-          </h2>
-          <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)' }}>
-            Filter by discipline, keyword, or price. All prices are stated in INR (integer paise representation).
-          </p>
-        </div>
+        <RevealOnScroll>
+          <div style={{ marginBottom: 'var(--space-8)' }}>
+            <span className="badge badge-lime" style={{ marginBottom: 'var(--space-2)' }}>
+              Live Catalogue Explorer
+            </span>
+            <h2
+              id="collection-heading"
+              style={{
+                fontSize: 'clamp(1.75rem, 3.5vw, 2.5rem)',
+                fontWeight: 800,
+                letterSpacing: '-0.02em',
+                marginBottom: 'var(--space-2)',
+              }}
+            >
+              Browse All Digital Products
+            </h2>
+            <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)' }}>
+              Filter by discipline, keyword, or price. All prices are stated in INR (integer paise representation).
+            </p>
+          </div>
+        </RevealOnScroll>
 
         {/* Filters */}
         <ProductFilters
