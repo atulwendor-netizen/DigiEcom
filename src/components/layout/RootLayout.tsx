@@ -4,6 +4,7 @@ import { Header } from '../common/Header';
 import { Footer } from '../common/Footer';
 import { SkipLink } from '../common/SkipLink';
 import { CartDrawer } from '../cart/CartDrawer';
+import { AuthModal } from '../auth/AuthModal';
 
 export const RootLayout: React.FC = () => {
   return (
@@ -15,6 +16,7 @@ export const RootLayout: React.FC = () => {
       </main>
       <Footer />
       <CartDrawer />
+      <AuthModal />
     </div>
   );
 };

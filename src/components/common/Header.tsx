@@ -5,6 +5,7 @@ import categoriesData from '../../data/categories.json';
 import { DemoBanner } from './DemoBanner';
 import { BrandLogo } from './BrandLogo';
 import { useCart } from '../../context/CartContext';
+import { UserMenu } from '../auth/UserMenu';
 
 export const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -246,11 +247,16 @@ export const Header: React.FC = () => {
               />
             </form>
 
-            {/* Right Side: Primary Browse CTA, Cart Trigger & Mobile Menu Toggle */}
+            {/* Right Side: Primary Browse CTA, User Menu, Cart Trigger & Mobile Menu Toggle */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
               <Link to="/products" className="btn btn-primary btn-sm desktop-cta">
                 Browse Products
               </Link>
+
+              {/* User Account / Sign In Trigger */}
+              <div className="desktop-user-menu" style={{ display: 'none' }}>
+                <UserMenu />
+              </div>
 
               {/* Shopping Cart Trigger */}
               <button
@@ -463,6 +469,23 @@ export const Header: React.FC = () => {
                 }}
               >
                 Contact & Support
+              </Link>
+
+              <Link
+                to="/account"
+                onClick={closeMenus}
+                style={{
+                  padding: 'var(--space-3)',
+                  borderRadius: 'var(--radius-md)',
+                  color: 'var(--accent-lime)',
+                  fontWeight: 700,
+                  fontSize: 'var(--text-base)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                }}
+              >
+                <span>Digital Library & Purchases</span>
               </Link>
             </nav>
 

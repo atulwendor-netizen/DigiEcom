@@ -351,6 +351,9 @@ a {
   .desktop-cta {
     display: inline-flex !important;
   }
+  .desktop-user-menu {
+    display: flex !important;
+  }
   .mobile-menu-btn {
     display: none !important;
   }
@@ -364,6 +367,9 @@ a {
     display: none !important;
   }
   .desktop-cta {
+    display: none !important;
+  }
+  .desktop-user-menu {
     display: none !important;
   }
   .mobile-menu-btn {

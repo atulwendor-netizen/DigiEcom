@@ -14,27 +14,33 @@ import { LicensePolicyPage } from './pages/policies/LicensePolicyPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { ScrollToTop } from './components/common/ScrollToTop';
 import { CartProvider } from './context/CartContext';
+import { AuthProvider } from './context/AuthContext';
+import { AccountPage } from './pages/AccountPage';
 
 export const App: React.FC = () => {
   return (
-    <CartProvider>
-      <ScrollToTop />
-      <Routes>
-        <Route path="/" element={<RootLayout />}>
-          <Route index element={<HomePage />} />
-          <Route path="products" element={<ProductsPage />} />
-          <Route path="products/:slug" element={<ProductDetailPage />} />
-          <Route path="about" element={<AboutPage />} />
-          <Route path="contact" element={<ContactPage />} />
-          <Route path="policies/privacy" element={<PrivacyPolicyPage />} />
-          <Route path="policies/terms" element={<TermsPage />} />
-          <Route path="policies/refunds" element={<RefundPolicyPage />} />
-          <Route path="policies/delivery" element={<DeliveryPolicyPage />} />
-          <Route path="policies/license" element={<LicensePolicyPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Route>
-      </Routes>
-    </CartProvider>
+    <AuthProvider>
+      <CartProvider>
+        <ScrollToTop />
+        <Routes>
+          <Route path="/" element={<RootLayout />}>
+            <Route index element={<HomePage />} />
+            <Route path="products" element={<ProductsPage />} />
+            <Route path="products/:slug" element={<ProductDetailPage />} />
+            <Route path="account" element={<AccountPage />} />
+            <Route path="library" element={<AccountPage defaultTab="library" />} />
+            <Route path="about" element={<AboutPage />} />
+            <Route path="contact" element={<ContactPage />} />
+            <Route path="policies/privacy" element={<PrivacyPolicyPage />} />
+            <Route path="policies/terms" element={<TermsPage />} />
+            <Route path="policies/refunds" element={<RefundPolicyPage />} />
+            <Route path="policies/delivery" element={<DeliveryPolicyPage />} />
+            <Route path="policies/license" element={<LicensePolicyPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Route>
+        </Routes>
+      </CartProvider>
+    </AuthProvider>
   );
 };
 

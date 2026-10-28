@@ -12,6 +12,7 @@ import {
   AlertCircle,
 } from 'lucide-react';
 import { RazorpayService } from '../../services/checkout/razorpay.service';
+import { useAuth } from '../../context/AuthContext';
 import type {
   RazorpayCustomerInfo,
   RazorpayOrderResponse,
@@ -41,13 +42,25 @@ export const RazorpayCheckoutModal: React.FC<RazorpayCheckoutModalProps> = ({
   subtotalPaise,
   onPaymentSuccess,
 }) => {
+  const { user, recordOrder } = useAuth();
   const [customer, setCustomer] = useState<RazorpayCustomerInfo>({
-    fullName: '',
-    email: '',
-    phone: '',
+    fullName: user?.fullName || '',
+    email: user?.email || '',
+    phone: user?.phone || '',
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Sync user details if authenticated user changes
+  useEffect(() => {
+    if (isOpen && user) {
+      setCustomer({
+        fullName: user.fullName || '',
+        email: user.email || '',
+        phone: user.phone || '',
+      });
+    }
+  }, [isOpen, user]);
 
   // In-app gateway simulator state for environments where external script is blocked
   const [activeTab, setActiveTab] = useState<PaymentMethodTab>('upi');
@@ -97,6 +110,7 @@ export const RazorpayCheckoutModal: React.FC<RazorpayCheckoutModalProps> = ({
         RazorpayService.openCheckout({
           order: orderData,
           onSuccess: (verifiedOrder) => {
+            recordOrder(verifiedOrder);
             onPaymentSuccess(verifiedOrder);
             onClose();
           },
@@ -137,6 +151,7 @@ export const RazorpayCheckoutModal: React.FC<RazorpayCheckoutModalProps> = ({
 
       setIsLoading(false);
       if (verification.verified && verification.order) {
+        recordOrder(verification.order);
         onPaymentSuccess(verification.order);
         onClose();
       } else {
