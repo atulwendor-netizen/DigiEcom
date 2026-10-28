@@ -37,6 +37,33 @@ async function buildServerless() {
   // Duplicate for index
   fs.copyFileSync('api/checkout/[...path].js', 'api/checkout/index.js');
 
+  // Build Razorpay Webhooks serverless function
+  fs.mkdirSync('api/webhooks', { recursive: true });
+  await esbuild.build({
+    ...common,
+    entryPoints: ['server/webhookApi.ts'],
+    outfile: 'api/webhooks/razorpay.js',
+    footer: {
+      js: '\nexport default function handler(req, res) { return handleWebhookApi(req, res); }\n',
+    },
+  });
+
+  fs.copyFileSync('api/webhooks/razorpay.js', 'api/webhooks/[...path].js');
+  fs.copyFileSync('api/webhooks/razorpay.js', 'api/webhooks/index.js');
+
+  // Build Storage API serverless function
+  fs.mkdirSync('api/storage', { recursive: true });
+  await esbuild.build({
+    ...common,
+    entryPoints: ['server/storageApi.ts'],
+    outfile: 'api/storage/[...path].js',
+    footer: {
+      js: '\nexport default function handler(req, res) { return handleStorageApi(req, res); }\n',
+    },
+  });
+
+  fs.copyFileSync('api/storage/[...path].js', 'api/storage/index.js');
+
   console.log('✓ Vercel serverless functions bundled successfully into api/');
 }
 

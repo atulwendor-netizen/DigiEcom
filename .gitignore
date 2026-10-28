@@ -21,7 +21,8 @@ credentials.json
 # (Private digital files must never be placed in public web root)
 private/
 downloads/private/
-server/storage/
+.storage_vault/
+.storage_private/
 
 # Editor & OS files
 .DS_Store
