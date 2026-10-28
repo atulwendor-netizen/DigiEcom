@@ -30,7 +30,7 @@ describe('Legal & Support Pages Integrity', () => {
     );
 
     expect(screen.getByRole('heading', { name: /Contact DigiEcom Support/i })).toBeInTheDocument();
-    expect(screen.getByText(/\[support@yourdomain.com\]/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/digiecomsupport1@gmail.com/i).length).toBeGreaterThan(0);
     expect(screen.getByText(/Operating Hours/i)).toBeInTheDocument();
   });
 

@@ -5,6 +5,7 @@ import { Footer } from '../common/Footer';
 import { SkipLink } from '../common/SkipLink';
 import { CartDrawer } from '../cart/CartDrawer';
 import { AuthModal } from '../auth/AuthModal';
+import { SupportChatWidget } from '../chat/SupportChatWidget';
 
 export const RootLayout: React.FC = () => {
   return (
@@ -17,6 +18,7 @@ export const RootLayout: React.FC = () => {
       <Footer />
       <CartDrawer />
       <AuthModal />
+      <SupportChatWidget />
     </div>
   );
 };

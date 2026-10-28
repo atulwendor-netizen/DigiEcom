@@ -66,7 +66,13 @@ export const ContactPage: React.FC = () => {
             </div>
             <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', margin: 0 }}>
               Primary Desk:{' '}
-              <span className="code-inline">[{siteConfig.supportEmail}]</span>
+              <a
+                href={`mailto:${siteConfig.supportEmail}`}
+                className="code-inline"
+                style={{ color: 'var(--lime)', textDecoration: 'none' }}
+              >
+                {siteConfig.supportEmail}
+              </a>
             </p>
             <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-dim)', marginTop: '4px' }}>
               Standard response within 24 business hours.
@@ -115,7 +121,7 @@ export const ContactPage: React.FC = () => {
               <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', maxWidth: '440px', margin: '0 auto' }}>
                 Thank you for testing the contact form! Because this is a static storefront demonstration, no external
                 email daemon has been triggered. In production, this form will forward directly to{' '}
-                <span className="code-inline">[{siteConfig.supportEmail}]</span>.
+                <span className="code-inline">{siteConfig.supportEmail}</span>.
               </p>
               <button
                 type="button"

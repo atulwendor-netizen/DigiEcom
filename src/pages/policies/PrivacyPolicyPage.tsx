@@ -68,7 +68,7 @@ export const PrivacyPolicyPage: React.FC = () => {
             </p>
             <ul style={{ paddingLeft: 'var(--space-6)', fontSize: 'var(--text-sm)', color: 'var(--text-secondary)', marginTop: 'var(--space-2)', display: 'flex', flexDirection: 'column', gap: 'var(--space-1)' }}>
               <li><strong>Contract Fulfillment:</strong> Generating license keys, verifying payment status, and sending secure download links.</li>
-              <li><strong>Customer Support:</strong> Responding to pre-purchase inquiries and technical assistance requests submitted to <span className="code-inline">[support@yourdomain.com]</span>.</li>
+              <li><strong>Customer Support:</strong> Responding to pre-purchase inquiries and technical assistance requests submitted to <span className="code-inline">digiecomsupport1@gmail.com</span>.</li>
               <li><strong>Legal Compliance:</strong> Maintaining financial transaction ledgers required under <span className="code-inline">[Tax / GST Regulations of Jurisdiction]</span>.</li>
             </ul>
           </section>

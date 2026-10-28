@@ -77,7 +77,7 @@ export const DeliveryPolicyPage: React.FC = () => {
             <ul style={{ paddingLeft: 'var(--space-6)', fontSize: 'var(--text-sm)', color: 'var(--text-secondary)', marginTop: 'var(--space-2)', display: 'flex', flexDirection: 'column', gap: 'var(--space-1)' }}>
               <li>Check your email spam, promotions, or quarantine folders for messages originating from <span className="code-inline">[delivery@yourdomain.com]</span>.</li>
               <li>Confirm there were no typos in the email address submitted during checkout.</li>
-              <li>Email our fulfillment desk at <span className="code-inline">[support@yourdomain.com]</span> with your transaction reference number. Our team will verify the payment ledger and re-issue signed links manually within <span className="code-inline">[24 business hours]</span>.</li>
+              <li>Email our fulfillment desk at <span className="code-inline">digiecomsupport1@gmail.com</span> with your transaction reference number. Our team will verify the payment ledger and re-issue signed links manually within <span className="code-inline">[24 business hours]</span>.</li>
             </ul>
           </section>
         </div>

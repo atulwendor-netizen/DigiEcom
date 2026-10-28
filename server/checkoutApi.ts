@@ -10,6 +10,7 @@ import type {
   OrderDeliverable,
   VerifiedOrder,
 } from '../src/types/checkout';
+import productsJson from '../src/data/products.json';
 
 interface ProductCatalogItem {
   id: string;
@@ -21,6 +22,9 @@ interface ProductCatalogItem {
 
 // Load products catalog securely from backend
 function getProductCatalog(): ProductCatalogItem[] {
+  if (Array.isArray(productsJson) && productsJson.length > 0) {
+    return productsJson as unknown as ProductCatalogItem[];
+  }
   try {
     const catalogPath = path.resolve(process.cwd(), 'src/data/products.json');
     const raw = fs.readFileSync(catalogPath, 'utf-8');
