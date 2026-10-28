@@ -12,7 +12,11 @@ export class LocalStorageProvider implements StorageProvider {
   private isInitialized = false;
 
   constructor(vaultDir?: string) {
-    this.vaultDir = vaultDir || process.env.LOCAL_STORAGE_DIR || path.resolve(process.cwd(), '.storage_vault');
+    const defaultDir =
+      process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME
+        ? '/tmp/.storage_vault'
+        : path.resolve(process.cwd(), '.storage_vault');
+    this.vaultDir = vaultDir || process.env.LOCAL_STORAGE_DIR || defaultDir;
     this.blobsDir = path.resolve(this.vaultDir, 'blobs');
     this.metaDir = path.resolve(this.vaultDir, 'meta');
   }

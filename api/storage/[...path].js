@@ -153,7 +153,8 @@ var LocalStorageProvider = class {
   metaDir;
   isInitialized = false;
   constructor(vaultDir) {
-    this.vaultDir = vaultDir || process.env.LOCAL_STORAGE_DIR || path2.resolve(process.cwd(), ".storage_vault");
+    const defaultDir = process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME ? "/tmp/.storage_vault" : path2.resolve(process.cwd(), ".storage_vault");
+    this.vaultDir = vaultDir || process.env.LOCAL_STORAGE_DIR || defaultDir;
     this.blobsDir = path2.resolve(this.vaultDir, "blobs");
     this.metaDir = path2.resolve(this.vaultDir, "meta");
   }
