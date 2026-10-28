@@ -232,10 +232,11 @@ export function handleCheckoutApi(req: IncomingMessage, res: ServerResponse): vo
     return;
   }
 
-  const url = req.url || '/';
+  const rawUrl = req.url || '/';
+  const pathname = (rawUrl.split('?')[0] || '/').replace(/\/+$/, '') || '/';
 
   // GET /api/checkout/status
-  if (req.method === 'GET' && (url === '/status' || url.endsWith('/status'))) {
+  if (req.method === 'GET' && (pathname === '/status' || pathname.endsWith('/status'))) {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json');
     res.end(
@@ -253,7 +254,7 @@ export function handleCheckoutApi(req: IncomingMessage, res: ServerResponse): vo
   }
 
   // GET /api/checkout/download
-  if (req.method === 'GET' && (url.startsWith('/download') || url.includes('/download?'))) {
+  if (req.method === 'GET' && (pathname.startsWith('/download') || pathname.includes('/download'))) {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Content-Disposition', 'attachment; filename="digiecom-asset-license.json"');
@@ -289,7 +290,7 @@ export function handleCheckoutApi(req: IncomingMessage, res: ServerResponse): vo
       }
 
       // POST /create-order
-      if (req.method === 'POST' && (url === '/create-order' || url.endsWith('/create-order'))) {
+      if (req.method === 'POST' && (pathname === '/create-order' || pathname.endsWith('/create-order'))) {
         const order = await createOrder(parsedBody);
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
@@ -298,7 +299,7 @@ export function handleCheckoutApi(req: IncomingMessage, res: ServerResponse): vo
       }
 
       // POST /verify-payment
-      if (req.method === 'POST' && (url === '/verify-payment' || url.endsWith('/verify-payment'))) {
+      if (req.method === 'POST' && (pathname === '/verify-payment' || pathname.endsWith('/verify-payment'))) {
         const result = await verifyPayment(parsedBody);
         res.statusCode = result.verified ? 200 : 400;
         res.setHeader('Content-Type', 'application/json');
@@ -309,7 +310,7 @@ export function handleCheckoutApi(req: IncomingMessage, res: ServerResponse): vo
       // 404 Route Not Found
       res.statusCode = 404;
       res.setHeader('Content-Type', 'application/json');
-      res.end(JSON.stringify({ error: `Checkout API route not found: ${url}` }));
+      res.end(JSON.stringify({ error: `Checkout API route not found: ${pathname}` }));
     } catch (err: any) {
       console.error('Checkout API error:', err);
       res.statusCode = 500;
