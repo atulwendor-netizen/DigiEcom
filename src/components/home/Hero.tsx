@@ -185,8 +185,9 @@ export const Hero: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Column: 3D Floating Product Mockups */}
+          {/* Right Column: Refined Container-Query Product Stage */}
           <div
+            className="stage-col"
             style={{
               position: 'relative',
               width: '100%',
@@ -197,43 +198,61 @@ export const Hero: React.FC = () => {
             }}
           >
             <div
-              className="hero-art hero-visual"
-              aria-label="Decorative digital product mockups"
+              className="stage hero-visual hero-art"
+              aria-label="Featured digital products"
               style={{
                 position: 'relative',
-                minHeight: '460px',
+                width: '100%',
+                maxWidth: '600px',
+                aspectRatio: '1 / 1',
                 overflow: 'visible',
               }}
             >
-              <div className="art-glow" />
-              <div className="art-orbit" />
-              <div
-                className="product-mock mock-pink card-ebook"
+              <div className="stage-ring ring" aria-hidden="true" />
+              <div className="stage-orb orb" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                  <path d="M12 3v18M4.2 7.5l15.6 9M19.8 7.5l-15.6 9" />
+                </svg>
+              </div>
+
+              {/* Card A: E-Book */}
+              <article
+                className="stage-card stage-card-a card-a card-ebook"
+                aria-label="E-book: The Pragmatic System Design Handbook"
                 style={{ overflow: 'visible', zIndex: 1 }}
               >
-                <div style={{ fontSize: '0.62rem', fontWeight: 900, textTransform: 'uppercase', marginBottom: '4px' }}>E-Book</div>
-                <h3 style={{ fontSize: '0.88rem', lineHeight: 1.15 }}>The Pragmatic System Design Handbook</h3>
-                <p className="subtext" style={{ margin: '4px 0', opacity: 0.9, fontSize: '0.8rem' }}>340 pages &bull; Architecture</p>
-                <div className="mini-lines"><span></span><span></span><span></span></div>
-              </div>
-              <div
-                className="product-mock mock-main card-main"
-                style={{ overflow: 'visible', zIndex: 3 }}
-              >
-                <span className="mock-label">DIGIECOM / STOREFRONT</span>
-                <span className="tagline" style={{ color: '#fff' }}>IDEAS →{'\n'}INTO ACTION</span>
-              </div>
-              <div
-                className="product-mock mock-orange card-prompts"
+                <span className="stage-tag tag">E-book</span>
+                <h3>The Pragmatic System Design Handbook</h3>
+                <p className="subtext">Patterns, trade-offs and worked examples.</p>
+                <span className="stage-price price">₹799</span>
+              </article>
+
+              {/* Card B: Centerpiece Figma Kit */}
+              <article
+                className="stage-card stage-card-b card-b card-main"
+                aria-label="Figma kit: Component Library for Figma"
                 style={{ overflow: 'visible', zIndex: 2 }}
               >
-                <div style={{ fontSize: '0.62rem', fontWeight: 900, textTransform: 'uppercase', marginBottom: '4px' }}>AI Prompts</div>
-                <h3 style={{ fontSize: '0.88rem', lineHeight: 1.15 }}>Enterprise Prompt Vault: 450+ Tested System Prompts</h3>
-                <p className="subtext" style={{ margin: '4px 0', opacity: 0.9, fontSize: '0.8rem' }}>450+ tested schemas</p>
-                <div className="mini-lines"><span></span><span></span><span></span></div>
-              </div>
-              <div className="art-sticker" aria-hidden="true">✳</div>
-              <div className="art-caption">Tools for your next chapter</div>
+                <span className="stage-tag tag">Figma kit</span>
+                <div className="stage-disc disc" aria-hidden="true" />
+                <div className="copy" style={{ marginTop: 'auto', zIndex: 1 }}>
+                  <h3>Component Library for Figma</h3>
+                  <p className="subtext">Auto-layout components, light and dark.</p>
+                  <span className="stage-price price">₹1,299</span>
+                </div>
+              </article>
+
+              {/* Card C: AI Prompt Pack */}
+              <article
+                className="stage-card stage-card-c card-c card-prompts"
+                aria-label="Prompt pack: Enterprise Prompt Vault"
+                style={{ overflow: 'visible', zIndex: 3 }}
+              >
+                <span className="stage-tag tag">Prompt pack</span>
+                <h3>Enterprise Prompt Vault: 450+ Tested System Prompts</h3>
+                <p className="subtext">450+ tested system prompts.</p>
+                <span className="stage-price price">₹499</span>
+              </article>
             </div>
           </div>
         </div>
