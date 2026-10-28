@@ -127,10 +127,10 @@ export const RefundPolicyPage: React.FC = () => {
               <span style={{ fontSize: 'var(--text-sm)', color: 'var(--text-primary)', fontWeight: 600 }}>
                 Support Email:{' '}
                 <a
-                  href="mailto:Digisupport1@gmail.com"
+                  href="mailto:digiecomsupport1@gmail.com"
                   style={{ color: 'var(--lime)', textDecoration: 'underline' }}
                 >
-                  Digisupport1@gmail.com
+                  digiecomsupport1@gmail.com
                 </a>
               </span>
             </div>
@@ -207,8 +207,8 @@ export const RefundPolicyPage: React.FC = () => {
                 <span style={{ color: 'var(--text-dim)', fontSize: '11px', display: 'block', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                   Customer Support Email
                 </span>
-                <a href="mailto:Digisupport1@gmail.com" style={{ color: 'var(--lime)', fontWeight: 600 }}>
-                  Digisupport1@gmail.com
+                <a href="mailto:digiecomsupport1@gmail.com" style={{ color: 'var(--lime)', fontWeight: 600 }}>
+                  digiecomsupport1@gmail.com
                 </a>
               </div>
               <div>
