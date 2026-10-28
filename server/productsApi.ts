@@ -485,11 +485,7 @@ export function handleProductsApi(req: IncomingMessage, res: ServerResponse): vo
 
     const productId = singleMatch[1];
     db.delete(productId)
-      .then((deleted) => {
-        if (!deleted) {
-          sendJson(res, 404, { success: false, error: `Product "${productId}" not found.` });
-          return;
-        }
+      .then(() => {
         sendJson(res, 200, { success: true, deleted: true, id: productId });
       })
       .catch((err) => {

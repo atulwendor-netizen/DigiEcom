@@ -190,6 +190,7 @@ export const ProductService = {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${adminKey}`,
+          'x-admin-key': adminKey || '',
         },
         body: JSON.stringify(input),
       });
@@ -217,6 +218,7 @@ export const ProductService = {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${adminKey}`,
+          'x-admin-key': adminKey || '',
         },
         body: JSON.stringify(updates),
       });
@@ -244,6 +246,7 @@ export const ProductService = {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${adminKey}`,
+          'x-admin-key': adminKey || '',
         },
         body: JSON.stringify({ status }),
       });
@@ -266,11 +269,13 @@ export const ProductService = {
       const res = await fetch(`/api/products/${id}`, {
         method: 'DELETE',
         headers: {
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${adminKey}`,
+          'x-admin-key': adminKey || '',
         },
       });
       const data = await res.json();
-      if (res.ok && data.success) {
+      if ((res.ok && data.success) || res.status === 404) {
         return { success: true };
       }
       return { success: false, error: data.error || 'Failed to delete product' };

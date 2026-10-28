@@ -44,21 +44,31 @@ export class AdminStorageService {
   public static getStoredAdminKey(): string | null {
     if (typeof window === 'undefined') return null;
     try {
-      return sessionStorage.getItem(ADMIN_SESSION_STORAGE_KEY);
+      return (
+        sessionStorage.getItem(ADMIN_SESSION_STORAGE_KEY) ||
+        localStorage.getItem(ADMIN_SESSION_STORAGE_KEY) ||
+        sessionStorage.getItem('digiecom_admin_storage_key') ||
+        localStorage.getItem('digiecom_admin_storage_key') ||
+        null
+      );
     } catch {
       return null;
     }
   }
 
   /**
-   * Sets the verified Admin API key into sessionStorage.
+   * Sets the verified Admin API key into sessionStorage & localStorage.
    */
   public static setStoredAdminKey(key: string): void {
     if (typeof window === 'undefined') return;
+    const cleanKey = key.trim();
     try {
-      sessionStorage.setItem(ADMIN_SESSION_STORAGE_KEY, key.trim());
+      sessionStorage.setItem(ADMIN_SESSION_STORAGE_KEY, cleanKey);
+      sessionStorage.setItem('digiecom_admin_storage_key', cleanKey);
+      localStorage.setItem(ADMIN_SESSION_STORAGE_KEY, cleanKey);
+      localStorage.setItem('digiecom_admin_storage_key', cleanKey);
     } catch (e) {
-      console.warn('Failed saving admin key in sessionStorage:', e);
+      console.warn('Failed saving admin key in storage:', e);
     }
   }
 
@@ -69,8 +79,11 @@ export class AdminStorageService {
     if (typeof window === 'undefined') return;
     try {
       sessionStorage.removeItem(ADMIN_SESSION_STORAGE_KEY);
+      sessionStorage.removeItem('digiecom_admin_storage_key');
+      localStorage.removeItem(ADMIN_SESSION_STORAGE_KEY);
+      localStorage.removeItem('digiecom_admin_storage_key');
     } catch (e) {
-      console.warn('Failed removing admin key from sessionStorage:', e);
+      console.warn('Failed removing admin key from storage:', e);
     }
   }
 

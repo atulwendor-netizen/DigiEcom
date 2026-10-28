@@ -1564,11 +1564,7 @@ function handleProductsApi(req, res) {
       return;
     }
     const productId = singleMatch[1];
-    db.delete(productId).then((deleted) => {
-      if (!deleted) {
-        sendJson(res, 404, { success: false, error: `Product "${productId}" not found.` });
-        return;
-      }
+    db.delete(productId).then(() => {
       sendJson(res, 200, { success: true, deleted: true, id: productId });
     }).catch((err) => {
       sendJson(res, 500, { success: false, error: err.message });

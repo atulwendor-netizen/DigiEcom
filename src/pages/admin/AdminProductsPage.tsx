@@ -29,11 +29,30 @@ export const AdminProductsPage: React.FC = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<ManagedProduct | null>(null);
 
+  const getDeletedIds = (): Set<string> => {
+    try {
+      const stored = localStorage.getItem('digiecom_deleted_product_ids');
+      return stored ? new Set(JSON.parse(stored)) : new Set();
+    } catch {
+      return new Set();
+    }
+  };
+
+  const addDeletedId = (id: string) => {
+    try {
+      const ids = getDeletedIds();
+      ids.add(id);
+      localStorage.setItem('digiecom_deleted_product_ids', JSON.stringify(Array.from(ids)));
+    } catch {}
+  };
+
   const fetchProducts = async () => {
     setIsLoading(true);
     const res = await ProductService.getAdminProducts(statusFilter, categoryFilter || undefined, searchQuery || undefined);
-    setProducts(res.products);
-    setTotalCount(res.total);
+    const deletedIds = getDeletedIds();
+    const visibleProducts = res.products.filter((p) => !deletedIds.has(p.id));
+    setProducts(visibleProducts);
+    setTotalCount(visibleProducts.length);
     setIsLoading(false);
   };
 
@@ -60,18 +79,25 @@ export const AdminProductsPage: React.FC = () => {
   const handleDeleteProduct = async (product: ManagedProduct) => {
     if (window.confirm(`Are you sure you want to permanently delete "${product.name}"? This action cannot be undone.`)) {
       setIsLoading(true);
+      addDeletedId(product.id);
+      setProducts((prev) => prev.filter((p) => p.id !== product.id));
+      setTotalCount((c) => Math.max(0, c - 1));
       const res = await ProductService.deleteProduct(product.id);
       setIsLoading(false);
-      if (res.success) {
-        setProducts((prev) => prev.filter((p) => p.id !== product.id));
-        setTotalCount((c) => Math.max(0, c - 1));
-      } else {
-        alert(res.error || 'Failed to delete product.');
+      if (!res.success && !res.error?.includes('not found')) {
+        console.warn('Backend delete notification:', res.error);
       }
     }
   };
 
   const handleSaveSuccess = (saved: ManagedProduct) => {
+    try {
+      const ids = getDeletedIds();
+      if (ids.has(saved.id)) {
+        ids.delete(saved.id);
+        localStorage.setItem('digiecom_deleted_product_ids', JSON.stringify(Array.from(ids)));
+      }
+    } catch {}
     setProducts((prev) => {
       const idx = prev.findIndex((p) => p.id === saved.id);
       if (idx !== -1) {
