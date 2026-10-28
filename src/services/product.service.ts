@@ -1,4 +1,5 @@
 import productsSeed from '../data/products.json';
+import { AdminStorageService } from './admin/adminStorage.service';
 
 export type ProductStatus = 'draft' | 'published' | 'unpublished';
 
@@ -59,11 +60,13 @@ export interface CreateProductInput {
   attachedFileMime?: string;
 }
 
-const ADMIN_STORAGE_KEY_STORAGE = 'digiecom_admin_storage_key';
-
 function getAdminApiKey(): string | null {
   if (typeof window === 'undefined') return null;
-  return sessionStorage.getItem(ADMIN_STORAGE_KEY_STORAGE);
+  return (
+    AdminStorageService.getStoredAdminKey() ||
+    sessionStorage.getItem('digiecom_admin_api_key_v1') ||
+    sessionStorage.getItem('digiecom_admin_storage_key')
+  );
 }
 
 export const ProductService = {
