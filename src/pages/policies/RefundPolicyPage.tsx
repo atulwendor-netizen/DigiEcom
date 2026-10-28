@@ -201,7 +201,7 @@ export const RefundPolicyPage: React.FC = () => {
                 <span style={{ color: 'var(--text-dim)', fontSize: '11px', display: 'block', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                   Legal Business / Proprietor
                 </span>
-                <strong style={{ color: 'var(--text-primary)' }}>[DigiEcom]</strong>
+                <strong style={{ color: 'var(--text-primary)' }}>DigiEcom</strong>
               </div>
               <div>
                 <span style={{ color: 'var(--text-dim)', fontSize: '11px', display: 'block', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
