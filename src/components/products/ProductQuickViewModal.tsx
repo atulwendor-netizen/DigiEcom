@@ -166,21 +166,21 @@ export const ProductQuickViewModal: React.FC<ProductQuickViewModalProps> = ({
               color: 'var(--text-secondary)',
             }}
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <span style={{ color: 'var(--text-dim)' }}>Included Formats:</span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 600, color: 'var(--text-primary)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', gap: '8px', minWidth: 0 }}>
+              <span style={{ color: 'var(--text-dim)', flexShrink: 0 }}>Included Formats:</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 600, color: 'var(--text-primary)', textAlign: 'right', overflowWrap: 'break-word', wordBreak: 'break-word', minWidth: 0 }}>
                 {product.fileFormats.join(', ')}
               </span>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', minWidth: 0 }}>
               <span style={{ color: 'var(--text-dim)' }}>Compatibility:</span>
-              <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>
+              <span style={{ fontWeight: 600, color: 'var(--text-primary)', overflowWrap: 'break-word', wordBreak: 'break-word', lineHeight: 1.4, minWidth: 0 }}>
                 {product.compatibility}
               </span>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <span style={{ color: 'var(--text-dim)' }}>License:</span>
-              <span style={{ fontWeight: 600, color: 'var(--accent-lime)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', gap: '8px', minWidth: 0 }}>
+              <span style={{ color: 'var(--text-dim)', flexShrink: 0 }}>License:</span>
+              <span style={{ fontWeight: 600, color: 'var(--accent-lime)', textAlign: 'right', overflowWrap: 'break-word', wordBreak: 'break-word', minWidth: 0 }}>
                 {product.licenseType}
               </span>
             </div>
@@ -288,7 +288,7 @@ export const ProductQuickViewModal: React.FC<ProductQuickViewModalProps> = ({
                       }}
                     >
                       <CheckCircle2 size={14} color="var(--accent-lime)" style={{ flexShrink: 0, marginTop: '2px' }} />
-                      <span>{content}</span>
+                      <span style={{ minWidth: 0, overflowWrap: 'break-word', wordBreak: 'break-word' }}>{content}</span>
                     </li>
                   ))}
                 </ul>

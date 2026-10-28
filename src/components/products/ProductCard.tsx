@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingBag, Eye } from 'lucide-react';
+import { ShoppingBag, Eye, CheckCircle2, Cpu } from 'lucide-react';
 import { Product } from '../../types/product';
 import { ProductCoverVisual } from './ProductCoverVisual';
 import { formatINR } from '../../utils/currency';
@@ -10,6 +10,8 @@ import { ProductQuickViewModal } from './ProductQuickViewModal';
 interface ProductCardProps {
   product: Product;
 }
+
+const sanitizeDigits = (text: string) => text.replace(/0(\d)/g, '0\u200B$1');
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const { addItem } = useCart();
@@ -23,6 +25,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
+        minWidth: 0,
+        boxSizing: 'border-box',
         overflow: 'hidden',
         position: 'relative',
         background: '#26223e',
@@ -35,7 +39,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       <Link
         to={`/products/${product.slug}`}
         aria-label={`View details for ${product.name}`}
-        style={{ display: 'block', textDecoration: 'none' }}
+        style={{ display: 'block', textDecoration: 'none', width: '100%', flexShrink: 0, minWidth: 0 }}
       >
         <ProductCoverVisual product={product} size="md" />
       </Link>
@@ -47,12 +51,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           padding: '20px',
           display: 'flex',
           flexDirection: 'column',
-          flex: 1,
-          justifyContent: 'space-between',
-          gap: '12px',
+          flex: '1 1 auto',
+          minWidth: 0,
+          boxSizing: 'border-box',
+          gap: '14px',
         }}
       >
-        <div>
+        <div style={{ display: 'flex', flexDirection: 'column', flex: '1 0 auto', minWidth: 0, gap: '8px' }}>
           {/* Metadata Row */}
           <div
             className="product-meta"
@@ -60,10 +65,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              gap: '12px',
+              flexWrap: 'wrap',
+              gap: '8px',
               color: 'var(--muted)',
               fontSize: '0.74rem',
-              marginBottom: '10px',
+              minWidth: 0,
             }}
           >
             <span
@@ -73,11 +79,20 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 fontWeight: 800,
                 letterSpacing: '0.04em',
                 textTransform: 'uppercase',
+                flexShrink: 0,
               }}
             >
               {product.categoryLabel}
             </span>
-            <span style={{ fontFamily: 'var(--font-mono)' }}>
+            <span
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.72rem',
+                color: 'var(--muted)',
+                minWidth: 0,
+                wordBreak: 'break-word',
+              }}
+            >
               {product.fileFormats.slice(0, 2).join(' · ')} &bull; DEMO
             </span>
           </div>
@@ -85,11 +100,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           {/* Product Title */}
           <h3
             style={{
-              margin: '0 0 8px',
-              fontSize: '1.2rem',
+              margin: '2px 0 0',
+              fontSize: '1.18rem',
               fontWeight: 800,
               letterSpacing: '-0.035em',
-              lineHeight: 1.25,
+              lineHeight: 1.3,
+              minWidth: 0,
+              overflowWrap: 'break-word',
+              wordBreak: 'break-word',
             }}
           >
             <Link
@@ -102,43 +120,101 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             </Link>
           </h3>
 
-          {/* Short Benefit-oriented Description */}
+          {/* Benefit-oriented Description - without truncation */}
           <p
             style={{
               color: 'var(--muted)',
-              margin: 0,
+              margin: '2px 0 0',
               fontSize: '0.86rem',
-              lineHeight: 1.5,
-              display: '-webkit-box',
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: 'vertical',
-              overflow: 'hidden',
+              lineHeight: 1.55,
+              minWidth: 0,
+              overflowWrap: 'break-word',
+              wordBreak: 'break-word',
             }}
           >
             {product.shortDescription}
           </p>
+
+          {/* Inclusions & Compatibility Badges (Unclipped, structured details) */}
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '6px',
+              marginTop: '4px',
+              padding: '10px 12px',
+              backgroundColor: 'rgba(255, 255, 255, 0.03)',
+              borderRadius: 'var(--radius-sm, 8px)',
+              border: '1px solid rgba(255, 255, 255, 0.05)',
+              fontSize: '0.75rem',
+              minWidth: 0,
+              boxSizing: 'border-box',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', minWidth: 0 }}>
+              <CheckCircle2 size={13} style={{ color: 'var(--lime)', marginTop: '2px', flexShrink: 0 }} />
+              <span
+                style={{
+                  color: 'var(--muted)',
+                  minWidth: 0,
+                  overflowWrap: 'break-word',
+                  wordBreak: 'break-word',
+                  lineHeight: 1.4,
+                }}
+              >
+                <strong style={{ color: 'var(--text)', fontWeight: 600 }}>Includes:</strong>{' '}
+                {sanitizeDigits(
+                  product.contents && product.contents.length > 0
+                    ? product.contents[0]
+                    : `${product.fileFormats.join(', ')} digital files`
+                )}
+              </span>
+            </div>
+            {product.compatibility && (
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', minWidth: 0 }}>
+                <Cpu size={13} style={{ color: 'var(--lavender, #c7bdff)', marginTop: '2px', flexShrink: 0 }} />
+                <span
+                  style={{
+                    color: 'var(--muted)',
+                    minWidth: 0,
+                    overflowWrap: 'break-word',
+                    wordBreak: 'break-word',
+                    lineHeight: 1.4,
+                  }}
+                >
+                  <strong style={{ color: 'var(--text)', fontWeight: 600 }}>Works with:</strong>{' '}
+                  {sanitizeDigits(product.compatibility)}
+                </span>
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* Product Bottom Row matching demo */}
+        {/* Product Bottom Row - aligned consistently via marginTop: auto */}
         <div
           className="product-bottom"
           style={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
+            flexWrap: 'wrap',
             gap: '12px',
-            marginTop: '16px',
+            marginTop: 'auto',
             paddingTop: '16px',
             borderTop: '1px solid var(--line)',
+            width: '100%',
+            minWidth: 0,
+            boxSizing: 'border-box',
           }}
         >
-          <div className="price">
+          <div className="price" style={{ minWidth: 0, flex: '1 1 auto' }}>
             <span
               style={{
                 fontFamily: 'var(--font-mono)',
                 fontSize: '1.15rem',
                 fontWeight: 900,
                 color: 'var(--text)',
+                display: 'block',
               }}
             >
               {formatINR(product.pricePaise)}
@@ -149,13 +225,23 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 color: 'var(--muted)',
                 fontSize: '0.64rem',
                 fontWeight: 500,
+                whiteSpace: 'nowrap',
               }}
             >
               Preview only &bull; Not for sale
             </small>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              flexWrap: 'wrap',
+              flexShrink: 0,
+              maxWidth: '100%',
+            }}
+          >
             <button
               type="button"
               onClick={() => setIsQuickViewOpen(true)}
@@ -171,6 +257,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 backgroundColor: 'rgba(255, 255, 255, 0.05)',
                 border: '1px solid var(--border-card)',
                 cursor: 'pointer',
+                boxSizing: 'border-box',
               }}
               aria-label={`Quick view ${product.name}`}
               title={`Quick view ${product.name}`}
@@ -192,6 +279,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 gap: '5px',
                 fontWeight: 600,
                 cursor: 'pointer',
+                boxSizing: 'border-box',
               }}
               aria-label={`Add ${product.name} to cart`}
             >
@@ -203,8 +291,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               to={`/products/${product.slug}`}
               className="round-link"
               aria-label={`View details for ${product.name}`}
+              style={{
+                width: '38px',
+                height: '38px',
+                flexShrink: 0,
+              }}
             >
-              <span aria-hidden="true" style={{ fontSize: '1.1rem', fontWeight: 700 }}>
+              <span aria-hidden="true" style={{ fontSize: '1.05rem', fontWeight: 700 }}>
                 ↗
               </span>
             </Link>

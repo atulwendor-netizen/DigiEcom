@@ -74,6 +74,7 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
         gap: 'var(--space-6)',
+        alignItems: 'stretch',
       }}
     >
       {products.map((product, idx) => (
@@ -83,6 +84,9 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
           style={{
             animation: `fadeInUp var(--duration-base) var(--ease-out-smooth) ${Math.min(idx * 35, 200)}ms both`,
             height: '100%',
+            minWidth: 0,
+            display: 'flex',
+            flexDirection: 'column',
           }}
         >
           <ProductCard product={product} />

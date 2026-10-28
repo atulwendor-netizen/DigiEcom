@@ -91,10 +91,15 @@ export const FeaturedProducts: React.FC<FeaturedProductsProps> = ({ products }) 
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fill, minmax(290px, 1fr))',
             gap: '20px',
+            alignItems: 'stretch',
           }}
         >
           {featured.map((product, idx) => (
-            <RevealOnScroll key={product.id} delay={idx * 70} style={{ height: '100%' }}>
+            <RevealOnScroll
+              key={product.id}
+              delay={idx * 70}
+              style={{ height: '100%', minWidth: 0, display: 'flex', flexDirection: 'column' }}
+            >
               <ProductCard product={product} />
             </RevealOnScroll>
           ))}
