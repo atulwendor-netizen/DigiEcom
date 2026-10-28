@@ -66,6 +66,9 @@ describe('Legal & Support Pages Integrity', () => {
 
     expect(screen.getByRole('heading', { name: /Refund and Cancellation Policy/i })).toBeInTheDocument();
     expect(screen.getByText(/Intangible Nature of Digital Products/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Digisupport1@gmail.com/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/Current Storefront Status/i)).toBeInTheDocument();
+    expect(screen.getByText(/Refund Eligibility/i)).toBeInTheDocument();
   });
 
   it('renders Digital Delivery Policy detailing secure signed URLs', () => {
