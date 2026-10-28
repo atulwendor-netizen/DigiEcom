@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { X, ShoppingBag, ArrowRight, CheckCircle2, Sparkles } from 'lucide-react';
 import { Product } from '../../types/product';
 import { ProductCoverVisual } from './ProductCoverVisual';
 import { formatINR } from '../../utils/currency';
 import { useCart } from '../../context/CartContext';
+import { acquireScrollLock } from '../../utils/scrollLock';
 
 interface ProductQuickViewModalProps {
   product: Product | null;
@@ -33,25 +35,25 @@ export const ProductQuickViewModal: React.FC<ProductQuickViewModalProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
-  // Lock body scroll
+  // Coordinated scroll-lock that preserves page position and handles unmounting cleanly
   useEffect(() => {
-    if (isOpen) {
-      const original = document.body.style.overflow;
-      document.body.style.overflow = 'hidden';
-      return () => {
-        document.body.style.overflow = original;
-      };
-    }
+    if (!isOpen) return;
+
+    const releaseLock = acquireScrollLock();
+    return () => {
+      releaseLock();
+    };
   }, [isOpen]);
 
   if (!isOpen || !product) return null;
+  if (typeof document === 'undefined') return null;
 
   const handleAddToCart = () => {
     addItem(product);
     onClose();
   };
 
-  return (
+  const modalContent = (
     <div
       className="quickview-backdrop"
       onClick={onClose}
@@ -59,14 +61,16 @@ export const ProductQuickViewModal: React.FC<ProductQuickViewModalProps> = ({
       style={{
         position: 'fixed',
         inset: 0,
-        backgroundColor: 'rgba(10, 8, 20, 0.78)',
-        backdropFilter: 'blur(6px)',
-        zIndex: 1150,
+        backgroundColor: 'rgba(10, 8, 20, 0.82)',
+        backdropFilter: 'blur(8px)',
+        WebkitBackdropFilter: 'blur(8px)',
+        zIndex: 1200,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 'var(--space-4)',
+        padding: 'clamp(12px, 3vw, 24px)',
         overflowY: 'auto',
+        overscrollBehavior: 'contain',
       }}
     >
       <div
@@ -75,66 +79,48 @@ export const ProductQuickViewModal: React.FC<ProductQuickViewModalProps> = ({
         role="dialog"
         aria-modal="true"
         aria-labelledby="quickview-title"
-        style={{
-          width: '100%',
-          maxWidth: '820px',
-          background: 'var(--panel)',
-          border: '1px solid var(--border-card)',
-          borderRadius: 'var(--radius)',
-          boxShadow: '0 30px 80px rgba(0, 0, 0, 0.55)',
-          position: 'relative',
-          padding: 0,
-          overflow: 'hidden',
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-          maxHeight: '90vh',
-        }}
       >
         {/* Close Button */}
         <button
           type="button"
           onClick={onClose}
           aria-label="Close quick view"
+          className="quickview-close-btn"
           style={{
             position: 'absolute',
-            top: 'var(--space-3)',
-            right: 'var(--space-3)',
-            background: 'var(--bg-surface-elevated)',
-            border: '1px solid var(--border-card)',
+            top: '14px',
+            right: '14px',
+            background: 'rgba(23, 21, 38, 0.85)',
+            backdropFilter: 'blur(8px)',
+            border: '1px solid rgba(255, 255, 255, 0.16)',
             color: 'var(--text-secondary)',
-            borderRadius: 'var(--radius-full)',
-            width: '34px',
-            height: '34px',
+            borderRadius: 'var(--radius-full, 50%)',
+            width: '36px',
+            height: '36px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             cursor: 'pointer',
-            zIndex: 10,
-            transition: 'all var(--transition-fast)',
+            zIndex: 30,
+            transition: 'all var(--transition-fast, 0.18s ease)',
+            boxSizing: 'border-box',
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.color = 'var(--text-primary)';
-            e.currentTarget.style.backgroundColor = 'var(--panel-light)';
+            e.currentTarget.style.borderColor = 'var(--lime)';
+            e.currentTarget.style.backgroundColor = 'var(--panel-light, #302b4b)';
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.color = 'var(--text-secondary)';
-            e.currentTarget.style.backgroundColor = 'var(--bg-surface-elevated)';
+            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.16)';
+            e.currentTarget.style.backgroundColor = 'rgba(23, 21, 38, 0.85)';
           }}
         >
           <X size={18} />
         </button>
 
         {/* Left Column: Visual Cover & Meta Tags */}
-        <div
-          style={{
-            background: 'var(--ink-2)',
-            padding: 'var(--space-6)',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            borderRight: '1px solid var(--border-subtle)',
-          }}
-        >
+        <div className="quickview-left-col">
           <div>
             <ProductCoverVisual product={product} size="md" />
 
@@ -188,16 +174,7 @@ export const ProductQuickViewModal: React.FC<ProductQuickViewModalProps> = ({
         </div>
 
         {/* Right Column: Title, Inclusions & Actions */}
-        <div
-          style={{
-            padding: 'var(--space-6)',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            overflowY: 'auto',
-            maxHeight: '90vh',
-          }}
-        >
+        <div className="quickview-right-col">
           <div>
             <h2
               id="quickview-title"
@@ -207,7 +184,7 @@ export const ProductQuickViewModal: React.FC<ProductQuickViewModalProps> = ({
                 color: 'var(--text-primary)',
                 lineHeight: 1.25,
                 marginBottom: 'var(--space-2)',
-                paddingRight: 'var(--space-6)',
+                paddingRight: 'var(--space-8)',
               }}
             >
               {product.name}
@@ -351,4 +328,6 @@ export const ProductQuickViewModal: React.FC<ProductQuickViewModalProps> = ({
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 };

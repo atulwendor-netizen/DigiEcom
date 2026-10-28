@@ -244,7 +244,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           >
             <button
               type="button"
-              onClick={() => setIsQuickViewOpen(true)}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setIsQuickViewOpen(true);
+              }}
               className="btn btn-ghost btn-sm"
               style={{
                 padding: '6px 8px',

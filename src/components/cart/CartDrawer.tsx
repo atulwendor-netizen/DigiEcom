@@ -8,6 +8,7 @@ import { CheckoutSimulatorModal } from './CheckoutSimulatorModal';
 import { RazorpayCheckoutModal } from '../checkout/RazorpayCheckoutModal';
 import { OrderConfirmationModal } from '../checkout/OrderConfirmationModal';
 import type { VerifiedOrder } from '../../types/checkout';
+import { acquireScrollLock } from '../../utils/scrollLock';
 
 export const CartDrawer: React.FC = () => {
   const {
@@ -45,10 +46,9 @@ export const CartDrawer: React.FC = () => {
   // Lock body scroll when drawer is open
   useEffect(() => {
     if (isCartOpen) {
-      const originalOverflow = document.body.style.overflow;
-      document.body.style.overflow = 'hidden';
+      const release = acquireScrollLock();
       return () => {
-        document.body.style.overflow = originalOverflow;
+        release();
       };
     }
   }, [isCartOpen]);

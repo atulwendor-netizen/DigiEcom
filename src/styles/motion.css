@@ -934,6 +934,65 @@
 
 .quickview-modal {
   animation: checkoutModalPop 0.28s var(--ease-out-smooth) forwards;
+  width: 100%;
+  max-width: 840px;
+  background: var(--panel, #25213d);
+  border: 1px solid var(--border-card, rgba(255, 255, 255, 0.12));
+  border-radius: var(--radius, 22px);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.65);
+  position: relative;
+  padding: 0;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  max-height: min(92vh, 780px);
+  margin: auto;
+  box-sizing: border-box;
+}
+
+.quickview-left-col {
+  background: var(--ink-2, #201d35);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justifyContent: space-between;
+  border-right: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.quickview-right-col {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justifyContent: space-between;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .quickview-modal {
+    grid-template-columns: 1fr;
+    max-height: 92vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: var(--radius-lg, 18px);
+  }
+
+  .quickview-left-col {
+    border-right: none;
+    border-bottom: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
+    padding: 20px 18px;
+    overflow-y: visible;
+  }
+
+  .quickview-right-col {
+    padding: 20px 18px;
+    overflow-y: visible;
+  }
 }
 
 .cart-trigger-btn:hover {
