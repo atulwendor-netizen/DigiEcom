@@ -64,6 +64,19 @@ async function buildServerless() {
 
   fs.copyFileSync('api/storage/[...path].js', 'api/storage/index.js');
 
+  // Build Products API serverless function
+  fs.mkdirSync('api/products', { recursive: true });
+  await esbuild.build({
+    ...common,
+    entryPoints: ['server/productsApi.ts'],
+    outfile: 'api/products/[...path].js',
+    footer: {
+      js: '\nexport default function handler(req, res) { return handleProductsApi(req, res); }\n',
+    },
+  });
+
+  fs.copyFileSync('api/products/[...path].js', 'api/products/index.js');
+
   console.log('✓ Vercel serverless functions bundled successfully into api/');
 }
 

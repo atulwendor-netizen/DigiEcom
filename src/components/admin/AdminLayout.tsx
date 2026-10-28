@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Outlet, Link, useNavigate } from 'react-router-dom';
-import { Database, LogOut, ExternalLink, ShieldCheck, RefreshCw } from 'lucide-react';
+import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
+import { Database, LogOut, ExternalLink, ShieldCheck, RefreshCw, Package, HardDrive } from 'lucide-react';
 import { AdminStorageService } from '../../services/admin/adminStorage.service';
 
 export const AdminLayout: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [healthStatus, setHealthStatus] = useState<{
     status: string;
     provider: string;
@@ -202,6 +203,56 @@ export const AdminLayout: React.FC = () => {
           </button>
         </div>
       </header>
+
+      {/* Admin Section Navigation Tabs */}
+      <nav
+        style={{
+          borderBottom: '1px solid var(--border-card)',
+          backgroundColor: 'rgba(18, 14, 28, 0.6)',
+          backdropFilter: 'blur(8px)',
+          padding: '0 24px',
+          display: 'flex',
+          gap: '8px',
+        }}
+      >
+        <Link
+          to="/admin/products"
+          style={{
+            padding: '12px 16px',
+            textDecoration: 'none',
+            fontSize: 'var(--text-xs)',
+            fontWeight: 700,
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            color: location.pathname.startsWith('/admin/products') ? 'var(--accent-lime)' : 'var(--text-secondary)',
+            borderBottom: location.pathname.startsWith('/admin/products') ? '2px solid var(--accent-lime)' : '2px solid transparent',
+            transition: 'all 0.15s ease',
+          }}
+        >
+          <Package size={15} />
+          <span>Product Catalogue</span>
+        </Link>
+
+        <Link
+          to="/admin/storage"
+          style={{
+            padding: '12px 16px',
+            textDecoration: 'none',
+            fontSize: 'var(--text-xs)',
+            fontWeight: 700,
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            color: location.pathname.startsWith('/admin/storage') || location.pathname === '/admin' ? 'var(--accent-lime)' : 'var(--text-secondary)',
+            borderBottom: location.pathname.startsWith('/admin/storage') || location.pathname === '/admin' ? '2px solid var(--accent-lime)' : '2px solid transparent',
+            transition: 'all 0.15s ease',
+          }}
+        >
+          <HardDrive size={15} />
+          <span>Digital Storage Vault</span>
+        </Link>
+      </nav>
 
       {/* Main Admin Workspace Area */}
       <main style={{ flex: 1, padding: '24px', maxWidth: '1440px', width: '100%', margin: '0 auto', boxSizing: 'border-box' }}>

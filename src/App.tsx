@@ -20,6 +20,7 @@ import { AdminLayout } from './components/admin/AdminLayout';
 import { AdminAuthGuard } from './components/admin/AdminAuthGuard';
 import { AdminLoginPage } from './pages/admin/AdminLoginPage';
 import { AdminStoragePage } from './pages/admin/AdminStoragePage';
+import { AdminProductsPage } from './pages/admin/AdminProductsPage';
 
 export const App: React.FC = () => {
   return (
@@ -56,7 +57,8 @@ export const App: React.FC = () => {
               </AdminAuthGuard>
             }
           >
-            <Route index element={<AdminStoragePage />} />
+            <Route index element={<AdminProductsPage />} />
+            <Route path="products" element={<AdminProductsPage />} />
             <Route path="storage" element={<AdminStoragePage />} />
           </Route>
         </Routes>

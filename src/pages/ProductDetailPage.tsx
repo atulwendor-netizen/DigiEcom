@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import {
   ArrowLeft,
@@ -25,6 +25,7 @@ import { ProductReviewsSection } from '../components/products/ProductReviewsSect
 import { RazorpayCheckoutModal } from '../components/checkout/RazorpayCheckoutModal';
 import { OrderConfirmationModal } from '../components/checkout/OrderConfirmationModal';
 import type { VerifiedOrder } from '../types/checkout';
+import { ProductService } from '../services/product.service';
 
 export const ProductDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -34,7 +35,19 @@ export const ProductDetailPage: React.FC = () => {
   const { addItem } = useCart();
 
   const products = productsData as unknown as Product[];
-  const product = products.find((p) => p.slug === slug);
+  const [product, setProduct] = useState<Product | undefined>(() => {
+    return products.find((p) => p.slug === slug);
+  });
+
+  useEffect(() => {
+    if (slug) {
+      ProductService.getProductBySlug(slug).then((res) => {
+        if (res) {
+          setProduct(res as unknown as Product);
+        }
+      });
+    }
+  }, [slug]);
 
   useDocumentTitle(
     product ? product.name : 'Product Not Found',

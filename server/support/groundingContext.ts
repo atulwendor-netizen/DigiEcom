@@ -9,11 +9,26 @@ import productsJson from '../../src/data/products.json';
  */
 export function loadGroundedProducts(): GroundedProduct[] {
   try {
-    let rawProducts: any[] = productsJson;
+    let rawProducts: any[] = [];
+    const isVercel = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
+    const dbPath = isVercel
+      ? '/tmp/.storage_vault/db/products.json'
+      : path.resolve(process.cwd(), '.storage_vault/db/products.json');
+
+    if (fs.existsSync(dbPath)) {
+      try {
+        const raw = fs.readFileSync(dbPath, 'utf-8');
+        rawProducts = JSON.parse(raw);
+      } catch {}
+    }
+
     if (!Array.isArray(rawProducts) || rawProducts.length === 0) {
-      const catalogPath = path.resolve(process.cwd(), 'src/data/products.json');
-      const raw = fs.readFileSync(catalogPath, 'utf-8');
-      rawProducts = JSON.parse(raw);
+      rawProducts = productsJson;
+      if (!Array.isArray(rawProducts) || rawProducts.length === 0) {
+        const catalogPath = path.resolve(process.cwd(), 'src/data/products.json');
+        const raw = fs.readFileSync(catalogPath, 'utf-8');
+        rawProducts = JSON.parse(raw);
+      }
     }
 
     return rawProducts.map((p: any) => ({

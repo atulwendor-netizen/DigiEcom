@@ -3,6 +3,7 @@ import { handleCheckoutApi } from './checkoutApi';
 import { handleSupportApi } from './supportApi';
 import { handleWebhookApi } from './webhookApi';
 import { handleStorageApi } from './storageApi';
+import { handleProductsApi } from './productsApi';
 
 const app = express();
 const PORT = Number(process.env.PORT) || 5001;
@@ -24,6 +25,10 @@ app.use('/api/storage', (req, res) => {
   handleStorageApi(req, res);
 });
 
+app.use('/api/products', (req, res) => {
+  handleProductsApi(req, res);
+});
+
 // Root health & service discovery
 app.get('/', (_req, res) => {
   res.json({
@@ -36,6 +41,7 @@ app.get('/', (_req, res) => {
       whatsappWebhook: '/api/support/whatsapp',
       razorpayWebhook: '/api/webhooks/razorpay',
       storageHealth: '/api/storage/health',
+      productsCatalogue: '/api/products',
     },
   });
 });

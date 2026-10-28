@@ -457,11 +457,23 @@ var products_default = [
 // server/support/groundingContext.ts
 function loadGroundedProducts() {
   try {
-    let rawProducts = products_default;
+    let rawProducts = [];
+    const isVercel = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
+    const dbPath = isVercel ? "/tmp/.storage_vault/db/products.json" : path.resolve(process.cwd(), ".storage_vault/db/products.json");
+    if (fs.existsSync(dbPath)) {
+      try {
+        const raw = fs.readFileSync(dbPath, "utf-8");
+        rawProducts = JSON.parse(raw);
+      } catch {
+      }
+    }
     if (!Array.isArray(rawProducts) || rawProducts.length === 0) {
-      const catalogPath = path.resolve(process.cwd(), "src/data/products.json");
-      const raw = fs.readFileSync(catalogPath, "utf-8");
-      rawProducts = JSON.parse(raw);
+      rawProducts = products_default;
+      if (!Array.isArray(rawProducts) || rawProducts.length === 0) {
+        const catalogPath = path.resolve(process.cwd(), "src/data/products.json");
+        const raw = fs.readFileSync(catalogPath, "utf-8");
+        rawProducts = JSON.parse(raw);
+      }
     }
     return rawProducts.map((p) => ({
       id: p.id,

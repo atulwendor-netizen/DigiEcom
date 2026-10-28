@@ -8,6 +8,7 @@ import { Product, ProductSortOption } from '../types/product';
 import { CategoryId } from '../types/category';
 import productsData from '../data/products.json';
 import categoriesData from '../data/categories.json';
+import { ProductService } from '../services/product.service';
 
 export const ProductsPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -71,7 +72,15 @@ export const ProductsPage: React.FC = () => {
     'Browse our complete catalogue of DRM-free e-books, AI prompts, business templates, Notion hubs, and design assets.'
   );
 
-  const products = productsData as unknown as Product[];
+  const [products, setProducts] = useState<Product[]>(productsData as unknown as Product[]);
+
+  useEffect(() => {
+    ProductService.getPublishedProducts().then((res) => {
+      if (res && res.length > 0) {
+        setProducts(res as unknown as Product[]);
+      }
+    });
+  }, []);
 
   const filteredProducts = useMemo(() => {
     let list = [...products];
