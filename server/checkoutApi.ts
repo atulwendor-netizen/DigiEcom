@@ -11,6 +11,13 @@ import type {
   VerifiedOrder,
 } from '../src/types/checkout';
 import productsJson from '../src/data/products.json';
+import {
+  getStorageConfig,
+  isStorageConfigured,
+  generateProductPresignedUrl,
+  generateDownloadToken,
+  verifyDownloadToken,
+} from './signedUrlStorage';
 
 interface ProductCatalogItem {
   id: string;
@@ -182,17 +189,17 @@ export async function verifyPayment(
       amountPaise: itemTotal,
     });
 
-    const token = `dge_${Math.random().toString(36).substring(2, 8)}_${Date.now().toString(36)}`;
+    const token = generateDownloadToken(product.id, orderId);
     const license = `DGE-${Math.random().toString(36).substring(2, 6).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
 
     deliverables.push({
       productId: product.id,
       productName: product.name,
-      downloadUrl: `/api/checkout/download?token=${token}&product=${product.id}`,
+      downloadUrl: `/api/checkout/download?token=${token}&product=${product.id}&order=${orderId}`,
       fileFormat: product.fileFormats?.join(', ') || '.zip',
       fileSize: '16.4 MB',
       licenseKey: license,
-      expiresIn: 'Valid for 30 days • 5 download attempts remaining',
+      expiresIn: 'Valid for 30 days • Direct authenticated digital delivery',
     });
   }
 
@@ -237,6 +244,7 @@ export function handleCheckoutApi(req: IncomingMessage, res: ServerResponse): vo
 
   // GET /api/checkout/status
   if (req.method === 'GET' && (pathname === '/status' || pathname.endsWith('/status'))) {
+    const storageConfig = getStorageConfig();
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json');
     res.end(
@@ -248,6 +256,26 @@ export function handleCheckoutApi(req: IncomingMessage, res: ServerResponse): vo
         currency: 'INR',
         serverCalculatedPricing: true,
         hmacVerification: true,
+        storageConfigured: isStorageConfigured(),
+        storageProvider: storageConfig.provider,
+      })
+    );
+    return;
+  }
+
+  // GET /api/checkout/storage-status
+  if (req.method === 'GET' && (pathname === '/storage-status' || pathname.endsWith('/storage-status'))) {
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/json');
+    const config = getStorageConfig();
+    res.end(
+      JSON.stringify({
+        isStorageConfigured: isStorageConfigured(),
+        provider: config.provider,
+        bucket: config.provider !== 'unconfigured' ? config.bucket : 'sandbox-not-configured',
+        region: config.region,
+        expiresInSeconds: config.expiresInSeconds,
+        supportedProviders: ['cloudflare-r2', 'aws-s3'],
       })
     );
     return;
@@ -255,16 +283,74 @@ export function handleCheckoutApi(req: IncomingMessage, res: ServerResponse): vo
 
   // GET /api/checkout/download
   if (req.method === 'GET' && (pathname.startsWith('/download') || pathname.includes('/download'))) {
+    const urlObj = new URL(rawUrl, 'http://localhost');
+    const token = urlObj.searchParams.get('token') || '';
+    const productId = urlObj.searchParams.get('product') || '';
+    const orderId = urlObj.searchParams.get('order') || '';
+    const format = urlObj.searchParams.get('format') || '';
+
+    // Verify download token
+    const isValid = verifyDownloadToken(productId, orderId, token);
+    if (!isValid) {
+      res.statusCode = 403;
+      res.setHeader('Content-Type', 'application/json');
+      res.end(
+        JSON.stringify({
+          success: false,
+          error: 'Invalid, expired, or tampered digital download token. Please contact support.',
+        })
+      );
+      return;
+    }
+
+    // If real Cloudflare R2 / AWS S3 storage is configured:
+    if (isStorageConfigured()) {
+      const presigned = generateProductPresignedUrl(productId);
+      if (presigned) {
+        if (format === 'json') {
+          res.statusCode = 200;
+          res.setHeader('Content-Type', 'application/json');
+          res.end(
+            JSON.stringify({
+              success: true,
+              downloadUrl: presigned.url,
+              filename: presigned.filename,
+              expiresInSeconds: presigned.expiresInSeconds,
+              provider: presigned.provider,
+            })
+          );
+          return;
+        }
+
+        // Direct 302 redirect to signed Cloudflare R2 / AWS S3 URL
+        res.statusCode = 302;
+        res.setHeader('Location', presigned.url);
+        res.end();
+        return;
+      }
+    }
+
+    // Sandbox / fallback delivery
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Content-Disposition', 'attachment; filename="digiecom-asset-license.json"');
+    res.setHeader('Content-Disposition', `attachment; filename="digiecom-${productId || 'asset'}-license.json"`);
     res.end(
-      JSON.stringify({
-        deliverable: 'DigiEcom Verified Digital Asset Bundle',
-        status: 'Authorized',
-        issuedAt: new Date().toISOString(),
-        notice: 'Download completed successfully. Thank you for your purchase from DigiEcom.',
-      }, null, 2)
+      JSON.stringify(
+        {
+          deliverable: 'DigiEcom Verified Digital Asset Package',
+          productId: productId || 'de-prod-001',
+          orderId: orderId || 'demo_order',
+          status: 'Authorized',
+          tokenValid: true,
+          storageMode: isStorageConfigured() ? 'production' : 'sandbox',
+          notice: isStorageConfigured()
+            ? 'Asset ready for download.'
+            : 'Download verified successfully. Cloudflare R2 / AWS S3 credentials are in sandbox mode. Set R2_ACCESS_KEY_ID or AWS_ACCESS_KEY_ID in server environment variables to stream direct cloud binary assets.',
+          issuedAt: new Date().toISOString(),
+        },
+        null,
+        2
+      )
     );
     return;
   }
