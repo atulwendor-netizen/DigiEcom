@@ -3,6 +3,43 @@ import type { IncomingMessage, ServerResponse } from 'http';
 import { getStorageProvider } from './storage/storageManager';
 import { isValidFileId, validateUploadFile, DEFAULT_MAX_FILE_SIZE_BYTES } from './storage/storageValidator';
 import { generateStorageDownloadToken, verifyStorageDownloadToken } from './storage/storageToken';
+import { isStorageConfigured } from './signedUrlStorage';
+
+export interface StorageActivityLog {
+  id: string;
+  timestamp: string;
+  action:
+    | 'VERIFY_ADMIN'
+    | 'UPLOAD'
+    | 'DELETE'
+    | 'REPLACE'
+    | 'TOKEN_ISSUED'
+    | 'DOWNLOAD_ATTEMPT'
+    | 'METADATA_READ';
+  fileId?: string;
+  filename?: string;
+  details: string;
+  status: 'success' | 'failed';
+  ip?: string;
+}
+
+const MAX_AUDIT_LOGS = 100;
+export const storageActivityLogs: StorageActivityLog[] = [];
+
+/**
+ * Appends an event to the in-memory audit log.
+ */
+export function logStorageActivity(entry: Omit<StorageActivityLog, 'id' | 'timestamp'>): void {
+  const log: StorageActivityLog = {
+    id: `log_${Date.now().toString(36)}_${Math.random().toString(36).substring(2, 6)}`,
+    timestamp: new Date().toISOString(),
+    ...entry,
+  };
+  storageActivityLogs.unshift(log);
+  if (storageActivityLogs.length > MAX_AUDIT_LOGS) {
+    storageActivityLogs.pop();
+  }
+}
 
 /**
  * Timing-safe admin API key verification.
@@ -129,6 +166,13 @@ export function handleStorageApi(req: IncomingMessage, res: ServerResponse): voi
         }
 
         // Standard authorized digital deliverable acknowledgment
+        logStorageActivity({
+          action: 'DOWNLOAD_ATTEMPT',
+          fileId: metadata.fileId,
+          filename: metadata.originalName,
+          details: `Authorized download voucher issued for ${metadata.originalName}`,
+          status: 'success',
+        });
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
         res.setHeader('Content-Disposition', `attachment; filename="digiecom-${metadata.fileId}-authorized.json"`);
@@ -158,6 +202,55 @@ export function handleStorageApi(req: IncomingMessage, res: ServerResponse): voi
     return;
   }
 
+  // 3. POST /api/storage/verify-admin (Admin Key Verification Endpoint)
+  if (req.method === 'POST' && (pathname === '/verify-admin' || pathname.endsWith('/verify-admin'))) {
+    let rawBody = '';
+    req.on('data', (chunk) => {
+      rawBody += chunk;
+    });
+    req.on('end', () => {
+      let keyToTest = extractAdminKey(req);
+      if (rawBody) {
+        try {
+          const parsed = JSON.parse(rawBody);
+          if (parsed && typeof parsed.adminKey === 'string') {
+            keyToTest = parsed.adminKey;
+          }
+        } catch {}
+      }
+
+      const isValid = verifyAdminApiKey(keyToTest);
+      const provider = getStorageProvider();
+
+      if (isValid) {
+        logStorageActivity({
+          action: 'VERIFY_ADMIN',
+          details: 'Admin API key verified successfully',
+          status: 'success',
+        });
+        sendJson(res, 200, {
+          success: true,
+          valid: true,
+          provider: provider.name,
+          isDurable: isStorageConfigured(),
+          details: 'Admin authentication verified',
+        });
+      } else {
+        logStorageActivity({
+          action: 'VERIFY_ADMIN',
+          details: 'Admin verification attempt failed (invalid key)',
+          status: 'failed',
+        });
+        sendJson(res, 401, {
+          success: false,
+          valid: false,
+          error: 'Invalid or missing Admin Storage API Key',
+        });
+      }
+    });
+    return;
+  }
+
   // -------------------------------------------------------------
   // ADMIN-ONLY OPERATIONS REQUIRE AUTHENTICATION
   // -------------------------------------------------------------
@@ -170,7 +263,7 @@ export function handleStorageApi(req: IncomingMessage, res: ServerResponse): voi
     return;
   }
 
-  // 3. GET /api/storage/files (Admin: List all files)
+  // 4. GET /api/storage/files (Admin: List all files)
   if (req.method === 'GET' && (pathname === '/files' || pathname.endsWith('/files'))) {
     const provider = getStorageProvider();
     provider
@@ -184,7 +277,61 @@ export function handleStorageApi(req: IncomingMessage, res: ServerResponse): voi
     return;
   }
 
-  // 4. GET /api/storage/files/:fileId/metadata (Admin: Get specific metadata)
+  // 5. GET /api/storage/stats (Admin: Aggregate Storage Statistics)
+  if (req.method === 'GET' && (pathname === '/stats' || pathname.endsWith('/stats'))) {
+    const provider = getStorageProvider();
+    provider
+      .listObjects()
+      .then((files) => {
+        let totalSizeBytes = 0;
+        const byCategory: Record<string, { count: number; bytes: number }> = {};
+        const byFormat: Record<string, { count: number; bytes: number }> = {};
+
+        for (const file of files) {
+          totalSizeBytes += file.sizeBytes || 0;
+          const cat = file.category || 'digital-products';
+          if (!byCategory[cat]) byCategory[cat] = { count: 0, bytes: 0 };
+          byCategory[cat].count += 1;
+          byCategory[cat].bytes += file.sizeBytes || 0;
+
+          const ext = file.extension || 'other';
+          if (!byFormat[ext]) byFormat[ext] = { count: 0, bytes: 0 };
+          byFormat[ext].count += 1;
+          byFormat[ext].bytes += file.sizeBytes || 0;
+        }
+
+        sendJson(res, 200, {
+          success: true,
+          stats: {
+            totalFiles: files.length,
+            totalSizeBytes,
+            totalSizeFormatted: `${(totalSizeBytes / (1024 * 1024)).toFixed(2)} MB`,
+            provider: provider.name,
+            isDurable: isStorageConfigured(),
+            maxFileSizeBytes: DEFAULT_MAX_FILE_SIZE_BYTES,
+            byCategory,
+            byFormat,
+            updatedAt: new Date().toISOString(),
+          },
+        });
+      })
+      .catch((err) => {
+        sendJson(res, 500, { success: false, error: err.message });
+      });
+    return;
+  }
+
+  // 6. GET /api/storage/logs (Admin: Activity Audit Logs)
+  if (req.method === 'GET' && (pathname === '/logs' || pathname.endsWith('/logs'))) {
+    sendJson(res, 200, {
+      success: true,
+      count: storageActivityLogs.length,
+      logs: storageActivityLogs,
+    });
+    return;
+  }
+
+  // 7. GET /api/storage/files/:fileId/metadata (Admin: Get specific metadata)
   const metaMatch = pathname.match(/\/files\/([^/]+)\/metadata$/);
   if (req.method === 'GET' && metaMatch) {
     const fileId = metaMatch[1];
@@ -226,6 +373,12 @@ export function handleStorageApi(req: IncomingMessage, res: ServerResponse): voi
           sendJson(res, 404, { success: false, error: `File "${fileId}" not found for deletion` });
           return;
         }
+        logStorageActivity({
+          action: 'DELETE',
+          fileId,
+          details: `Deleted object ${fileId}`,
+          status: 'success',
+        });
         sendJson(res, 200, { success: true, deleted: true, fileId });
       })
       .catch((err) => {
@@ -291,6 +444,13 @@ export function handleStorageApi(req: IncomingMessage, res: ServerResponse): voi
           associatedProductId,
         });
 
+        logStorageActivity({
+          action: 'UPLOAD',
+          fileId: metadata.fileId,
+          filename: metadata.originalName,
+          details: `Uploaded ${metadata.originalName} (${(metadata.sizeBytes / 1024).toFixed(1)} KB)`,
+          status: 'success',
+        });
         sendJson(res, 201, { success: true, metadata });
         return;
       }
@@ -312,6 +472,13 @@ export function handleStorageApi(req: IncomingMessage, res: ServerResponse): voi
         }
 
         const { token, expiresAt } = generateStorageDownloadToken(fileId, Number(ttlSeconds), orderId);
+        logStorageActivity({
+          action: 'TOKEN_ISSUED',
+          fileId,
+          filename: meta.originalName,
+          details: `Generated short-lived download token for ${meta.originalName}`,
+          status: 'success',
+        });
         sendJson(res, 200, {
           success: true,
           fileId,
@@ -354,6 +521,13 @@ export function handleStorageApi(req: IncomingMessage, res: ServerResponse): voi
           associatedProductId,
         });
 
+        logStorageActivity({
+          action: 'REPLACE',
+          fileId: targetFileId,
+          filename: updatedMeta.originalName,
+          details: `Replaced content for ${updatedMeta.originalName}`,
+          status: 'success',
+        });
         sendJson(res, 200, { success: true, updated: true, metadata: updatedMeta });
         return;
       }

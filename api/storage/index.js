@@ -631,6 +631,19 @@ function verifyStorageDownloadToken(expectedFileId, token, orderId = "auth_order
 }
 
 // server/storageApi.ts
+var MAX_AUDIT_LOGS = 100;
+var storageActivityLogs = [];
+function logStorageActivity(entry) {
+  const log = {
+    id: `log_${Date.now().toString(36)}_${Math.random().toString(36).substring(2, 6)}`,
+    timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+    ...entry
+  };
+  storageActivityLogs.unshift(log);
+  if (storageActivityLogs.length > MAX_AUDIT_LOGS) {
+    storageActivityLogs.pop();
+  }
+}
 function verifyAdminApiKey(providedKey) {
   const expectedKey = process.env.ADMIN_STORAGE_API_KEY || "digiecom_admin_secret_dev_key";
   if (!providedKey || typeof providedKey !== "string") return false;
@@ -715,6 +728,13 @@ function handleStorageApi(req, res) {
         res.end(buffer);
         return;
       }
+      logStorageActivity({
+        action: "DOWNLOAD_ATTEMPT",
+        fileId: metadata.fileId,
+        filename: metadata.originalName,
+        details: `Authorized download voucher issued for ${metadata.originalName}`,
+        status: "success"
+      });
       res.statusCode = 200;
       res.setHeader("Content-Type", "application/json");
       res.setHeader("Content-Disposition", `attachment; filename="digiecom-${metadata.fileId}-authorized.json"`);
@@ -741,6 +761,52 @@ function handleStorageApi(req, res) {
     });
     return;
   }
+  if (req.method === "POST" && (pathname === "/verify-admin" || pathname.endsWith("/verify-admin"))) {
+    let rawBody2 = "";
+    req.on("data", (chunk) => {
+      rawBody2 += chunk;
+    });
+    req.on("end", () => {
+      let keyToTest = extractAdminKey(req);
+      if (rawBody2) {
+        try {
+          const parsed = JSON.parse(rawBody2);
+          if (parsed && typeof parsed.adminKey === "string") {
+            keyToTest = parsed.adminKey;
+          }
+        } catch {
+        }
+      }
+      const isValid = verifyAdminApiKey(keyToTest);
+      const provider = getStorageProvider();
+      if (isValid) {
+        logStorageActivity({
+          action: "VERIFY_ADMIN",
+          details: "Admin API key verified successfully",
+          status: "success"
+        });
+        sendJson(res, 200, {
+          success: true,
+          valid: true,
+          provider: provider.name,
+          isDurable: isStorageConfigured(),
+          details: "Admin authentication verified"
+        });
+      } else {
+        logStorageActivity({
+          action: "VERIFY_ADMIN",
+          details: "Admin verification attempt failed (invalid key)",
+          status: "failed"
+        });
+        sendJson(res, 401, {
+          success: false,
+          valid: false,
+          error: "Invalid or missing Admin Storage API Key"
+        });
+      }
+    });
+    return;
+  }
   const adminKey = extractAdminKey(req);
   if (!verifyAdminApiKey(adminKey)) {
     sendJson(res, 401, {
@@ -755,6 +821,50 @@ function handleStorageApi(req, res) {
       sendJson(res, 200, { success: true, count: files.length, files });
     }).catch((err) => {
       sendJson(res, 500, { success: false, error: err.message });
+    });
+    return;
+  }
+  if (req.method === "GET" && (pathname === "/stats" || pathname.endsWith("/stats"))) {
+    const provider = getStorageProvider();
+    provider.listObjects().then((files) => {
+      let totalSizeBytes = 0;
+      const byCategory = {};
+      const byFormat = {};
+      for (const file of files) {
+        totalSizeBytes += file.sizeBytes || 0;
+        const cat = file.category || "digital-products";
+        if (!byCategory[cat]) byCategory[cat] = { count: 0, bytes: 0 };
+        byCategory[cat].count += 1;
+        byCategory[cat].bytes += file.sizeBytes || 0;
+        const ext = file.extension || "other";
+        if (!byFormat[ext]) byFormat[ext] = { count: 0, bytes: 0 };
+        byFormat[ext].count += 1;
+        byFormat[ext].bytes += file.sizeBytes || 0;
+      }
+      sendJson(res, 200, {
+        success: true,
+        stats: {
+          totalFiles: files.length,
+          totalSizeBytes,
+          totalSizeFormatted: `${(totalSizeBytes / (1024 * 1024)).toFixed(2)} MB`,
+          provider: provider.name,
+          isDurable: isStorageConfigured(),
+          maxFileSizeBytes: DEFAULT_MAX_FILE_SIZE_BYTES,
+          byCategory,
+          byFormat,
+          updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+        }
+      });
+    }).catch((err) => {
+      sendJson(res, 500, { success: false, error: err.message });
+    });
+    return;
+  }
+  if (req.method === "GET" && (pathname === "/logs" || pathname.endsWith("/logs"))) {
+    sendJson(res, 200, {
+      success: true,
+      count: storageActivityLogs.length,
+      logs: storageActivityLogs
     });
     return;
   }
@@ -790,6 +900,12 @@ function handleStorageApi(req, res) {
         sendJson(res, 404, { success: false, error: `File "${fileId}" not found for deletion` });
         return;
       }
+      logStorageActivity({
+        action: "DELETE",
+        fileId,
+        details: `Deleted object ${fileId}`,
+        status: "success"
+      });
       sendJson(res, 200, { success: true, deleted: true, fileId });
     }).catch((err) => {
       sendJson(res, 500, { success: false, error: err.message });
@@ -842,6 +958,13 @@ function handleStorageApi(req, res) {
           category,
           associatedProductId
         });
+        logStorageActivity({
+          action: "UPLOAD",
+          fileId: metadata.fileId,
+          filename: metadata.originalName,
+          details: `Uploaded ${metadata.originalName} (${(metadata.sizeBytes / 1024).toFixed(1)} KB)`,
+          status: "success"
+        });
         sendJson(res, 201, { success: true, metadata });
         return;
       }
@@ -858,6 +981,13 @@ function handleStorageApi(req, res) {
           return;
         }
         const { token, expiresAt } = generateStorageDownloadToken(fileId, Number(ttlSeconds), orderId);
+        logStorageActivity({
+          action: "TOKEN_ISSUED",
+          fileId,
+          filename: meta.originalName,
+          details: `Generated short-lived download token for ${meta.originalName}`,
+          status: "success"
+        });
         sendJson(res, 200, {
           success: true,
           fileId,
@@ -894,6 +1024,13 @@ function handleStorageApi(req, res) {
           category,
           associatedProductId
         });
+        logStorageActivity({
+          action: "REPLACE",
+          fileId: targetFileId,
+          filename: updatedMeta.originalName,
+          details: `Replaced content for ${updatedMeta.originalName}`,
+          status: "success"
+        });
         sendJson(res, 200, { success: true, updated: true, metadata: updatedMeta });
         return;
       }
@@ -907,6 +1044,8 @@ function handleStorageApi(req, res) {
 export {
   extractAdminKey,
   handleStorageApi,
+  logStorageActivity,
+  storageActivityLogs,
   verifyAdminApiKey
 };
 

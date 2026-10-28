@@ -16,6 +16,10 @@ import { ScrollToTop } from './components/common/ScrollToTop';
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
 import { AccountPage } from './pages/AccountPage';
+import { AdminLayout } from './components/admin/AdminLayout';
+import { AdminAuthGuard } from './components/admin/AdminAuthGuard';
+import { AdminLoginPage } from './pages/admin/AdminLoginPage';
+import { AdminStoragePage } from './pages/admin/AdminStoragePage';
 
 export const App: React.FC = () => {
   return (
@@ -23,6 +27,7 @@ export const App: React.FC = () => {
       <CartProvider>
         <ScrollToTop />
         <Routes>
+          {/* Public Storefront Routes */}
           <Route path="/" element={<RootLayout />}>
             <Route index element={<HomePage />} />
             <Route path="products" element={<ProductsPage />} />
@@ -37,6 +42,22 @@ export const App: React.FC = () => {
             <Route path="policies/delivery" element={<DeliveryPolicyPage />} />
             <Route path="policies/license" element={<LicensePolicyPage />} />
             <Route path="*" element={<NotFoundPage />} />
+          </Route>
+
+          {/* Admin Login Gatekeeper */}
+          <Route path="/admin/login" element={<AdminLoginPage />} />
+
+          {/* Protected Admin Console Routes */}
+          <Route
+            path="/admin"
+            element={
+              <AdminAuthGuard>
+                <AdminLayout />
+              </AdminAuthGuard>
+            }
+          >
+            <Route index element={<AdminStoragePage />} />
+            <Route path="storage" element={<AdminStoragePage />} />
           </Route>
         </Routes>
       </CartProvider>

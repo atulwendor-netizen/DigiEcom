@@ -458,5 +458,94 @@ describe('Modular Storage Backend — Local Vault, Security & Tokens', () => {
       expect(body.status).toBe('operational');
       expect(body.provider).toBe('local');
     });
+
+    it('verifies admin key via POST /api/storage/verify-admin', async () => {
+      // 1. Correct key in JSON payload
+      const validReq = createMockRequest({
+        method: 'POST',
+        url: '/api/storage/verify-admin',
+        headers: { 'content-type': 'application/json' },
+        rawBody: JSON.stringify({ adminKey: TEST_ADMIN_KEY }),
+      });
+      const validRes = createMockResponse();
+      handleStorageApi(validReq, validRes);
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      expect(validRes.statusCode).toBe(200);
+      const validBody = JSON.parse(validRes.body);
+      expect(validBody.success).toBe(true);
+      expect(validBody.valid).toBe(true);
+
+      // 2. Incorrect key
+      const invalidReq = createMockRequest({
+        method: 'POST',
+        url: '/api/storage/verify-admin',
+        headers: { 'content-type': 'application/json' },
+        rawBody: JSON.stringify({ adminKey: 'wrong_secret_key' }),
+      });
+      const invalidRes = createMockResponse();
+      handleStorageApi(invalidReq, invalidRes);
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      expect(invalidRes.statusCode).toBe(401);
+      const invalidBody = JSON.parse(invalidRes.body);
+      expect(invalidBody.success).toBe(false);
+      expect(invalidBody.valid).toBe(false);
+    });
+
+    it('computes storage statistics via GET /api/storage/stats', async () => {
+      // Upload two test files with known categories
+      const provider = new LocalStorageProvider(TEST_VAULT_DIR);
+      await provider.putObject({
+        filename: 'handbook.pdf',
+        buffer: Buffer.from('%PDF-1.4\n12345'),
+        category: 'ebooks',
+      });
+      await provider.putObject({
+        filename: 'pack.zip',
+        buffer: Buffer.from([0x50, 0x4b, 0x03, 0x04, 0x00, 0x00]),
+        category: 'templates',
+      });
+
+      const req = createMockRequest({
+        method: 'GET',
+        url: '/api/storage/stats',
+        headers: { 'x-admin-key': TEST_ADMIN_KEY },
+      });
+      const res = createMockResponse();
+
+      handleStorageApi(req, res);
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      expect(res.statusCode).toBe(200);
+      const body = JSON.parse(res.body);
+      expect(body.success).toBe(true);
+      expect(body.stats.totalFiles).toBeGreaterThanOrEqual(2);
+      expect(body.stats.totalSizeBytes).toBeGreaterThan(0);
+      expect(body.stats.byCategory).toBeDefined();
+      expect(body.stats.byFormat).toBeDefined();
+      expect(body.stats.byFormat['.pdf'].count).toBeGreaterThanOrEqual(1);
+      expect(body.stats.byFormat['.zip'].count).toBeGreaterThanOrEqual(1);
+    });
+
+    it('records and returns activity audit logs via GET /api/storage/logs', async () => {
+      const req = createMockRequest({
+        method: 'GET',
+        url: '/api/storage/logs',
+        headers: { 'x-admin-key': TEST_ADMIN_KEY },
+      });
+      const res = createMockResponse();
+
+      handleStorageApi(req, res);
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      expect(res.statusCode).toBe(200);
+      const body = JSON.parse(res.body);
+      expect(body.success).toBe(true);
+      expect(Array.isArray(body.logs)).toBe(true);
+      expect(body.logs.length).toBeGreaterThan(0);
+      expect(body.logs[0].timestamp).toBeDefined();
+      expect(body.logs[0].action).toBeDefined();
+    });
   });
 });
