@@ -20,8 +20,8 @@ describe('Homepage Rendering & Components', () => {
     ).toBeInTheDocument();
 
     // CTAs
-    expect(screen.getByRole('link', { name: /Explore Products/i })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /Browse Categories/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Shop Bestsellers/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Free Samples/i })).toBeInTheDocument();
   });
 
   it('renders all 6 categories in the Category Explorer with working links', () => {

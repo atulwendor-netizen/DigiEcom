@@ -144,19 +144,19 @@
 
 @keyframes float-left {
   0%, 100% {
-    transform: rotate(-12deg) translate(0, 0);
+    transform: rotate(-8deg) translate(-40px, 20px);
   }
   50% {
-    transform: rotate(-12deg) translate(-4px, -12px);
+    transform: rotate(-8deg) translate(-44px, 12px);
   }
 }
 
 @keyframes float-right {
   0%, 100% {
-    transform: rotate(10deg) translate(0, 0);
+    transform: rotate(6deg) translate(40px, -20px);
   }
   50% {
-    transform: rotate(10deg) translate(3px, 12px);
+    transform: rotate(6deg) translate(43px, -12px);
   }
 }
 
@@ -472,7 +472,7 @@
   line-height: 0.95;
   font-weight: 950;
   letter-spacing: -0.06em;
-  color: #171526;
+  color: #fff;
 }
 
 .mock-label {
@@ -1054,6 +1054,133 @@
     animation: none !important;
     transition: none !important;
     transform: none !important;
+  }
+}
+
+/* ==========================================================================
+   Storefront Layout, Hero Enhancements & Cart/Support Badges
+   ========================================================================== */
+
+/* 1. Hero title & text */
+.hero-title {
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  font-size: clamp(2.5rem, 5vw, 4.25rem);
+}
+
+.hero-text {
+  max-width: 680px;
+}
+
+/* 2. Centre the content on wide screens */
+.hero-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* 3. Fix the clipped hero cards */
+.hero-visual {
+  position: relative;
+  min-height: 460px;
+  overflow: visible !important;
+}
+
+.card-ebook {
+  z-index: 1 !important;
+  transform: rotate(-8deg) translate(-40px, 20px);
+}
+
+.card-main {
+  z-index: 3 !important;
+}
+
+.card-prompts {
+  z-index: 2 !important;
+  transform: rotate(6deg) translate(40px, -20px);
+}
+
+.card-main,
+.card-ebook,
+.card-prompts {
+  overflow: visible !important;
+}
+
+/* 4. Remove the stray purple highlight on “System” */
+.card-ebook ::selection {
+  background: transparent;
+}
+
+/* 5. Fix card text contrast */
+.card-main::after {
+  content: none !important;
+}
+
+.card-main .tagline {
+  position: absolute;
+  left: 20px;
+  bottom: 22px;
+  font-size: 1.55rem;
+  line-height: 0.95;
+  font-weight: 950;
+  letter-spacing: -0.06em;
+  color: #fff;
+  white-space: pre-line;
+}
+
+.card-ebook .subtext,
+.card-prompts .subtext {
+  opacity: 0.9;
+  font-size: 0.8rem;
+}
+
+/* 7. Trust badges: make them readable */
+.trust-badges {
+  gap: 24px;
+  font-size: 0.9rem;
+  color: #d8d0f0;
+}
+
+.trust-badges svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* 8. Cart badge */
+.cart-btn {
+  position: relative;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #a6ff3d;
+  color: #0b0614;
+  font-size: 11px;
+  font-weight: 700;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+}
+
+/* 9. AI Support button on mobile */
+@media (max-width: 640px) {
+  .support-chat-wrapper {
+    bottom: 12px !important;
+    right: 12px !important;
+  }
+
+  .ai-support {
+    bottom: 12px;
+    right: 12px;
+    padding: 8px !important;
+  }
+
+  .ai-support span {
+    display: none !important;
   }
 }
 

@@ -120,11 +120,11 @@ describe('HeroHumanAnimation Component', () => {
     ).toBeInTheDocument();
 
     // CTAs remain clickable HTML links
-    const exploreBtn = screen.getByRole('link', { name: /Explore Products/i });
+    const exploreBtn = screen.getByRole('link', { name: /Shop Bestsellers/i });
     expect(exploreBtn).toBeInTheDocument();
     expect(exploreBtn).toHaveAttribute('href', '/products');
 
-    const browseBtn = screen.getByRole('link', { name: /Browse Categories/i });
+    const browseBtn = screen.getByRole('link', { name: /Free Samples/i });
     expect(browseBtn).toBeInTheDocument();
     expect(browseBtn).toHaveAttribute('href', '#category-explorer');
 

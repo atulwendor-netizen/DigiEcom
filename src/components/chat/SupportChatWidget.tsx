@@ -176,7 +176,7 @@ export const SupportChatWidget: React.FC = () => {
           onClick={toggleOpen}
           aria-label="Open DigiEcom AI Customer Support"
           aria-expanded={false}
-          className="support-chat-trigger"
+          className="support-chat-trigger ai-support"
           style={{
             display: 'flex',
             alignItems: 'center',

@@ -262,7 +262,7 @@ export const Header: React.FC = () => {
               <button
                 type="button"
                 onClick={openCart}
-                className="cart-trigger-btn"
+                className="cart-trigger-btn cart-btn"
                 aria-label={itemCount > 0 ? `Shopping cart, ${itemCount} items` : 'Shopping cart'}
                 style={{
                   position: 'relative',
@@ -289,7 +289,7 @@ export const Header: React.FC = () => {
                 <ShoppingBag size={20} />
                 {itemCount > 0 && (
                   <span
-                    className="cart-count-badge"
+                    className="cart-count-badge cart-badge"
                     style={{
                       position: 'absolute',
                       top: '-6px',
