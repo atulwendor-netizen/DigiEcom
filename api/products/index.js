@@ -5,6 +5,460 @@ import crypto4 from "crypto";
 // server/products/productDb.ts
 import fs from "fs";
 import path from "path";
+
+// src/data/products.json
+var products_default = [
+  {
+    id: "de-prod-001",
+    slug: "system-design-handbook-cloud-scale",
+    name: "The Pragmatic System Design Handbook: Cloud-Scale Microservices",
+    category: "ebooks-guides",
+    categoryLabel: "E-books & Guides",
+    shortDescription: "A 340-page practitioner guide covering distributed consensus, event-driven architectures, caching topologies, and real-world latency budgets.",
+    fullDescription: "Building resilient distributed systems requires moving past textbook theory into pragmatic engineering trade-offs. The Pragmatic System Design Handbook walks through end-to-end cloud architectures for modern distributed platforms. Learn how to size message brokers under spiky workloads, establish idempotency keys across microservice boundaries, prevent thundering herds with probabilistic cache invalidation, and design resilient multi-region fallbacks with minimal overhead.",
+    pricePaise: 79900,
+    currency: "INR",
+    coverVisualType: "playbook",
+    coverGradient: "linear-gradient(135deg, #1e1035 0%, #3b1d6e 100%)",
+    gallery: ["Architecture Diagram Overview", "Cache Topology Matrix", "Case Studies Sample"],
+    fileFormats: [".pdf", ".epub"],
+    compatibility: "Compatible with Apple Books, Kindle, Adobe Acrobat, and any modern EPUB/PDF reader.",
+    contents: [
+      "340-page DRM-free digital handbook (.pdf & .epub)",
+      "High-resolution architectural blueprint posters (Vector SVG & Print PDF)",
+      "System design interview evaluation rubric & cheat-sheet (12 pages)",
+      "Production outage post-mortem checklists & runbooks"
+    ],
+    licenseType: "Single-user personal & professional reading license",
+    deliveryMethod: "Instant secure digital download after verification",
+    publicationStatus: "published",
+    isFeatured: true,
+    createdAt: "2026-08-15T10:00:00Z",
+    faqs: [
+      {
+        question: "Is this handbook updated for modern cloud stacks?",
+        answer: "Yes, this edition incorporates Kubernetes container orchestrations, Kafka/Redpanda streaming patterns, distributed tracing with OpenTelemetry, and modern serverless hybrid considerations."
+      },
+      {
+        question: "Are the diagrams vector format?",
+        answer: "All 85+ architecture diagrams are embedded as crisp vector graphics in the PDF and included as standalone SVGs for team architecture reviews."
+      }
+    ],
+    tags: ["System Design", "Microservices", "Cloud Architecture", "Backend Engineering"],
+    isDemoContent: true,
+    demoNotice: "Demonstration catalogue item \u2014 checkout and file delivery are disabled in this storefront preview."
+  },
+  {
+    id: "de-prod-002",
+    slug: "founders-playbook-zero-to-one",
+    name: "Zero-to-One Founder Playbook: Validating & Launching Tech Products",
+    category: "ebooks-guides",
+    categoryLabel: "E-books & Guides",
+    shortDescription: "Step-by-step framework to test value propositions, run customer discovery interviews, define MVP scope, and secure initial paying users.",
+    fullDescription: "Avoid spending six months building software nobody wants. The Zero-to-One Founder Playbook provides an actionable roadmap from initial hypothesis to paying pilot customers. Includes exact scripts for non-leading user interviews, cold outreach templates that convert, lightweight landing page validation tactics, and unit economic benchmarks for bootstrapped and seed-stage software companies.",
+    pricePaise: 59900,
+    currency: "INR",
+    coverVisualType: "playbook",
+    coverGradient: "linear-gradient(135deg, #171138 0%, #431407 100%)",
+    gallery: ["Interview Script Framework", "Landing Page Testing Funnel", "Unit Economic Calculator"],
+    fileFormats: [".pdf", ".epub"],
+    compatibility: "Compatible with all PDF and EPUB reading software across desktop, tablet, and mobile devices.",
+    contents: [
+      "210-page tactical founder manual (.pdf and .epub)",
+      "Customer discovery interview questioning scripts (Word and Markdown)",
+      "Early adopter agreement starter template",
+      "Launch day distribution checklist covering 18 channels"
+    ],
+    licenseType: "Single-founder commercial license",
+    deliveryMethod: "Instant secure digital download after verification",
+    publicationStatus: "published",
+    isFeatured: false,
+    createdAt: "2026-09-02T14:30:00Z",
+    faqs: [
+      {
+        question: "Does this playbook apply to B2B or B2C products?",
+        answer: "While the validation fundamentals apply broadly, the discovery interview frameworks and pricing models are tailored specifically for B2B SaaS and high-utility creator tools."
+      }
+    ],
+    tags: ["Startups", "Product Management", "Validation", "Entrepreneurship"],
+    isDemoContent: true,
+    demoNotice: "Demonstration catalogue item \u2014 checkout and file delivery are disabled in this storefront preview."
+  },
+  {
+    id: "de-prod-003",
+    slug: "master-ai-prompt-vault-gpt4o-claude",
+    name: "Enterprise Prompt Vault: 450+ Tested System Prompts for Engineers & PMs",
+    category: "ai-prompts",
+    categoryLabel: "AI Prompts & Resources",
+    shortDescription: "Production-tested prompts for code refactoring, PR reviews, PRD drafting, SQL generation, and context-window optimization.",
+    fullDescription: "Stop writing vague prompts that yield hallucinated or verbose code. The Enterprise Prompt Vault is a structured repository of 450+ multi-shot, role-conditioned prompts designed for advanced LLMs including GPT-4o, Claude 3.5 Sonnet, and Gemini 1.5 Pro. Each prompt is battle-tested with few-shot inputs, negative constraints, and structured output schemas (JSON/Markdown) to produce reliable, high-yield results for day-to-day engineering and product management tasks.",
+    pricePaise: 99900,
+    currency: "INR",
+    coverVisualType: "ai",
+    coverGradient: "linear-gradient(135deg, #092c22 0%, #154c38 100%)",
+    gallery: ["Prompt Taxonomy Tree", "Few-Shot Schema Example", "Benchmark Test Cards"],
+    fileFormats: [".json", ".md", ".csv"],
+    compatibility: "Works with OpenAI API, Anthropic Claude Workbench, Google AI Studio, Cursor, and any LLM chat interface.",
+    contents: [
+      "450+ formatted system & task prompts organized in categorized JSON and Markdown files",
+      "Raw CSV spreadsheet for easy programmatic ingestion or vector search indexing",
+      "Guide on chain-of-density and prompt compression techniques (35 pages)",
+      "Prompt testing & regression evaluation matrix"
+    ],
+    licenseType: "Commercial team use license (up to 10 team members)",
+    deliveryMethod: "Instant secure digital download after verification",
+    publicationStatus: "published",
+    isFeatured: true,
+    createdAt: "2026-09-18T09:15:00Z",
+    faqs: [
+      {
+        question: "How are the prompts structured?",
+        answer: "Each prompt includes an objective, system persona, input parameters, strict guardrails, few-shot demonstration examples, and expected output schemas."
+      },
+      {
+        question: "Can these prompts be imported into developer tools?",
+        answer: "Yes. We include a standard JSON format ready for import into prompt management tools, LangChain/LlamaIndex configs, or custom CLI scripts."
+      }
+    ],
+    tags: ["AI Prompts", "LLM", "Claude 3.5", "GPT-4o", "Prompt Engineering"],
+    isDemoContent: true,
+    demoNotice: "Demonstration catalogue item \u2014 checkout and file delivery are disabled in this storefront preview."
+  },
+  {
+    id: "de-prod-004",
+    slug: "autonomous-coding-agent-prompts",
+    name: "Autonomous Coding Agent Orchestration Workflows & Meta-Prompts",
+    category: "ai-prompts",
+    categoryLabel: "AI Prompts & Resources",
+    shortDescription: "Meta-prompts and tool-use schemas for autonomous AI pair programming, test-driven iteration, and error recovery loops.",
+    fullDescription: "Unleash the full power of agentic coding assistants. This collection of agent instructions, tool call schemas, and recursive review prompts provides a tested foundation for building autonomous coding pipelines. Features specialized agent personas: Test Author, Code Reviewer, Security Auditor, and Migration Engineer, complete with automated verification protocols to prevent infinite loops and regressions.",
+    pricePaise: 84900,
+    currency: "INR",
+    coverVisualType: "ai",
+    coverGradient: "linear-gradient(135deg, #1a0f3d 0%, #064e3b 100%)",
+    gallery: ["Agent State Machine", "Tool Calling Schema Sample", "TDD Verification Flow"],
+    fileFormats: [".json", ".yaml", ".md"],
+    compatibility: "Compatible with Antigravity, Claude Code, Cursor, AutoGen, CrewAI, and LangGraph pipelines.",
+    contents: [
+      "28 specialized agent configuration files in YAML and JSON",
+      "Self-correcting test-driven development (TDD) execution flow scripts",
+      "Context compaction and memory management guidelines",
+      "Interactive prompt playground template"
+    ],
+    licenseType: "Commercial developer license",
+    deliveryMethod: "Instant secure digital download after verification",
+    publicationStatus: "published",
+    isFeatured: false,
+    createdAt: "2026-10-01T12:00:00Z",
+    faqs: [
+      {
+        question: "Does this work with command-line agent tools?",
+        answer: "Yes, system prompts and instructions are designed for direct inclusion in CLI agent prompt files or system message configurations."
+      }
+    ],
+    tags: ["Agents", "Automation", "Developer Tools", "AI Workflows"],
+    isDemoContent: true,
+    demoNotice: "Demonstration catalogue item \u2014 checkout and file delivery are disabled in this storefront preview."
+  },
+  {
+    id: "de-prod-005",
+    slug: "finmodel-saas-metrics-valuation-projections",
+    name: "SaaS Financial Modeling Suite: 5-Year Dynamic Projections & Unit Economics",
+    category: "business-templates",
+    categoryLabel: "Business Templates",
+    shortDescription: "Institutional-grade financial model with cohort retention curves, CAC payback calculations, hiring plans, and runway forecasts.",
+    fullDescription: "Prepare for investor due diligence or budget your runway with complete numerical clarity. Built by seasoned venture-backed finance leads, this 5-year financial model calculates monthly MRR/ARR bridge, customer churn cohorts, LTV/CAC ratios, headcount growth, and cash burn scenarios. Fully dynamic with clear input drivers, scenario toggle switches (Base, Bull, Bear), and automated presentation charts.",
+    pricePaise: 149900,
+    currency: "INR",
+    coverVisualType: "finance",
+    coverGradient: "linear-gradient(135deg, #2b1100 0%, #7c2d12 100%)",
+    gallery: ["MRR Cohort Heatmap", "Headcount & Opex Matrix", "Investor Summary Dashboard"],
+    fileFormats: [".xlsx", ".gsheet", ".pdf"],
+    compatibility: "Fully compatible with Microsoft Excel 2019+ (PC/Mac) and Google Sheets. No external macro plugins required.",
+    contents: [
+      "Master financial projection workbook (.xlsx with 14 connected worksheets)",
+      "Google Sheets one-click cloud copy link with protected formula cells",
+      "User guide & formula cheat-sheet explaining SaaS benchmarks (.pdf)",
+      "Ready-to-export investor board deck financial summary slides"
+    ],
+    licenseType: "Company-wide commercial operational license",
+    deliveryMethod: "Instant secure digital download after verification",
+    publicationStatus: "published",
+    isFeatured: true,
+    createdAt: "2026-07-20T11:45:00Z",
+    faqs: [
+      {
+        question: "Are formulas locked or customizable?",
+        answer: "All formulas are 100% unlocked and clearly documented with color-coded inputs, calculation rows, and summary outputs for complete auditability."
+      },
+      {
+        question: "Does it support annual vs. monthly subscription mixes?",
+        answer: "Yes, the revenue sheet includes a dedicated billing periodicity toggle that factors deferred revenue and actual cash flow timings."
+      }
+    ],
+    tags: ["Finance", "SaaS Metrics", "Financial Model", "Excel", "Fundraising"],
+    isDemoContent: true,
+    demoNotice: "Demonstration catalogue item \u2014 checkout and file delivery are disabled in this storefront preview."
+  },
+  {
+    id: "de-prod-006",
+    slug: "tech-contract-legal-agreements-bundle",
+    name: "Startup Legal Kit: MSA, SLA, Independent Contractor & NDA Starter Templates",
+    category: "business-templates",
+    categoryLabel: "Business Templates",
+    shortDescription: "Comprehensive starter legal contract drafts annotated with clause-by-clause operational commentary and negotiation guidelines.",
+    fullDescription: "Save tens of thousands in drafting fees by starting negotiations with clean, balanced tech commercial contracts. This bundle includes Master Services Agreements (MSA), Software License Agreements (SLA), Mutual Non-Disclosure Agreements (NDA), and Independent Contractor / Intellectual Property Assignment Agreements. Each clause includes annotations explaining risk trade-offs, standard limits of liability, and jurisdiction placeholders.",
+    pricePaise: 129900,
+    currency: "INR",
+    coverVisualType: "legal",
+    coverGradient: "linear-gradient(135deg, #1c1538 0%, #312e81 100%)",
+    gallery: ["Contract Clause Breakdown", "Negotiation Matrix", "Plain English Summary"],
+    fileFormats: [".docx", ".pdf"],
+    compatibility: "Compatible with Microsoft Word, Google Docs, Apple Pages, and LibreOffice.",
+    contents: [
+      "4 core contract starter templates in editable .docx format",
+      "Annotated negotiation guide highlighting key risk clauses (.pdf)",
+      "Intellectual Property Assignment Exhibit template",
+      "Clause fallback library with alternative compromise provisions"
+    ],
+    licenseType: "Commercial starter template license (requires final legal counsel review)",
+    deliveryMethod: "Instant secure digital download after verification",
+    publicationStatus: "published",
+    isFeatured: false,
+    createdAt: "2026-08-10T16:20:00Z",
+    faqs: [
+      {
+        question: "Do I still need a lawyer?",
+        answer: "Yes. These templates are starter business drafts intended to reduce billable drafting hours and clarify operational terms, but must be reviewed by qualified legal counsel in your specific jurisdiction prior to execution."
+      }
+    ],
+    tags: ["Legal", "Contracts", "Agreements", "B2B SaaS", "Templates"],
+    isDemoContent: true,
+    demoNotice: "Demonstration catalogue item \u2014 checkout and file delivery are disabled in this storefront preview."
+  },
+  {
+    id: "de-prod-007",
+    slug: "notion-ultimate-engineering-workspace",
+    name: "Ultimate Engineering & Product Hub for Notion: Sprint, Architecture & Docs",
+    category: "productivity-tools",
+    categoryLabel: "Productivity Tools",
+    shortDescription: "Integrated Notion workspace featuring automated sprint velocity, incident post-mortems, RFC design docs, and team onboarding.",
+    fullDescription: "Eliminate scattered documentation and broken wiki links. The Ultimate Engineering Hub connects product roadmaps directly to sprint execution tasks, architectural RFCs, tech debt backlogs, and on-call runbooks. Features synced databases, custom formula progress rings, automated sprint rollover views, and structured templates for engineering incident retrospectives.",
+    pricePaise: 69900,
+    currency: "INR",
+    coverVisualType: "notion",
+    coverGradient: "linear-gradient(135deg, #082836 0%, #0e7490 100%)",
+    gallery: ["Sprint Agile Board", "RFC Repository Database", "Onboarding Hub Template"],
+    fileFormats: [".notion-template", ".pdf"],
+    compatibility: "Requires a free or paid Notion account. Installs instantly via standard Notion duplicate workspace link.",
+    contents: [
+      "Complete 8-module connected Notion workspace template",
+      "Setup video walkthrough link and written deployment checklist (.pdf)",
+      "Standard RFC architecture template and incident post-mortem template",
+      "Engineering team skill matrix and leveling guide framework"
+    ],
+    licenseType: "Team workspace license (unlimited internal team members)",
+    deliveryMethod: "Instant secure digital download after verification",
+    publicationStatus: "published",
+    isFeatured: true,
+    createdAt: "2026-08-28T13:10:00Z",
+    faqs: [
+      {
+        question: "Can I use this with a free Notion plan?",
+        answer: "Yes, all databases and relations function properly on both free and Notion Plus workspace plans."
+      }
+    ],
+    tags: ["Notion", "Productivity", "Agile", "RFC", "Engineering Docs"],
+    isDemoContent: true,
+    demoNotice: "Demonstration catalogue item \u2014 checkout and file delivery are disabled in this storefront preview."
+  },
+  {
+    id: "de-prod-008",
+    slug: "obsidian-developer-second-brain-vault",
+    name: "Developer Second Brain Obsidian Vault: Knowledge Graph & Daily Journal",
+    category: "productivity-tools",
+    categoryLabel: "Productivity Tools",
+    shortDescription: "Pre-configured Obsidian vault with Zettelkasten note linking, Dataview queries, code snippet tagging, and daily review workflows.",
+    fullDescription: "Turn fragmented bookmarks and terminal notes into an interconnected personal knowledge graph. This turnkey Obsidian vault comes pre-configured with curated community plugins, custom CSS theme styling, Dataview tables for language syntaxes, spaced repetition flashcard triggers, and automated daily note templates that effortlessly capture reading notes and technical insights.",
+    pricePaise: 49900,
+    currency: "INR",
+    coverVisualType: "obsidian",
+    coverGradient: "linear-gradient(135deg, #180d38 0%, #4c1d95 100%)",
+    gallery: ["Interactive Knowledge Graph", "Dataview Snippet Index", "Daily Log Architecture"],
+    fileFormats: [".zip", ".md"],
+    compatibility: "Compatible with Obsidian v1.4+ on macOS, Linux, Windows, iOS, and Android.",
+    contents: [
+      "Ready-to-open Obsidian vault archive (.zip) with tested folder structure",
+      "Pre-configured Dataview, Templater, and Omnisearch setups with zero-lag settings",
+      "50 starter reference cards covering algorithms, Git commands, and HTTP standards",
+      "16-page vault architecture manual explaining note classification"
+    ],
+    licenseType: "Single-user personal knowledge license",
+    deliveryMethod: "Instant secure digital download after verification",
+    publicationStatus: "published",
+    isFeatured: false,
+    createdAt: "2026-09-12T08:00:00Z",
+    faqs: [
+      {
+        question: "Is my data private with this vault?",
+        answer: "100% private. Obsidian operates entirely on local plain text Markdown files stored on your machine. No cloud account or external telemetry is involved."
+      }
+    ],
+    tags: ["Obsidian", "PKM", "Second Brain", "Markdown", "Developer Productivity"],
+    isDemoContent: true,
+    demoNotice: "Demonstration catalogue item \u2014 checkout and file delivery are disabled in this storefront preview."
+  },
+  {
+    id: "de-prod-009",
+    slug: "lumina-design-system-figma-pro",
+    name: "Lumina UI Design System: 1,200+ Accessible Components & Design Tokens",
+    category: "design-assets",
+    categoryLabel: "Design & Creative Assets",
+    shortDescription: "Figma design system with WCAG AAA contrast, auto-layout 5.0, variables for dark/light modes, and typed token exports for code.",
+    fullDescription: "Accelerate product design with a system built from atomic principles up to complex enterprise dashboards. Lumina UI includes over 1,200 meticulously crafted components covering data tables, modal dialogs, navigation systems, charts, form controls, and state variants. Every element is linked to Figma variables with automated light/dark theme switching, and includes a matching W3C Design Tokens JSON file for React and CSS.",
+    pricePaise: 199900,
+    currency: "INR",
+    coverVisualType: "design",
+    coverGradient: "linear-gradient(135deg, #350826 0%, #be185d 100%)",
+    gallery: ["Component Library Overview", "Variables & Tokens Studio", "Desktop & Mobile UI Grids"],
+    fileFormats: [".fig", ".tokens.json", ".svg"],
+    compatibility: "Compatible with Figma (Desktop and Web, 2024+ engine with Variables and Component Properties).",
+    contents: [
+      "Full Figma master file (.fig) with 1,200+ components and interactive variants",
+      "W3C Design Tokens JSON export file for CSS variables and Tailwind syncing",
+      "Icon set containing 350+ consistent SVG vectors on a 24px grid",
+      "Typography scale presets and WCAG AAA color contrast audit documentation"
+    ],
+    licenseType: "Commercial project license (unlimited commercial projects)",
+    deliveryMethod: "Instant secure digital download after verification",
+    publicationStatus: "published",
+    isFeatured: true,
+    createdAt: "2026-07-05T15:00:00Z",
+    faqs: [
+      {
+        question: "Does this support Figma's latest variable and mode updates?",
+        answer: "Yes! All color, spacing, and radius values are defined using Figma Variables, enabling instant 1-click toggling between Light and Dark themes."
+      },
+      {
+        question: "Can my engineering team import the tokens into CSS?",
+        answer: "Yes. We include `tokens.json` formatted to the W3C community standard, compatible with Style Dictionary, Tailwind CSS, and CSS Modules."
+      }
+    ],
+    tags: ["Figma", "Design System", "UI Kit", "Tokens", "Accessibility"],
+    isDemoContent: true,
+    demoNotice: "Demonstration catalogue item \u2014 checkout and file delivery are disabled in this storefront preview."
+  },
+  {
+    id: "de-prod-010",
+    slug: "3d-neo-fintech-illustration-pack",
+    name: "Neo-Fintech 3D Vector & Render Pack: 60 Custom Render Assets",
+    category: "design-assets",
+    categoryLabel: "Design & Creative Assets",
+    shortDescription: "High-resolution transparent 3D illustrations covering security locks, digital currencies, analytics graphs, and credit cards.",
+    fullDescription: "Elevate your landing pages and product interfaces with modern, tactile 3D renders. This pack provides 60 bespoke illustrations designed specifically for fintech, developer tooling, and modern SaaS platforms. Provided in ultra-high resolution transparent PNGs (4000x4000px) across two lighting angles (Studio Dark and Neon Glow), plus raw Blender source files with fully procedural shaders.",
+    pricePaise: 119900,
+    currency: "INR",
+    coverVisualType: "illustration",
+    coverGradient: "linear-gradient(135deg, #1b0a33 0%, #581c87 100%)",
+    gallery: ["Card & Vault Renders", "Floating Currency Assets", "Blender Material Shaders"],
+    fileFormats: [".png", ".blend", ".svg"],
+    compatibility: "PNGs work in all graphics software; Blender source files require Blender 3.6+ (Cycles or Eevee).",
+    contents: [
+      "60 transparent 3D renders at 4000x4000px resolution in both Studio and Neon lighting",
+      "Full Blender 3D project source files (.blend) with organized node networks",
+      "Vector wireframe SVG companions for subtle background accents",
+      "Commercial usage guide and attribution waiver"
+    ],
+    licenseType: "Extended commercial license (websites, mobile apps, marketing campaigns)",
+    deliveryMethod: "Instant secure digital download after verification",
+    publicationStatus: "published",
+    isFeatured: false,
+    createdAt: "2026-08-22T17:30:00Z",
+    faqs: [
+      {
+        question: "Are textures and materials embedded in the Blender files?",
+        answer: "Yes, all materials are 100% procedural or packed with embedded high-resolution normal and roughness maps."
+      }
+    ],
+    tags: ["3D Renders", "Fintech", "Illustrations", "Blender", "Graphics"],
+    isDemoContent: true,
+    demoNotice: "Demonstration catalogue item \u2014 checkout and file delivery are disabled in this storefront preview."
+  },
+  {
+    id: "de-prod-011",
+    slug: "ambient-focus-soundscapes-creator-audio",
+    name: "Deep Work Ambient Soundscapes: 12 Lossless Bio-Acoustic Audio Tracks",
+    category: "other-downloads",
+    categoryLabel: "Other Digital Downloads",
+    shortDescription: "12 studio-mastered, 60-minute loopable soundscapes designed for sustained cognitive focus, coding sessions, and deep work.",
+    fullDescription: "Engineered without disruptive rhythmic drops or harsh frequency peaks, this collection of 12 long-form ambient soundscapes provides the optimal acoustic backdrop for intense concentration. Mastered in high-resolution lossless audio (FLAC 24-bit/48kHz) and standard MP3, each track transitions seamlessly when looped in your favorite media player.",
+    pricePaise: 39900,
+    currency: "INR",
+    coverVisualType: "audio",
+    coverGradient: "linear-gradient(135deg, #0f172a 0%, #1e293b 100%)",
+    gallery: ["Frequency Response Graph", "Tracklisting Overview", "Loop Boundary Details"],
+    fileFormats: [".flac", ".wav", ".mp3"],
+    compatibility: "Playable on any audio player, DAW, or mobile media app (Apple Music, VLC, QuickTime, Spotify local files).",
+    contents: [
+      "12 sixty-minute seamless loop audio tracks in lossless 24-bit FLAC",
+      "12 sixty-minute 320kbps MP3 audio tracks for lightweight storage",
+      "Acoustic frequency analysis and listening environment recommendations (.pdf)",
+      "Royalty-free background synchronization license for podcasts and video tutorials"
+    ],
+    licenseType: "Personal focus & creator royalty-free sync license",
+    deliveryMethod: "Instant secure digital download after verification",
+    publicationStatus: "published",
+    isFeatured: false,
+    createdAt: "2026-06-18T10:00:00Z",
+    faqs: [
+      {
+        question: "Can I use these tracks as background music in YouTube videos or podcasts?",
+        answer: "Yes! The included creator sync license permits royalty-free use as background audio in non-broadcast online video, streaming, and podcast content."
+      }
+    ],
+    tags: ["Audio", "Deep Work", "Soundscapes", "Productivity", "Lossless"],
+    isDemoContent: true,
+    demoNotice: "Demonstration catalogue item \u2014 checkout and file delivery are disabled in this storefront preview."
+  },
+  {
+    id: "de-prod-012",
+    slug: "terminal-developer-productivity-dotfiles",
+    name: "Optimized Linux & macOS Terminal Dotfiles, Zsh, Neovim & Tmux Presets",
+    category: "other-downloads",
+    categoryLabel: "Other Digital Downloads",
+    shortDescription: "Clean, blazing-fast dotfiles configurations featuring sensible aliases, fuzzy navigation, Neovim LSP setup, and Tmux sessions.",
+    fullDescription: "Step into a meticulously configured terminal environment tuned for velocity and ergonomics. Designed for Linux (Ubuntu/Debian/Fedora) and macOS, this dotfiles bundle provides modular Zsh configurations, fast prompt themes, ergonomic Tmux session management, and a robust Neovim configuration featuring Mason LSP installers, Telescope fuzzy finding, and Treesitter syntax highlighting.",
+    pricePaise: 29900,
+    currency: "INR",
+    coverVisualType: "dotfiles",
+    coverGradient: "linear-gradient(135deg, #0d1117 0%, #1f2937 100%)",
+    gallery: ["Neovim IDE Layout", "Tmux Split Configuration", "Fuzzy Finder Keybindings"],
+    fileFormats: [".tar.gz", ".sh", ".lua"],
+    compatibility: "Compatible with Linux (x86_64/ARM64) and macOS. Requires Git, Zsh 5.8+, Neovim 0.9+, and Tmux 3.2+.",
+    contents: [
+      "Modular dotfiles archive (.tar.gz) with automated symlink installer script (`install.sh`)",
+      "Safe rollback and backup script preserving existing configurations",
+      "Complete Neovim Lua configuration with auto-configured LSP bindings",
+      "Interactive printable cheat-sheet for Tmux and Neovim keybindings (.pdf)"
+    ],
+    licenseType: "Single-developer personal workstation license",
+    deliveryMethod: "Instant secure digital download after verification",
+    publicationStatus: "published",
+    isFeatured: false,
+    createdAt: "2026-09-25T14:00:00Z",
+    faqs: [
+      {
+        question: "Will running the installer overwrite my existing configs?",
+        answer: "No. The installer automatically detects existing files and moves them into a dated `~/.dotfiles.backup` directory before linking new files."
+      }
+    ],
+    tags: ["Dotfiles", "Neovim", "Zsh", "Tmux", "Linux", "Developer Setup"],
+    isDemoContent: true,
+    demoNotice: "Demonstration catalogue item \u2014 checkout and file delivery are disabled in this storefront preview."
+  }
+];
+
+// server/products/productDb.ts
 var LocalFileDatabaseProvider = class {
   name = "local-file";
   dbFilePath;
@@ -39,10 +493,17 @@ var LocalFileDatabaseProvider = class {
     this.isInitialized = true;
   }
   loadSeedProducts() {
+    if (Array.isArray(products_default) && products_default.length > 0) {
+      return products_default.map((p) => ({
+        ...p,
+        status: p.status || "published",
+        createdAt: p.createdAt || (/* @__PURE__ */ new Date()).toISOString(),
+        updatedAt: p.updatedAt || (/* @__PURE__ */ new Date()).toISOString()
+      }));
+    }
     const seedCandidates = [
       path.resolve(process.cwd(), "src/data/products.json"),
-      path.resolve(process.cwd(), "dist/src/data/products.json"),
-      path.resolve(__dirname, "../../src/data/products.json")
+      path.resolve(process.cwd(), "dist/src/data/products.json")
     ];
     for (const cand of seedCandidates) {
       if (fs.existsSync(cand)) {

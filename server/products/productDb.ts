@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import type { ManagedProduct, ProductQueryParams } from './product.types';
+import productsSeedJson from '../../src/data/products.json';
 
 export interface ProductDatabaseProvider {
   readonly name: string;
@@ -58,10 +59,18 @@ export class LocalFileDatabaseProvider implements ProductDatabaseProvider {
   }
 
   private loadSeedProducts(): ManagedProduct[] {
+    if (Array.isArray(productsSeedJson) && productsSeedJson.length > 0) {
+      return (productsSeedJson as any[]).map((p) => ({
+        ...p,
+        status: (p.status as any) || 'published',
+        createdAt: p.createdAt || new Date().toISOString(),
+        updatedAt: p.updatedAt || new Date().toISOString(),
+      }));
+    }
+
     const seedCandidates = [
       path.resolve(process.cwd(), 'src/data/products.json'),
       path.resolve(process.cwd(), 'dist/src/data/products.json'),
-      path.resolve(__dirname, '../../src/data/products.json'),
     ];
 
     for (const cand of seedCandidates) {
@@ -77,9 +86,7 @@ export class LocalFileDatabaseProvider implements ProductDatabaseProvider {
               updatedAt: p.updatedAt || new Date().toISOString(),
             }));
           }
-        } catch {
-          // continue
-        }
+        } catch {}
       }
     }
     return [];
