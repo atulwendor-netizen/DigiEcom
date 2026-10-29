@@ -9,6 +9,14 @@ const app = express();
 const PORT = Number(process.env.PORT) || 5001;
 
 // Mount API handlers as Express middleware
+app.use('/api/create-order', (req, res) => {
+  handleCheckoutApi(req, res);
+});
+
+app.use('/api/verify-payment', (req, res) => {
+  handleCheckoutApi(req, res);
+});
+
 app.use('/api/checkout', (req, res) => {
   handleCheckoutApi(req, res);
 });
@@ -35,6 +43,8 @@ app.get('/', (_req, res) => {
     service: 'DigiEcom API Services',
     status: 'running',
     endpoints: {
+      createOrder: '/api/create-order',
+      verifyPayment: '/api/verify-payment',
       checkout: '/api/checkout/status',
       supportHealth: '/api/support/health',
       supportChat: '/api/support/chat',

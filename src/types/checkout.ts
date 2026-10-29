@@ -72,21 +72,29 @@ export interface RazorpayCustomerInfo {
 }
 
 export interface RazorpayOrderRequest {
-  items: Array<{
+  amount?: number; // Integer paise
+  currency?: string;
+  receipt?: string;
+  items?: Array<{
     productId: string;
     quantity: number;
   }>;
-  customer: RazorpayCustomerInfo;
+  customer?: RazorpayCustomerInfo;
+  notes?: Record<string, string>;
 }
 
 export interface RazorpayOrderResponse {
   success: boolean;
+  order_id: string;
+  id: string;
   orderId: string;
+  amount: number;
   amountPaise: number;
-  currency: 'INR';
+  currency: string;
+  key_id: string;
   keyId: string;
   receipt: string;
-  customer: RazorpayCustomerInfo;
+  customer?: RazorpayCustomerInfo;
   items: Array<{
     productId: string;
     productName: string;
@@ -94,7 +102,7 @@ export interface RazorpayOrderResponse {
     unitPricePaise: number;
     amountPaise: number;
   }>;
-  isSandboxMode: boolean;
+  isSandboxMode?: boolean;
 }
 
 export interface RazorpayPaymentSuccessPayload {
@@ -104,14 +112,19 @@ export interface RazorpayPaymentSuccessPayload {
 }
 
 export interface RazorpayVerificationRequest {
-  orderId: string;
-  paymentId: string;
-  signature: string;
-  items: Array<{
+  order_id?: string;
+  payment_id?: string;
+  razorpay_order_id?: string;
+  razorpay_payment_id?: string;
+  razorpay_signature?: string;
+  orderId?: string;
+  paymentId?: string;
+  signature?: string;
+  items?: Array<{
     productId: string;
     quantity: number;
   }>;
-  customer: RazorpayCustomerInfo;
+  customer?: RazorpayCustomerInfo;
 }
 
 export interface OrderDeliverable {

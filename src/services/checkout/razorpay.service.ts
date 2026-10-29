@@ -66,19 +66,36 @@ export class RazorpayService {
 
   /**
    * Creates an order securely on the backend server.
-   * Prices are calculated in integer paise server-side.
+   * Supports both items array and direct amount in paise (minimum 100 paise).
    */
   public static async createOrder(
-    items: Array<{ productId: string; quantity: number }>,
-    customer: RazorpayCustomerInfo
+    input: RazorpayOrderRequest | Array<{ productId: string; quantity: number }> | { amount: number; currency?: string; receipt?: string },
+    customerInfo?: RazorpayCustomerInfo
   ): Promise<RazorpayOrderResponse> {
-    const payload: RazorpayOrderRequest = { items, customer };
+    let payload: any;
+    if (Array.isArray(input)) {
+      payload = { items: input, customer: customerInfo };
+    } else {
+      payload = input;
+      if (customerInfo && !payload.customer) {
+        payload.customer = customerInfo;
+      }
+    }
 
-    const res = await fetch('/api/checkout/create-order', {
+    let res = await fetch('/api/create-order', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
+
+    // Fallback if top-level endpoint is routed to /api/checkout/create-order
+    if (!res.ok && res.status === 404) {
+      res = await fetch('/api/checkout/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+    }
 
     if (!res.ok) {
       const errorData = await res.json().catch(() => ({}));
@@ -94,11 +111,20 @@ export class RazorpayService {
   public static async verifyPayment(
     data: RazorpayVerificationRequest
   ): Promise<RazorpayVerificationResponse> {
-    const res = await fetch('/api/checkout/verify-payment', {
+    let res = await fetch('/api/verify-payment', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
+
+    // Fallback if top-level endpoint is routed to /api/checkout/verify-payment
+    if (!res.ok && res.status === 404) {
+      res = await fetch('/api/checkout/verify-payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+    }
 
     const result = (await res.json().catch(() => ({
       success: false,
@@ -116,22 +142,31 @@ export class RazorpayService {
     const { order, onSuccess, onFailure, onDismiss } = options;
 
     if (typeof window === 'undefined' || !(window as any).Razorpay) {
-      onFailure('Razorpay Checkout SDK is not available.');
+      onFailure('Razorpay Checkout SDK is not available. Please ensure internet connectivity.');
       return;
     }
 
     try {
+      const keyId =
+        order.key_id ||
+        order.keyId ||
+        import.meta.env.VITE_RAZORPAY_KEY_ID ||
+        'rzp_test_Ttgfx1HNEULoxH';
+
+      const orderId = order.order_id || order.orderId || order.id;
+      const amountPaise = order.amount !== undefined ? order.amount : order.amountPaise;
+
       const rzpOptions = {
-        key: order.keyId,
-        amount: order.amountPaise,
+        key: keyId,
+        amount: amountPaise,
         currency: order.currency || 'INR',
         name: 'DigiEcom Marketplace',
-        description: `Order ${order.orderId} • Instant Digital Goods`,
-        order_id: order.orderId,
+        description: `Order ${orderId} • Instant Digital Goods`,
+        order_id: orderId,
         prefill: {
-          name: order.customer.fullName,
-          email: order.customer.email,
-          contact: order.customer.phone || '9999999999',
+          name: order.customer?.fullName || 'Valued Customer',
+          email: order.customer?.email || 'guest@example.com',
+          contact: order.customer?.phone || '9999999999',
         },
         theme: {
           color: '#bbf246', // DigiEcom signature neon-lime
@@ -147,10 +182,13 @@ export class RazorpayService {
         handler: async (response: RazorpayPaymentSuccessPayload) => {
           try {
             const verification = await RazorpayService.verifyPayment({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
               orderId: response.razorpay_order_id,
               paymentId: response.razorpay_payment_id,
               signature: response.razorpay_signature,
-              items: order.items.map((i) => ({ productId: i.productId, quantity: i.quantity })),
+              items: order.items ? order.items.map((i) => ({ productId: i.productId, quantity: i.quantity })) : [],
               customer: order.customer,
             });
 
@@ -168,7 +206,7 @@ export class RazorpayService {
       const razorpayInstance = new (window as any).Razorpay(rzpOptions);
 
       razorpayInstance.on('payment.failed', (resp: any) => {
-        onFailure(resp?.error?.description || 'Payment was declined or cancelled.');
+        onFailure(resp?.error?.description || resp?.error?.reason || 'Payment was declined or cancelled.');
       });
 
       razorpayInstance.open();

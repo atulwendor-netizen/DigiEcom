@@ -34,8 +34,10 @@ async function buildServerless() {
     },
   });
 
-  // Duplicate for index
+  // Duplicate for index and direct endpoints
   fs.copyFileSync('api/checkout/[...path].js', 'api/checkout/index.js');
+  fs.copyFileSync('api/checkout/[...path].js', 'api/create-order.js');
+  fs.copyFileSync('api/checkout/[...path].js', 'api/verify-payment.js');
 
   // Build Razorpay Webhooks serverless function
   fs.mkdirSync('api/webhooks', { recursive: true });

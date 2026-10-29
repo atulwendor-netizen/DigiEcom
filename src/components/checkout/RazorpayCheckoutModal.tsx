@@ -104,7 +104,9 @@ export const RazorpayCheckoutModal: React.FC<RazorpayCheckoutModalProps> = ({
       );
       setCreatedOrder(orderData);
 
-      // 2. Check if official Razorpay checkout script is loaded
+      // 2. Ensure official Razorpay checkout script is loaded
+      await RazorpayService.loadSDK().catch(() => {});
+
       if (RazorpayService.isSDKLoaded()) {
         setIsLoading(false);
         RazorpayService.openCheckout({
@@ -116,7 +118,6 @@ export const RazorpayCheckoutModal: React.FC<RazorpayCheckoutModalProps> = ({
           },
           onFailure: (errMsg) => {
             setError(errMsg);
-            // Fall back to in-app simulator so user is never stranded
             setIsSimulatingGateway(true);
           },
           onDismiss: () => {

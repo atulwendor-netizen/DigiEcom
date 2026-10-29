@@ -12,6 +12,12 @@ export default defineConfig({
     {
       name: 'digiecom-checkout-api',
       configureServer(server) {
+        server.middlewares.use('/api/create-order', (req, res) => {
+          handleCheckoutApi(req, res);
+        });
+        server.middlewares.use('/api/verify-payment', (req, res) => {
+          handleCheckoutApi(req, res);
+        });
         server.middlewares.use('/api/checkout', (req, res) => {
           handleCheckoutApi(req, res);
         });
@@ -26,6 +32,12 @@ export default defineConfig({
         });
       },
       configurePreviewServer(server) {
+        server.middlewares.use('/api/create-order', (req, res) => {
+          handleCheckoutApi(req, res);
+        });
+        server.middlewares.use('/api/verify-payment', (req, res) => {
+          handleCheckoutApi(req, res);
+        });
         server.middlewares.use('/api/checkout', (req, res) => {
           handleCheckoutApi(req, res);
         });
