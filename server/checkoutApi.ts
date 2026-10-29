@@ -1,7 +1,6 @@
 import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
-import Razorpay from 'razorpay';
 
 // Load local environment variables if available
 try {
@@ -166,34 +165,53 @@ export async function createOrder(
   const receipt = data.receipt || `rcpt_${Date.now().toString(36)}_${Math.random().toString(36).substring(2, 6)}`;
   let orderId = `order_test_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
 
-  // Call Razorpay API using official SDK
+  // Call Razorpay API: POST https://api.razorpay.com/v1/orders
   try {
-    const razorpay = new Razorpay({
-      key_id: keyId,
-      key_secret: keySecret,
-    });
-
-    const rzpOrder = await razorpay.orders.create({
-      amount: totalAmountPaise,
-      currency,
-      receipt,
-      notes: data.notes || {
-        customerEmail: data.customer?.email || 'unspecified',
-        customerName: data.customer?.fullName || 'unspecified',
+    const authHeader = Buffer.from(`${keyId}:${keySecret}`).toString('base64');
+    const response = await fetch('https://api.razorpay.com/v1/orders', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Basic ${authHeader}`,
       },
+      body: JSON.stringify({
+        amount: totalAmountPaise,
+        currency,
+        receipt,
+        notes: data.notes || {
+          customerEmail: data.customer?.email || 'unspecified',
+          customerName: data.customer?.fullName || 'unspecified',
+        },
+      }),
     });
 
-    orderId = rzpOrder.id;
-    totalAmountPaise = rzpOrder.amount as number;
-  } catch (apiErr: any) {
-    const statusCode = apiErr?.statusCode || apiErr?.status || 500;
-    if (statusCode === 401 || (apiErr?.error?.code === 'BAD_REQUEST_ERROR' && apiErr?.error?.description?.toLowerCase().includes('auth'))) {
-      const err: any = new Error('Razorpay authentication failed: Invalid Key ID or Key Secret');
-      err.status = 401;
+    const rzpData = (await response.json()) as any;
+
+    if (!response.ok) {
+      const statusCode = response.status;
+      if (
+        statusCode === 401 ||
+        (rzpData?.error?.code === 'BAD_REQUEST_ERROR' &&
+          rzpData?.error?.description?.toLowerCase().includes('auth'))
+      ) {
+        const err: any = new Error('Razorpay authentication failed: Invalid Key ID or Key Secret');
+        err.status = 401;
+        throw err;
+      }
+      const err: any = new Error(rzpData?.error?.description || 'Razorpay order creation failed');
+      err.status = statusCode === 401 ? 401 : 500;
       throw err;
     }
 
-    if (process.env.NODE_ENV === 'test' && (apiErr.code === 'ENOTFOUND' || apiErr.code === 'ECONNREFUSED' || isSandbox)) {
+    orderId = rzpData.id;
+    totalAmountPaise = rzpData.amount as number;
+  } catch (apiErr: any) {
+    if (apiErr.status) throw apiErr;
+
+    if (
+      process.env.NODE_ENV === 'test' &&
+      (apiErr.code === 'ENOTFOUND' || apiErr.code === 'ECONNREFUSED' || isSandbox)
+    ) {
       // In offline automated unit tests, keep deterministic mock order ID
       orderId = `order_test_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
     } else {

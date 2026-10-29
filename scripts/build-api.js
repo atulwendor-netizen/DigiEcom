@@ -9,9 +9,21 @@ async function buildServerless() {
     format: 'esm',
     // Do not bundle node built-in modules like http, crypto, fs, path
     external: ['http', 'https', 'crypto', 'fs', 'path', 'url', 'stream', 'util', 'events'],
+    banner: {
+      js: 'import { createRequire as __createRequire } from "module"; const require = __createRequire(import.meta.url);',
+    },
   };
 
-  // Build Support API serverless function
+  // Clean api/ directory before building to stay strictly within Vercel Hobby plan 12-function limit
+  fs.rmSync('api', { recursive: true, force: true });
+
+  fs.mkdirSync('api/support', { recursive: true });
+  fs.mkdirSync('api/checkout', { recursive: true });
+  fs.mkdirSync('api/webhooks', { recursive: true });
+  fs.mkdirSync('api/storage', { recursive: true });
+  fs.mkdirSync('api/products', { recursive: true });
+
+  // 1. Support API catch-all
   await esbuild.build({
     ...common,
     entryPoints: ['server/supportApi.ts'],
@@ -21,10 +33,7 @@ async function buildServerless() {
     },
   });
 
-  // Duplicate for index
-  fs.copyFileSync('api/support/[...path].js', 'api/support/index.js');
-
-  // Build Checkout API serverless function
+  // 2. Checkout API catch-all
   await esbuild.build({
     ...common,
     entryPoints: ['server/checkoutApi.ts'],
@@ -34,27 +43,21 @@ async function buildServerless() {
     },
   });
 
-  // Duplicate for index and direct endpoints
-  fs.copyFileSync('api/checkout/[...path].js', 'api/checkout/index.js');
+  // 3. Direct top-level Razorpay endpoints
   fs.copyFileSync('api/checkout/[...path].js', 'api/create-order.js');
   fs.copyFileSync('api/checkout/[...path].js', 'api/verify-payment.js');
 
-  // Build Razorpay Webhooks serverless function
-  fs.mkdirSync('api/webhooks', { recursive: true });
+  // 4. Webhook catch-all
   await esbuild.build({
     ...common,
     entryPoints: ['server/webhookApi.ts'],
-    outfile: 'api/webhooks/razorpay.js',
+    outfile: 'api/webhooks/[...path].js',
     footer: {
       js: '\nexport default function handler(req, res) { return handleWebhookApi(req, res); }\n',
     },
   });
 
-  fs.copyFileSync('api/webhooks/razorpay.js', 'api/webhooks/[...path].js');
-  fs.copyFileSync('api/webhooks/razorpay.js', 'api/webhooks/index.js');
-
-  // Build Storage API serverless function
-  fs.mkdirSync('api/storage', { recursive: true });
+  // 5. Storage API catch-all
   await esbuild.build({
     ...common,
     entryPoints: ['server/storageApi.ts'],
@@ -64,10 +67,7 @@ async function buildServerless() {
     },
   });
 
-  fs.copyFileSync('api/storage/[...path].js', 'api/storage/index.js');
-
-  // Build Products API serverless function
-  fs.mkdirSync('api/products', { recursive: true });
+  // 6. Products API catch-all
   await esbuild.build({
     ...common,
     entryPoints: ['server/productsApi.ts'],
@@ -77,9 +77,7 @@ async function buildServerless() {
     },
   });
 
-  fs.copyFileSync('api/products/[...path].js', 'api/products/index.js');
-
-  console.log('✓ Vercel serverless functions bundled successfully into api/');
+  console.log('✓ Vercel serverless functions (7 functions) bundled successfully into api/');
 }
 
 buildServerless().catch((err) => {

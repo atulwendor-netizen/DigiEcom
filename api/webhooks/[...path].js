@@ -1,3 +1,5 @@
+import { createRequire as __createRequire } from "module"; const require = __createRequire(import.meta.url);
+
 // server/webhookApi.ts
 import crypto from "crypto";
 var WebhookEventCache = class {

@@ -1,3 +1,5 @@
+import { createRequire as __createRequire } from "module"; const require = __createRequire(import.meta.url);
+
 // server/productsApi.ts
 import { parse as parseUrl } from "url";
 import crypto4 from "crypto";

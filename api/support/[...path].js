@@ -1,3 +1,5 @@
+import { createRequire as __createRequire } from "module"; const require = __createRequire(import.meta.url);
+
 // server/support/groundingContext.ts
 import fs from "fs";
 import path from "path";

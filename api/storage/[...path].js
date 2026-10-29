@@ -1,3 +1,5 @@
+import { createRequire as __createRequire } from "module"; const require = __createRequire(import.meta.url);
+
 // server/storageApi.ts
 import crypto5 from "crypto";
 
