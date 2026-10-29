@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Key, Lock, Eye, EyeOff, ArrowLeft, AlertCircle, Database } from 'lucide-react';
 import { AdminStorageService } from '../../services/admin/adminStorage.service';
@@ -8,11 +8,24 @@ interface AdminLoginPageProps {
 }
 
 export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({ onSuccess }) => {
-  const [adminKey, setAdminKey] = useState('');
+  const navigate = useNavigate();
+  const [adminKey, setAdminKey] = useState(() => {
+    return AdminStorageService.getStoredAdminKey() || '';
+  });
   const [showKey, setShowKey] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const navigate = useNavigate();
+
+  // Auto-redirect if already authenticated
+  useEffect(() => {
+    if (AdminStorageService.isAuthenticated()) {
+      if (onSuccess) {
+        onSuccess();
+      } else {
+        navigate('/admin/products', { replace: true });
+      }
+    }
+  }, [navigate, onSuccess]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,7 +44,7 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({ onSuccess }) => 
       if (onSuccess) {
         onSuccess();
       } else {
-        navigate('/admin/storage');
+        navigate('/admin/products');
       }
     } else {
       setErrorMessage(result.error || 'Authentication failed. Please check your admin key.');
@@ -212,6 +225,20 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({ onSuccess }) => 
                 {showKey ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
             </div>
+            {adminKey && (
+              <div
+                style={{
+                  marginTop: '8px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  fontSize: '11px',
+                  color: 'var(--accent-lime)',
+                }}
+              >
+                <span>✓ Remembered key loaded on this device</span>
+              </div>
+            )}
           </div>
 
           <button

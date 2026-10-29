@@ -9,11 +9,13 @@ import { AdminLayout } from '../src/components/admin/AdminLayout';
 describe('Admin Foundation & Security Guard (Phase 2)', () => {
   beforeEach(() => {
     sessionStorage.clear();
+    localStorage.clear();
     vi.restoreAllMocks();
   });
 
   afterEach(() => {
     sessionStorage.clear();
+    localStorage.clear();
     vi.restoreAllMocks();
   });
 
