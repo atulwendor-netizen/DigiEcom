@@ -9,10 +9,6 @@
       "destination": "/api/checkout/status"
     },
     {
-      "source": "/api/products",
-      "destination": "/api/products/all"
-    },
-    {
       "source": "/api/storage",
       "destination": "/api/storage/health"
     },

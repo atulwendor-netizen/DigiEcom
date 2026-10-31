@@ -11,18 +11,40 @@ describe('Razorpay Standard Web Checkout Integration', () => {
       process.env.RAZORPAY_KEY_ID = TEST_KEY_ID;
       process.env.RAZORPAY_KEY_SECRET = TEST_KEY_SECRET;
 
-      const response = await createOrder({
-        amount: 25000, // 250 INR in paise
-        currency: 'INR',
-        receipt: 'rcpt_test_unit_1',
-      });
+      const originalFetch = global.fetch;
+      global.fetch = (async (url: any, opts: any) => {
+        if (typeof url === 'string' && url.includes('/v1/orders')) {
+          return {
+            ok: true,
+            status: 200,
+            json: async () => ({
+              id: 'order_test_unit_mock_123',
+              amount: 25000,
+              currency: 'INR',
+              receipt: 'rcpt_test_unit_1',
+              status: 'created',
+            }),
+          } as any;
+        }
+        return originalFetch(url, opts);
+      }) as any;
 
-      expect(response.success).toBe(true);
-      expect(response.order_id).toBeDefined();
-      expect(response.order_id).toMatch(/^(order_|order_test_)/);
-      expect(response.amount).toBe(25000);
-      expect(response.currency).toBe('INR');
-      expect(response.receipt).toBe('rcpt_test_unit_1');
+      try {
+        const response = await createOrder({
+          amount: 25000, // 250 INR in paise
+          currency: 'INR',
+          receipt: 'rcpt_test_unit_1',
+        });
+
+        expect(response.success).toBe(true);
+        expect(response.order_id).toBeDefined();
+        expect(response.order_id).toMatch(/^(order_|order_test_)/);
+        expect(response.amount).toBe(25000);
+        expect(response.currency).toBe('INR');
+        expect(response.receipt).toBe('rcpt_test_unit_1');
+      } finally {
+        global.fetch = originalFetch;
+      }
     });
 
     it('rejects order creation if amount is less than 100 paise (< 1 INR)', async () => {

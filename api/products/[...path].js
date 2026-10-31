@@ -1223,10 +1223,18 @@ function getCategoryLabel(category) {
   switch (category.toLowerCase()) {
     case "ebooks-guides":
       return "E-books & Guides";
+    case "ai-prompts":
+      return "AI Prompts & Resources";
+    case "business-templates":
     case "templates":
-      return "Templates & Kits";
+      return "Business Templates";
+    case "productivity-tools":
+      return "Productivity Tools";
+    case "design-assets":
+      return "Design & Creative Assets";
+    case "other-downloads":
     case "presets":
-      return "Audio & Presets";
+      return "Other Digital Downloads";
     case "code-snippets":
       return "Code & Components";
     default:
@@ -1266,7 +1274,7 @@ function handleProductsApi(req, res) {
   const db = getProductDatabase();
   const candidateAdminKey = extractAdminKey(req);
   const isAdmin = verifyAdminApiKey(candidateAdminKey);
-  if (req.method === "GET" && (pathname === "/" || pathname === "")) {
+  if (req.method === "GET" && (pathname === "/" || pathname === "" || pathname === "/all")) {
     const category = parsedUrl.query.category;
     const search = parsedUrl.query.search;
     const isFeatured = parsedUrl.query.featured === "true" ? true : void 0;
@@ -1362,7 +1370,7 @@ function handleProductsApi(req, res) {
     });
     return;
   }
-  if (req.method === "POST" && (pathname === "/" || pathname === "")) {
+  if (req.method === "POST" && (pathname === "/" || pathname === "" || pathname === "/all")) {
     if (!isAdmin) {
       sendJson(res, 401, {
         success: false,
@@ -1498,7 +1506,7 @@ function handleProductsApi(req, res) {
     return;
   }
   const singleMatch = pathname.match(/^\/([^/]+)$/);
-  if (req.method === "GET" && singleMatch) {
+  if (req.method === "GET" && singleMatch && singleMatch[1] !== "all") {
     const idOrSlug = singleMatch[1];
     const findProduct = async () => {
       let product = await db.getById(idOrSlug);

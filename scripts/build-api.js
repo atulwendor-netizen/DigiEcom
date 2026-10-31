@@ -67,7 +67,7 @@ async function buildServerless() {
     },
   });
 
-  // 6. Products API catch-all
+  // 6. Products API catch-all & direct root endpoint
   await esbuild.build({
     ...common,
     entryPoints: ['server/productsApi.ts'],
@@ -76,8 +76,9 @@ async function buildServerless() {
       js: '\nexport default function handler(req, res) { return handleProductsApi(req, res); }\n',
     },
   });
+  fs.copyFileSync('api/products/[...path].js', 'api/products.js');
 
-  console.log('✓ Vercel serverless functions (7 functions) bundled successfully into api/');
+  console.log('✓ Vercel serverless functions (8 functions) bundled successfully into api/');
 }
 
 buildServerless().catch((err) => {

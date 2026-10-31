@@ -6,7 +6,6 @@ import { ProductGrid } from '../components/products/ProductGrid';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { Product, ProductSortOption } from '../types/product';
 import { CategoryId } from '../types/category';
-import productsData from '../data/products.json';
 import categoriesData from '../data/categories.json';
 import { ProductService } from '../services/product.service';
 
@@ -72,14 +71,32 @@ export const ProductsPage: React.FC = () => {
     'Browse our complete catalogue of DRM-free e-books, AI prompts, business templates, Notion hubs, and design assets.'
   );
 
-  const [products, setProducts] = useState<Product[]>(productsData as unknown as Product[]);
+  const [products, setProducts] = useState<Product[]>(() => {
+    return ProductService.getInitialPublishedProducts() as unknown as Product[];
+  });
 
-  useEffect(() => {
+  const loadProducts = () => {
     ProductService.getPublishedProducts().then((res) => {
       if (res && res.length > 0) {
         setProducts(res as unknown as Product[]);
       }
     });
+  };
+
+  useEffect(() => {
+    loadProducts();
+
+    const handleProductsChange = () => {
+      loadProducts();
+    };
+
+    window.addEventListener('digiecom_products_changed', handleProductsChange);
+    window.addEventListener('storage', handleProductsChange);
+
+    return () => {
+      window.removeEventListener('digiecom_products_changed', handleProductsChange);
+      window.removeEventListener('storage', handleProductsChange);
+    };
   }, []);
 
   const filteredProducts = useMemo(() => {

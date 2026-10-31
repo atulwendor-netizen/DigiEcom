@@ -5,6 +5,7 @@ import { handleCheckoutApi } from './server/checkoutApi';
 import { handleSupportApi } from './server/supportApi';
 import { handleWebhookApi } from './server/webhookApi';
 import { handleStorageApi } from './server/storageApi';
+import { handleProductsApi } from './server/productsApi';
 
 export default defineConfig({
   plugins: [
@@ -30,6 +31,9 @@ export default defineConfig({
         server.middlewares.use('/api/storage', (req, res) => {
           handleStorageApi(req, res);
         });
+        server.middlewares.use('/api/products', (req, res) => {
+          handleProductsApi(req, res);
+        });
       },
       configurePreviewServer(server) {
         server.middlewares.use('/api/create-order', (req, res) => {
@@ -49,6 +53,9 @@ export default defineConfig({
         });
         server.middlewares.use('/api/storage', (req, res) => {
           handleStorageApi(req, res);
+        });
+        server.middlewares.use('/api/products', (req, res) => {
+          handleProductsApi(req, res);
         });
       },
     },

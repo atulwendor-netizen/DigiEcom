@@ -13,7 +13,6 @@ import {
   ShoppingBag,
   Lock,
 } from 'lucide-react';
-import productsData from '../data/products.json';
 import { Product } from '../types/product';
 import { ProductCoverVisual } from '../components/products/ProductCoverVisual';
 import { ProductCard } from '../components/products/ProductCard';
@@ -34,9 +33,14 @@ export const ProductDetailPage: React.FC = () => {
   const [confirmedOrder, setConfirmedOrder] = useState<VerifiedOrder | null>(null);
   const { addItem } = useCart();
 
-  const products = productsData as unknown as Product[];
+  const [allProducts, setAllProducts] = useState<Product[]>(() => {
+    return ProductService.getInitialPublishedProducts() as unknown as Product[];
+  });
+
   const [product, setProduct] = useState<Product | undefined>(() => {
-    return products.find((p) => p.slug === slug);
+    if (!slug) return undefined;
+    const found = ProductService.getInitialProductBySlug(slug);
+    return found ? (found as unknown as Product) : undefined;
   });
 
   useEffect(() => {
@@ -44,6 +48,11 @@ export const ProductDetailPage: React.FC = () => {
       ProductService.getProductBySlug(slug).then((res) => {
         if (res) {
           setProduct(res as unknown as Product);
+        }
+      });
+      ProductService.getPublishedProducts().then((res) => {
+        if (res && res.length > 0) {
+          setAllProducts(res as unknown as Product[]);
         }
       });
     }
@@ -107,7 +116,7 @@ export const ProductDetailPage: React.FC = () => {
   }
 
   // Related products from the same category (excluding current)
-  const relatedProducts = products
+  const relatedProducts = allProducts
     .filter((p) => p.category === product.category && p.id !== product.id)
     .slice(0, 3);
 

@@ -17,6 +17,7 @@ import {
   ProductService,
   ProductStatus,
 } from '../../services/product.service';
+import categoriesData from '../../data/categories.json';
 
 interface ProductFormModalProps {
   isOpen: boolean;
@@ -202,11 +203,13 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
         .filter(Boolean);
 
       const cleanedContents = contents.map((c) => c.trim()).filter(Boolean);
+      const catObj = categoriesData.find((c) => c.id === category);
 
       const payload: CreateProductInput = {
         name: name.trim(),
         slug: slug.trim() || undefined,
         category,
+        categoryLabel: catObj ? catObj.name : undefined,
         shortDescription: shortDescription.trim(),
         fullDescription: fullDescription.trim() || shortDescription.trim(),
         pricePaise: Math.round(priceNum * 100),
@@ -530,10 +533,11 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
                         boxSizing: 'border-box',
                       }}
                     >
-                      <option value="ebooks-guides">E-books & Guides</option>
-                      <option value="templates">Templates & Kits</option>
-                      <option value="presets">Audio & Presets</option>
-                      <option value="code-snippets">Code & Components</option>
+                      {categoriesData.map((c) => (
+                        <option key={c.id} value={c.id}>
+                          {c.name}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 </div>

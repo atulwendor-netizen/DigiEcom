@@ -56,10 +56,18 @@ export function getCategoryLabel(category: string): string {
   switch (category.toLowerCase()) {
     case 'ebooks-guides':
       return 'E-books & Guides';
+    case 'ai-prompts':
+      return 'AI Prompts & Resources';
+    case 'business-templates':
     case 'templates':
-      return 'Templates & Kits';
+      return 'Business Templates';
+    case 'productivity-tools':
+      return 'Productivity Tools';
+    case 'design-assets':
+      return 'Design & Creative Assets';
+    case 'other-downloads':
     case 'presets':
-      return 'Audio & Presets';
+      return 'Other Digital Downloads';
     case 'code-snippets':
       return 'Code & Components';
     default:
@@ -110,7 +118,7 @@ export function handleProductsApi(req: IncomingMessage, res: ServerResponse): vo
   // -------------------------------------------------------------------------
   // 1. GET /api/products (Catalogue Query)
   // -------------------------------------------------------------------------
-  if (req.method === 'GET' && (pathname === '/' || pathname === '')) {
+  if (req.method === 'GET' && (pathname === '/' || pathname === '' || pathname === '/all')) {
     const category = parsedUrl.query.category as string | undefined;
     const search = parsedUrl.query.search as string | undefined;
     const isFeatured = parsedUrl.query.featured === 'true' ? true : undefined;
@@ -231,7 +239,7 @@ export function handleProductsApi(req: IncomingMessage, res: ServerResponse): vo
   // -------------------------------------------------------------------------
   // 3. POST /api/products (Admin: Create Product)
   // -------------------------------------------------------------------------
-  if (req.method === 'POST' && (pathname === '/' || pathname === '')) {
+  if (req.method === 'POST' && (pathname === '/' || pathname === '' || pathname === '/all')) {
     if (!isAdmin) {
       sendJson(res, 401, {
         success: false,
@@ -394,7 +402,7 @@ export function handleProductsApi(req: IncomingMessage, res: ServerResponse): vo
   // 5. GET /api/products/:idOrSlug (Single Product Fetch)
   // -------------------------------------------------------------------------
   const singleMatch = pathname.match(/^\/([^/]+)$/);
-  if (req.method === 'GET' && singleMatch) {
+  if (req.method === 'GET' && singleMatch && singleMatch[1] !== 'all') {
     const idOrSlug = singleMatch[1];
 
     const findProduct = async () => {
